@@ -9,13 +9,13 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="BudgetJournal">
-  <meta name="theme-color" content="#f4f3ec" id="themeMetaColor">
+  <meta name="theme-color" content="#f4f4f0" id="themeMetaColor">
   <link rel="manifest" href="manifest.json">
 
-  <!-- Google Fonts: Press Start 2P, Silkscreen, VT323 & Plus Jakarta Sans -->
+  <!-- Google Fonts: Plus Jakarta Sans (Display/UI) & JetBrains Mono (Tabular Telemetry) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -26,12 +26,12 @@
       theme: {
         extend: {
           fontFamily: {
-            pixel: ['"Press Start 2P"', 'monospace'],
-            pixelDisplay: ['"Press Start 2P"', 'monospace'],
+            pixel: ['"Plus Jakarta Sans"', 'sans-serif'],
+            pixelDisplay: ['"Plus Jakarta Sans"', 'sans-serif'],
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
             doodle: ['"Plus Jakarta Sans"', 'sans-serif'],
             hand: ['"Plus Jakarta Sans"', 'sans-serif'],
-            monoNum: ['"Plus Jakarta Sans"', 'sans-serif'],
+            monoNum: ['"JetBrains Mono"', '"Plus Jakarta Sans"', 'monospace'],
             silkscreen: ['"Plus Jakarta Sans"', 'sans-serif'],
           },
           colors: {
@@ -49,8 +49,8 @@
             pixelPink: '#ff5c7c',
             pixelPurple: '#c084fc',
             pixelOrange: '#ff9238',
-            pixelDark: '#111218',
-            pixelCardDark: '#181a24'
+            pixelDark: '#09090b',
+            pixelCardDark: '#121215'
           },
           boxShadow: {
             'pixel': '3px 3px 0px 0px #181920',
@@ -74,118 +74,100 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Pixel Grid Canvas - Clean Modern Light */
+    /* Warm Tactile Light & Crisp Deliberate Dark Surfaces */
     body {
-      background-color: #f4f3ec;
-      background-image: 
-        linear-gradient(to right, rgba(24, 25, 32, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(24, 25, 32, 0.05) 1px, transparent 1px);
-      background-size: 16px 16px;
-      color: #181920;
-      image-rendering: pixelated;
-      transition: background-color 0.2s ease, color 0.2s ease;
+      background-color: #f4f4f0;
+      background-image:
+        linear-gradient(to right, rgba(24, 25, 32, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(24, 25, 32, 0.035) 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: #18181b;
+      transition: background-color 150ms ease-out, color 150ms ease-out;
     }
 
-    /* Pixel Grid Canvas - Retro Dark */
     html.dark body {
-      background-color: #111218;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-      background-size: 16px 16px;
-      color: #f8fafc;
+      background-color: #09090b;
+      background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: #f4f4f5;
     }
 
     /* Prevent flex-child blowout on mobile screens */
     *, *::before, *::after { box-sizing: border-box; min-width: 0; }
 
-    /* Pixo Style: Modern Rounded Cards with Crisp Retro Ink Borders & Block Shadows */
+    /* Outer Card Container: R_outer = 16px (1rem) */
     .doodle-card, .pixel-card {
-      border: 2.5px solid #181920;
-      border-radius: 1.25rem !important; /* rounded-2xl */
+      border: 1.5px solid #18181b;
+      border-radius: 1rem !important;
       background-color: #ffffff;
-      box-shadow: 4px 4px 0px 0px #181920;
+      box-shadow: 0 2px 0 0 #18181b;
       position: relative;
       max-width: 100%;
     }
 
     html.dark .doodle-card, html.dark .pixel-card {
-      border: 2.5px solid #334155;
-      background-color: #181a24;
-      box-shadow: 4px 4px 0px 0px #000000;
-      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background-color: #121215;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.45);
+      color: #f4f4f5;
     }
 
-    /* Pixo Style: Chunky Rounded Action Buttons with Block Shadows */
+    /* Nested Interactive Controls: R_inner = 10px (0.625rem) */
     .doodle-sticker, .pixel-btn {
-      border: 2px solid #181920;
-      border-radius: 0.875rem !important; /* rounded-xl */
-      box-shadow: 3px 3px 0px 0px #181920;
-      transition: transform 0.05s ease, box-shadow 0.05s ease;
+      border: 1.5px solid #18181b;
+      border-radius: 0.625rem !important;
+      box-shadow: 0 1.5px 0 0 #18181b;
+      transition: background-color 140ms ease-out, border-color 140ms ease-out, color 140ms ease-out, transform 80ms ease-out;
     }
 
     .doodle-sticker:active, .pixel-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0px 0px #181920;
+      transform: scale(0.98);
     }
 
     html.dark .doodle-sticker, html.dark .pixel-btn {
-      border: 2px solid #475569;
-      box-shadow: 3px 3px 0px 0px #000000;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+    }
+
+    html.dark .doodle-sticker:hover, html.dark .pixel-btn:hover {
+      border-color: rgba(255, 255, 255, 0.22);
     }
 
     html.dark .doodle-sticker:active, html.dark .pixel-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0px 0px #000000;
+      transform: scale(0.98);
     }
 
-    /* Pixo Style: Rounded Cartridge Pill Header Strips */
-    .washi-tape, .pixel-strip-yellow {
-      background: #ffe135;
-      border: 2px solid #181920;
-      box-shadow: 2px 2px 0px 0px #181920;
-      background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(24, 25, 32, 0.12) 4px, rgba(24, 25, 32, 0.12) 8px);
-      position: absolute;
-      border-radius: 9999px !important;
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #f59e0b !important;
+      outline-offset: 2px;
     }
 
-    html.dark .washi-tape, html.dark .pixel-strip-yellow {
-      background: #f59e0b;
-      border: 2px solid #94a3b8;
-      box-shadow: 2px 2px 0px 0px #000000;
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
-    .washi-tape-pink, .pixel-strip-pink {
-      background: #ff5c7c;
-      border: 2px solid #181920;
-      box-shadow: 2px 2px 0px 0px #181920;
-      background-image: repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(24, 25, 32, 0.12) 4px, rgba(24, 25, 32, 0.12) 8px);
-      position: absolute;
-      border-radius: 9999px !important;
+    /* Strip decorative tape clutter for clean card geometry */
+    .washi-tape, .pixel-strip-yellow, .washi-tape-pink, .pixel-strip-pink {
+      display: none !important;
     }
 
-    html.dark .washi-tape-pink, html.dark .pixel-strip-pink {
-      background: #e11d48;
-      border: 2px solid #94a3b8;
-      box-shadow: 2px 2px 0px 0px #000000;
+    /* Nested Form Inputs: R_inner = 10px */
+    input:not([type="checkbox"]), select, textarea {
+      border-radius: 0.625rem !important;
     }
 
-    /* Pixo Style: Smooth Rounded Input Fields */
-    input, select, textarea {
-      border-radius: 0.75rem !important; /* rounded-xl */
-    }
-
-    /* Pixo Style: Smooth Rounded Pill Progress Bar */
+    /* Crisp Progress Bar */
     .pixel-bar-bg {
-      border: 2px solid #181920;
-      background-color: #e2e8f0;
-      box-shadow: inset 2px 2px 0px 0px rgba(0,0,0,0.12);
+      border: 1px solid rgba(24, 24, 27, 0.2);
+      background-color: #e4e4e7;
       border-radius: 9999px !important;
     }
     html.dark .pixel-bar-bg {
-      border: 2px solid #64748b;
-      background-color: #0f172a;
-      box-shadow: inset 2px 2px 0px 0px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      background-color: #1c1c21;
       border-radius: 9999px !important;
     }
 
@@ -216,69 +198,68 @@
   <!-- ========================================================================= -->
   <!-- 🖥️ DESKTOP SIDEBAR (Visible ONLY on Windows / Laptop Screens >= 1024px)     -->
   <!-- ========================================================================= -->
-  <aside class="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 lg:border-r-2 lg:border-ink dark:lg:border-slate-300 bg-[#faf5eb]/95 dark:bg-[#121316]/95 backdrop-blur-md z-40 p-6 justify-between select-none">
+  <aside class="hidden lg:flex lg:w-72 lg:flex-col lg:fixed lg:inset-y-0 lg:border-r lg:border-zinc-900/15 dark:lg:border-white/10 bg-[#faf9f6]/95 dark:bg-[#0d0e11]/95 backdrop-blur-md z-40 p-6 justify-between select-none">
     
-    <div class="flex flex-col gap-6">
-      <!-- Desktop Brand Logo -->
+    <div class="flex flex-col gap-5">
+      <!-- Desktop Brand Logo & Unclipped Version Pill -->
       <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-2xl bg-doodleYellow dark:bg-amber-500/20 border-2 border-ink dark:border-slate-300 shadow-doodle flex items-center justify-center ">
-          <span class="text-2xl">📒</span>
+        <div class="w-10 h-10 rounded-xl bg-amber-400 dark:bg-amber-400/15 border border-zinc-900 dark:border-amber-400/30 flex items-center justify-center shrink-0 text-zinc-900 dark:text-amber-300">
+          <i data-lucide="book-marked" class="w-5 h-5"></i>
         </div>
-        <div>
-          <div class="flex items-center gap-1.5">
-            <h1 class="font-pixel text-base sm:text-lg font-bold tracking-tight text-ink dark:text-slate-100 leading-none">Budget Journal</h1>
-            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.9</span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-2">
+            <h1 class="font-sans text-[16px] font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">Budget Journal</h1>
+            <span class="shrink-0 whitespace-nowrap inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-monoNum font-bold leading-none rounded-md bg-amber-400/25 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 border border-amber-500/40 dark:border-amber-400/30">v4.0</span>
           </div>
-          <p id="desktopPeriodBadge" class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">Memuat siklus...</p>
+          <p id="desktopPeriodBadge" class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">Memuat siklus...</p>
         </div>
       </div>
 
-      <!-- Quick Action: Tombol Catat Transaksi Desktop -->
-      <button onclick="openModal('addTxModal')" class="doodle-sticker w-full py-3.5 rounded-2xl bg-doodleYellow dark:bg-amber-400 hover:bg-amber-300 text-ink font-doodle text-lg font-bold shadow-doodle flex items-center justify-center gap-2 transition active:scale-95">
-        <span class="text-xl">✏️</span>
+      <!-- Primary Action CTA (1 Focal Anchor) -->
+      <button onclick="openModal('addTxModal')" class="doodle-sticker w-full h-11 px-4 bg-amber-400 hover:bg-amber-300 text-zinc-950 font-sans text-sm font-bold flex items-center justify-center gap-2">
+        <i data-lucide="plus" class="w-4 h-4 stroke-[2.5]"></i>
         <span>Catat Belanja Baru</span>
       </button>
 
-      <!-- Desktop Vertical Navigation Menu -->
-      <nav class="flex flex-col gap-2 font-doodle text-base font-bold">
-        <button onclick="switchTab('journal')" id="dNavTab_journal" class="doodle-sticker w-full px-4 py-2.5 rounded-xl flex items-center gap-3 text-left transition bg-doodleYellow text-ink shadow-doodle">
-          <span class="text-lg">📖</span>
-          <span>Jurnal Harian</span>
+      <!-- Desktop Vertical Navigation Menu (Uniform Height & Font Size) -->
+      <nav aria-label="Menu Utama Desktop" class="flex flex-col gap-1.5">
+        <button onclick="switchTab('journal')" id="dNavTab_journal" class="doodle-sticker w-full h-11 px-3.5 flex items-center gap-3 text-left text-[13.5px] font-bold bg-amber-400/90 dark:bg-amber-400 text-zinc-950 whitespace-nowrap">
+          <i data-lucide="book-open" class="w-4 h-4 shrink-0"></i>
+          <span class="truncate">Jurnal Harian</span>
         </button>
-        <button onclick="switchTab('dashboard')" id="dNavTab_dashboard" class="doodle-sticker w-full px-4 py-2.5 rounded-xl flex items-center gap-3 text-left transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-          <span class="text-lg">📊</span>
-          <span>Ringkasan Keuangan</span>
+        <button onclick="switchTab('dashboard')" id="dNavTab_dashboard" class="doodle-sticker w-full h-11 px-3.5 flex items-center gap-3 text-left text-[13.5px] font-semibold bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#1e2026] whitespace-nowrap">
+          <i data-lucide="layout-grid" class="w-4 h-4 shrink-0"></i>
+          <span class="truncate">Ringkasan Keuangan</span>
         </button>
-        <button onclick="switchTab('bills')" id="dNavTab_bills" class="doodle-sticker w-full px-4 py-2.5 rounded-xl flex items-center gap-3 text-left transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-          <span class="text-lg">💡</span>
-          <span>Tagihan Rutin Bulanan</span>
+        <button onclick="switchTab('bills')" id="dNavTab_bills" class="doodle-sticker w-full h-11 px-3.5 flex items-center gap-3 text-left text-[13.5px] font-semibold bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#1e2026] whitespace-nowrap">
+          <i data-lucide="receipt" class="w-4 h-4 shrink-0"></i>
+          <span class="truncate">Tagihan Bulanan</span>
         </button>
-        <button onclick="switchTab('debts')" id="dNavTab_debts" class="doodle-sticker w-full px-4 py-2.5 rounded-xl flex items-center gap-3 text-left transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-          <span class="text-lg">🤝</span>
-          <span>Hutang & Paylater</span>
+        <button onclick="switchTab('debts')" id="dNavTab_debts" class="doodle-sticker w-full h-11 px-3.5 flex items-center gap-3 text-left text-[13.5px] font-semibold bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#1e2026] whitespace-nowrap">
+          <i data-lucide="hand-coins" class="w-4 h-4 shrink-0"></i>
+          <span class="truncate">Hutang & Paylater</span>
         </button>
       </nav>
     </div>
 
     <!-- Desktop Sidebar Footer (Settings & Status) -->
-    <div class="flex flex-col gap-3 pt-4 border-t-2 border-dashed border-slate-300 dark:border-slate-700">
-      <div class="flex items-center justify-between">
-        <!-- Theme Mode Switcher -->
-        <button onclick="cycleTheme()" class="doodle-sticker px-3 py-1.5 rounded-none bg-white dark:bg-slate-800 font-doodle text-xs font-bold flex items-center gap-1.5 text-ink dark:text-white">
-          <span id="dQuickThemeIcon">☀️</span>
-          <span>Ganti Mode</span>
+    <div class="flex flex-col gap-2.5 pt-4 border-t border-zinc-200 dark:border-white/10">
+      <div class="flex items-center justify-between gap-2">
+        <button onclick="cycleTheme()" class="doodle-sticker h-9 px-3 bg-white dark:bg-[#16171b] hover:bg-zinc-50 dark:hover:bg-[#1e2026] text-xs font-semibold flex items-center gap-2 text-zinc-800 dark:text-zinc-200">
+          <span id="dQuickThemeIcon" class="inline-flex items-center justify-center w-4 h-4"><i data-lucide="monitor" class="w-3.5 h-3.5"></i></span>
+          <span>Tema</span>
         </button>
 
         <div class="flex gap-1.5">
-          <button onclick="syncData()" title="Sinkronisasi" class="w-8 h-8 rounded-xl bg-white dark:bg-slate-800 border-2 border-ink dark:border-slate-300 shadow-doodle-sm flex items-center justify-center">
-            <i data-lucide="refresh-cw" id="dSyncIcon" class="w-3.5 h-3.5 text-ink dark:text-white"></i>
+          <button onclick="syncData()" aria-label="Sinkronisasi" title="Sinkronisasi" class="doodle-sticker w-9 h-9 bg-white dark:bg-[#16171b] hover:bg-zinc-50 dark:hover:bg-[#1e2026] flex items-center justify-center text-zinc-800 dark:text-zinc-200">
+            <i data-lucide="refresh-cw" id="dSyncIcon" class="w-4 h-4"></i>
           </button>
-          <button onclick="openModal('settingsModal')" title="Pengaturan" class="w-8 h-8 rounded-xl bg-doodleBlue dark:bg-sky-500/30 border-2 border-ink dark:border-slate-300 shadow-doodle-sm flex items-center justify-center">
-            <i data-lucide="settings" class="w-3.5 h-3.5 text-ink dark:text-white"></i>
+          <button onclick="openModal('settingsModal')" aria-label="Pengaturan" title="Pengaturan" class="doodle-sticker w-9 h-9 bg-white dark:bg-[#16171b] hover:bg-zinc-50 dark:hover:bg-[#1e2026] flex items-center justify-center text-zinc-800 dark:text-zinc-200">
+            <i data-lucide="settings" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
-      <span class="text-[10px] font-doodle text-slate-500 dark:text-slate-400 text-center">Shortcut: Tekan 'N' untuk catat cepat</span>
+      <span class="text-[11px] text-zinc-500 dark:text-zinc-500 text-center">Pintasan: tekan <kbd class="px-1.5 py-0.5 rounded bg-zinc-200/70 dark:bg-white/10 font-monoNum text-[10px]">N</kbd> untuk catat cepat</span>
     </div>
 
   </aside>
@@ -289,47 +270,51 @@
   <div class="w-full lg:pl-72 flex flex-col items-center min-h-screen">
 
     <!-- 📱 MOBILE STICKY HEADER & TABS BAR (Visible ONLY on Handphone Screens < 1024px) -->
-    <div class="lg:hidden w-full sticky top-0 z-30 bg-[#faf5eb]/95 dark:bg-[#121316]/95 backdrop-blur-md border-b-2 border-ink dark:border-slate-300 shadow-sm transition-colors">
-      <header class="w-full max-w-md mx-auto pt-safe px-3 sm:px-4 py-2 flex items-center justify-between gap-2">
-        <div class="flex items-center gap-2 min-w-0 flex-1">
-          <div class="w-8 h-8 rounded-xl bg-doodleYellow dark:bg-amber-500/20 border-2 border-ink dark:border-slate-300 shadow-pixel-sm flex items-center justify-center shrink-0">
-            <span class="text-base">📒</span>
+    <div class="lg:hidden w-full sticky top-0 z-30 bg-[#faf9f6]/95 dark:bg-[#0d0e11]/95 backdrop-blur-md border-b border-zinc-900/15 dark:border-white/10 transition-colors">
+      <header class="w-full max-w-md mx-auto pt-safe px-3.5 py-2.5 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 min-w-0 flex-1">
+          <div class="w-9 h-9 rounded-xl bg-amber-400 dark:bg-amber-400/15 border border-zinc-900 dark:border-amber-400/30 flex items-center justify-center shrink-0 text-zinc-900 dark:text-amber-300">
+            <i data-lucide="book-marked" class="w-4 h-4"></i>
           </div>
           <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-1 min-w-0">
-              <h1 class="font-pixel text-[11px] sm:text-xs font-bold tracking-tight text-ink dark:text-slate-100 leading-none truncate">Budget Journal</h1>
-              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.9</span>
+            <div class="flex items-center gap-1.5 min-w-0">
+              <h1 class="font-sans text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">Budget Journal</h1>
+              <span class="shrink-0 whitespace-nowrap inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-monoNum font-bold leading-none rounded bg-amber-400/25 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 border border-amber-500/40 dark:border-amber-400/30">v4.0</span>
             </div>
-            <p id="periodBadge" class="font-silkscreen text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Memuat siklus...</p>
+            <p id="periodBadge" class="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
         </div>
         
-        <div class="flex items-center gap-1 shrink-0">
-          <button id="quickThemeBtn" onclick="cycleTheme()" title="Ganti Tema" class="w-7 h-7 sm:w-8 sm:h-8 rounded-none bg-white dark:bg-slate-800 border-2 border-ink dark:border-slate-300 shadow-pixel-sm flex items-center justify-center">
-            <span id="quickThemeIcon" class="text-xs">☀️</span>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button id="quickThemeBtn" onclick="cycleTheme()" aria-label="Ganti Tema" title="Ganti Tema" class="doodle-sticker w-11 h-11 bg-white dark:bg-[#16171b] flex items-center justify-center text-zinc-800 dark:text-zinc-200">
+            <span id="quickThemeIcon" class="inline-flex items-center justify-center"><i data-lucide="monitor" class="w-4 h-4"></i></span>
           </button>
-          <button id="syncBtn" onclick="syncData()" title="Sinkronisasi" class="w-7 h-7 sm:w-8 sm:h-8 rounded-none bg-white dark:bg-slate-800 border-2 border-ink dark:border-slate-300 shadow-pixel-sm flex items-center justify-center">
-            <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 text-ink dark:text-slate-200"></i>
+          <button id="syncBtn" onclick="syncData()" aria-label="Sinkronisasi" title="Sinkronisasi" class="doodle-sticker w-11 h-11 bg-white dark:bg-[#16171b] flex items-center justify-center text-zinc-800 dark:text-zinc-200">
+            <i data-lucide="refresh-cw" id="syncIcon" class="w-4 h-4"></i>
           </button>
-          <button onclick="openModal('settingsModal')" title="Pengaturan" class="w-7 h-7 sm:w-8 sm:h-8 rounded-none bg-doodleBlue dark:bg-sky-500/30 border-2 border-ink dark:border-slate-300 shadow-pixel-sm flex items-center justify-center">
-            <i data-lucide="settings" class="w-3.5 h-3.5 text-ink dark:text-slate-200"></i>
+          <button onclick="openModal('settingsModal')" aria-label="Pengaturan" title="Pengaturan" class="doodle-sticker w-11 h-11 bg-white dark:bg-[#16171b] flex items-center justify-center text-zinc-800 dark:text-zinc-200">
+            <i data-lucide="settings" class="w-4 h-4"></i>
           </button>
         </div>
       </header>
 
-      <!-- 📱 MOBILE SCRAPBOOK NAVIGATION TABS (Sticky together with Header) -->
-      <nav class="w-full max-w-md mx-auto px-3 pb-2 pt-0.5 flex gap-1.5 overflow-x-auto no-scrollbar">
-        <button onclick="switchTab('journal')" id="navTab_journal" class="doodle-sticker flex-1 min-w-[76px] py-2 px-2.5 rounded-xl font-doodle text-xs sm:text-sm font-bold flex items-center justify-center gap-1 bg-doodleYellow text-ink transition shadow-doodle">
-          <span>📖</span> Jurnal
+      <!-- 📱 MOBILE NAVIGATION TABS (Uniform Height & Crisp Icons) -->
+      <nav aria-label="Menu Utama Mobile" class="w-full max-w-md mx-auto px-3.5 pb-2.5 pt-0.5 grid grid-cols-4 gap-1.5">
+        <button onclick="switchTab('journal')" id="navTab_journal" class="doodle-sticker h-11 px-1.5 text-xs font-bold flex items-center justify-center gap-1 bg-amber-400 text-zinc-950 whitespace-nowrap">
+          <i data-lucide="book-open" class="w-3.5 h-3.5 shrink-0"></i>
+          <span>Jurnal</span>
         </button>
-        <button onclick="switchTab('dashboard')" id="navTab_dashboard" class="doodle-sticker flex-1 min-w-[84px] py-2 px-2.5 rounded-xl font-doodle text-xs sm:text-sm font-bold flex items-center justify-center gap-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition">
-          <span>📊</span> Ringkasan
+        <button onclick="switchTab('dashboard')" id="navTab_dashboard" class="doodle-sticker h-11 px-1.5 text-xs font-semibold flex items-center justify-center gap-1 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5 shrink-0"></i>
+          <span>Ringkasan</span>
         </button>
-        <button onclick="switchTab('bills')" id="navTab_bills" class="doodle-sticker flex-1 min-w-[78px] py-2 px-2.5 rounded-xl font-doodle text-xs sm:text-sm font-bold flex items-center justify-center gap-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition">
-          <span>💡</span> Tagihan
+        <button onclick="switchTab('bills')" id="navTab_bills" class="doodle-sticker h-11 px-1.5 text-xs font-semibold flex items-center justify-center gap-1 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
+          <i data-lucide="receipt" class="w-3.5 h-3.5 shrink-0"></i>
+          <span>Tagihan</span>
         </button>
-        <button onclick="switchTab('debts')" id="navTab_debts" class="doodle-sticker flex-1 min-w-[76px] py-2 px-2.5 rounded-xl font-doodle text-xs sm:text-sm font-bold flex items-center justify-center gap-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition">
-          <span>🤝</span> Hutang
+        <button onclick="switchTab('debts')" id="navTab_debts" class="doodle-sticker h-11 px-1.5 text-xs font-semibold flex items-center justify-center gap-1 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
+          <i data-lucide="hand-coins" class="w-3.5 h-3.5 shrink-0"></i>
+          <span>Hutang</span>
         </button>
       </nav>
     </div>
@@ -337,13 +322,13 @@
     <!-- DESKTOP TOP BAR BREADCRUMB (Visible ONLY on Desktop >= 1024px) -->
     <div class="hidden lg:flex w-full max-w-6xl px-8 pt-6 pb-2 items-center justify-between">
       <div>
-        <h2 id="desktopActiveTabHeading" class="font-doodle text-3xl font-bold text-ink dark:text-white">📖 Jurnal Pengeluaran Harian</h2>
-        <p class="font-doodle text-xs text-slate-500 dark:text-slate-400">Tampilan Landscape Windows • Terintegrasi Google Sheets</p>
+        <h2 id="desktopActiveTabHeading" class="font-sans text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">Jurnal Pengeluaran Harian</h2>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Terintegrasi secara otomatis dengan Google Sheets</p>
       </div>
       <div class="flex items-center gap-3">
-        <div class="px-3 py-1.5 rounded-none bg-white dark:bg-[#1a1c23] border border-ink/40 dark:border-slate-500 text-xs font-bold flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-none bg-emerald-500 animate-pulse border border-ink"></span>
-          <span id="desktopSyncStatus" class="font-doodle">Sinkronisasi Siap</span>
+        <div class="px-3 py-1.5 rounded-lg bg-white dark:bg-[#141519] border border-zinc-200 dark:border-white/10 text-xs font-medium flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="desktopSyncStatus" class="font-monoNum text-[11px]">Sinkronisasi siap</span>
         </div>
       </div>
     </div>
@@ -366,138 +351,137 @@
           <div class="lg:col-span-7 flex flex-col gap-6 min-w-0 w-full">
 
             <!-- HERO CARD (Dynamic Daily Budget) -->
-            <div class="doodle-card p-3.5 sm:p-5 lg:p-6 bg-white dark:bg-[#181a24] shadow-pixel">
+            <div class="doodle-card p-3.5 sm:p-5 lg:p-6 bg-white dark:bg-[#121215] shadow-pixel">
               <div class="washi-tape w-32 h-6 -top-3 left-1/2 -translate-x-1/2  border-t border-b border-amber-400/40"></div>
 
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-1.5 min-w-0">
-                  <span class="text-base lg:text-lg shrink-0">🎯</span>
-                  <span class="font-silkscreen text-xs sm:text-base lg:text-lg text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wide truncate">Jatah Uang Hari Ini</span>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2 min-w-0">
+                  <i data-lucide="target" class="w-4 h-4 text-amber-500 shrink-0"></i>
+                  <span class="font-sans text-sm sm:text-base font-bold text-zinc-800 dark:text-zinc-200 truncate">Jatah uang hari ini</span>
                 </div>
-                <span id="healthBadge" class="doodle-sticker px-2.5 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold font-silkscreen bg-doodleMint dark:bg-emerald-950 dark:text-emerald-300 text-ink border-2 border-ink shadow-pixel-sm shrink-0">
-                  ✨ Aman
+                <span id="healthBadge" class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 shrink-0">
+                  Aman terkendali
                 </span>
               </div>
 
-              <div class="my-2.5 sm:my-3 bg-doodleYellow/20 dark:bg-amber-950/30 border-2 border-dashed border-amber-500/80 dark:border-amber-500/60 rounded-2xl p-4 lg:p-5 text-center relative overflow-hidden shadow-pixel-sm">
-                <div class="absolute -right-3 -bottom-3 opacity-15 pointer-events-none text-7xl">💸</div>
-                <span class="font-doodle text-base lg:text-lg text-slate-600 dark:text-slate-400 block">Sisa Yang Boleh Dipakai:</span>
-                <div id="todayRemainingDisplay" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-ink dark:text-white tracking-tight flex items-center justify-center gap-1 mt-0.5">
-                  <span class="text-2xl sm:text-3xl lg:text-4xl font-monoNum font-bold text-amber-600 dark:text-amber-400">Rp</span>
-                  <span id="todayRemainingVal" class="font-monoNum font-bold text-4xl sm:text-5xl lg:text-6xl tracking-wider">0</span>
+              <div class="my-2.5 bg-amber-50/70 dark:bg-amber-500/[0.06] border border-amber-500/30 dark:border-amber-400/20 rounded-xl p-5 text-center relative overflow-hidden">
+                <span class="text-xs sm:text-sm font-medium text-zinc-600 dark:text-zinc-400 block">Sisa yang boleh dipakai hari ini</span>
+                <div id="todayRemainingDisplay" class="font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight flex items-baseline justify-center gap-1.5 mt-1">
+                  <span class="text-xl sm:text-2xl font-monoNum font-bold text-amber-600 dark:text-amber-400">Rp</span>
+                  <span id="todayRemainingVal" class="font-monoNum font-extrabold text-3xl sm:text-4xl lg:text-5xl tracking-tight">0</span>
                 </div>
-                <p class="font-doodle text-sm lg:text-base text-slate-600 dark:text-slate-400 mt-1">
-                  Dihitung dari: <span id="todayDailyBudgetVal" class="font-bold text-ink dark:text-slate-200">Rp 0</span> per hari
+                <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1.5">
+                  Dihitung dari <span id="todayDailyBudgetVal" class="font-monoNum font-bold text-zinc-800 dark:text-zinc-200">Rp 0</span> per hari
                 </p>
               </div>
 
               <!-- Doodled Progress Bar -->
               <div class="mt-2">
-                <div class="w-full pixel-bar-bg h-4 border-2 border-ink dark:border-slate-400 overflow-hidden p-0.5">
-                  <div id="todayProgressBar" class="bg-amber-400 dark:bg-amber-500 h-full rounded-full transition-all duration-300 border-r-2 border-ink" style="width: 0%"></div>
+                <div class="w-full pixel-bar-bg h-4 border-2 border-ink dark:border-zinc-400 overflow-hidden p-0.5">
+                  <div id="todayProgressBar" class="bg-amber-400 dark:bg-amber-500 h-full rounded-full transition-[width] duration-150 ease-out border-r-2 border-ink" style="width: 0%"></div>
                 </div>
               </div>
 
-              <!-- 3 Sticky Badges -->
-              <div class="grid grid-cols-3 gap-1 sm:gap-2 mt-3 pt-2.5 border-t-2 border-dashed border-slate-200 dark:border-slate-700">
-                <div class="doodle-sticker p-1 sm:p-2 rounded-none bg-doodlePink dark:bg-rose-950/50 text-center shadow-pixel-sm min-w-0">
-                  <span class="font-silkscreen text-[8px] sm:text-[10px] lg:text-xs text-slate-700 dark:text-rose-300 block font-bold leading-tight truncate">Terpakai</span>
-                  <span id="todaySpentVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-rose-700 dark:text-rose-400 mt-0.5 block leading-tight break-words">Rp 0</span>
+              <!-- 3 Supporting Metrics (1-to-3 Rule) -->
+              <div class="grid grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-zinc-200 dark:border-white/10">
+                <div class="p-2.5 rounded-xl bg-rose-500/[0.08] dark:bg-rose-500/[0.10] border border-rose-500/20 text-center min-w-0">
+                  <span class="text-[11px] text-zinc-600 dark:text-rose-200/80 block font-medium leading-tight truncate">Terpakai hari ini</span>
+                  <span id="todaySpentVal" class="text-xs sm:text-sm font-bold font-monoNum text-rose-700 dark:text-rose-400 mt-1 block leading-tight break-words">Rp 0</span>
                 </div>
-                <div class="doodle-sticker p-1 sm:p-2 rounded-none bg-doodleOrange dark:bg-amber-950/50 text-center shadow-pixel-sm min-w-0">
-                  <span class="font-silkscreen text-[8px] sm:text-[10px] lg:text-xs text-slate-700 dark:text-amber-300 block font-bold leading-tight truncate">Waktu</span>
-                  <span id="daysRemainingVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-amber-800 dark:text-amber-400 mt-0.5 block leading-tight break-words">0 Hari</span>
+                <div class="p-2.5 rounded-xl bg-amber-500/[0.08] dark:bg-amber-500/[0.10] border border-amber-500/20 text-center min-w-0">
+                  <span class="text-[11px] text-zinc-600 dark:text-amber-200/80 block font-medium leading-tight truncate">Sisa waktu</span>
+                  <span id="daysRemainingVal" class="text-xs sm:text-sm font-bold font-monoNum text-amber-800 dark:text-amber-400 mt-1 block leading-tight break-words">0 Hari</span>
                 </div>
-                <div class="doodle-sticker p-1 sm:p-2 rounded-none bg-doodleMint dark:bg-emerald-950/50 text-center shadow-pixel-sm min-w-0">
-                  <span class="font-silkscreen text-[8px] sm:text-[10px] lg:text-xs text-slate-700 dark:text-emerald-300 block font-bold leading-tight truncate">Sisa Tab</span>
-                  <span id="totalRemainingPoolVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-emerald-800 dark:text-emerald-400 mt-0.5 block leading-tight break-words">Rp 0</span>
+                <div class="p-2.5 rounded-xl bg-emerald-500/[0.08] dark:bg-emerald-500/[0.10] border border-emerald-500/20 text-center min-w-0">
+                  <span class="text-[11px] text-zinc-600 dark:text-emerald-200/80 block font-medium leading-tight truncate">Dana aman siklus</span>
+                  <span id="totalRemainingPoolVal" class="text-xs sm:text-sm font-bold font-monoNum text-emerald-800 dark:text-emerald-400 mt-1 block leading-tight break-words">Rp 0</span>
                 </div>
               </div>
             </div>
 
             <!-- 🧮 ALUR KEUANGAN MASTERMIND (Budget Protection Engine) -->
-            <div class="doodle-card p-3.5 sm:p-5 bg-white dark:bg-[#181a24] border-2 border-ink dark:border-slate-500 relative shadow-pixel">
+            <div class="doodle-card p-3.5 sm:p-5 bg-white dark:bg-[#121215] border-2 border-ink dark:border-zinc-500 relative shadow-pixel">
               <div class="washi-tape-pink w-32 h-5 -top-2.5 left-6 "></div>
 
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 cursor-pointer" onclick="toggleMastermindDetails()">
-                <div class="flex items-start sm:items-center gap-2 min-w-0">
-                  <span class="text-xl shrink-0 mt-0.5 sm:mt-0">🧮</span>
+                <div class="flex items-start sm:items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                    <i data-lucide="calculator" class="w-4 h-4"></i>
+                  </div>
                   <div class="min-w-0">
-                    <h3 class="font-silkscreen text-xs sm:text-base lg:text-lg font-bold text-ink dark:text-white leading-tight">Alur Keuangan Mastermind</h3>
-                    <span class="text-[9px] sm:text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 block mt-0.5">Budget dipotong otomatis oleh kewajiban tagihan & hutang</span>
+                    <h3 class="font-sans text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 leading-tight">Alur Keuangan Mastermind</h3>
+                    <span class="text-xs text-zinc-500 dark:text-zinc-400 block mt-0.5">Budget dipotong otomatis oleh kewajiban tagihan & hutang</span>
                   </div>
                 </div>
-                <div class="doodle-sticker self-start sm:self-auto px-2 py-0.5 rounded-none bg-doodleYellow dark:bg-amber-500/20 text-ink dark:text-amber-300 text-[10px] sm:text-xs font-silkscreen font-bold flex items-center gap-1 shrink-0">
+                <div class="doodle-sticker self-start sm:self-auto h-8 px-3 bg-zinc-50 dark:bg-[#18191e] text-zinc-700 dark:text-zinc-300 text-xs font-semibold flex items-center gap-1.5 shrink-0">
                   <span id="mastermindToggleText">Sembunyikan</span>
-                  <span id="mastermindToggleArrow">▲</span>
+                  <span id="mastermindToggleArrow" class="text-[10px]">▲</span>
                 </div>
               </div>
 
-              <div id="mastermindDetailsContent" class="mt-4 pt-3 border-t-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col gap-2.5 text-xs lg:text-sm">
-                <!-- 1. Budget Awal Siklus -->
+              <div id="mastermindDetailsContent" class="mt-4 pt-3.5 border-t border-zinc-200 dark:border-white/10 flex flex-col gap-2.5 text-xs sm:text-sm">
                 <div class="flex justify-between items-center gap-2">
-                  <span class="font-silkscreen text-[10px] sm:text-xs lg:text-sm text-slate-700 dark:text-slate-300 font-bold flex items-center gap-1.5 min-w-0">
-                    <span class="shrink-0">💵</span> <span class="truncate sm:whitespace-normal">Budget Awal Siklus:</span>
+                  <span class="text-zinc-700 dark:text-zinc-300 font-medium flex items-center gap-2 min-w-0">
+                    <i data-lucide="banknote" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
+                    <span class="truncate sm:whitespace-normal">Budget awal siklus</span>
                   </span>
-                  <span id="mmBudgetAwal" class="font-bold font-monoNum text-xs sm:text-sm lg:text-base text-ink dark:text-white shrink-0">Rp 0</span>
+                  <span id="mmBudgetAwal" class="font-bold font-monoNum text-zinc-900 dark:text-zinc-100 shrink-0">Rp 0</span>
                 </div>
 
-                <!-- 2. Potongan Tagihan Rutin Pending -->
                 <div class="flex justify-between items-center gap-2 text-rose-600 dark:text-rose-400">
-                  <span class="font-silkscreen text-[10px] sm:text-xs lg:text-sm font-bold flex items-center gap-1.5 min-w-0">
-                    <span class="shrink-0">💡</span> <span class="truncate sm:whitespace-normal">(-) Tagihan Rutin:</span>
+                  <span class="font-medium flex items-center gap-2 min-w-0">
+                    <i data-lucide="receipt" class="w-3.5 h-3.5 shrink-0"></i>
+                    <span class="truncate sm:whitespace-normal">Tagihan rutin belum dibayar</span>
                   </span>
-                  <span id="mmTagihanPending" class="font-bold font-monoNum text-xs sm:text-sm lg:text-base shrink-0">-Rp 0</span>
+                  <span id="mmTagihanPending" class="font-bold font-monoNum shrink-0">-Rp 0</span>
                 </div>
 
-                <!-- 3. Potongan Hutang/Paylater Pending -->
                 <div class="flex justify-between items-center gap-2 text-rose-600 dark:text-rose-400">
-                  <span class="font-silkscreen text-[10px] sm:text-xs lg:text-sm font-bold flex items-center gap-1.5 min-w-0">
-                    <span class="shrink-0">💳</span> <span class="truncate sm:whitespace-normal">(-) Hutang/Paylater:</span>
+                  <span class="font-medium flex items-center gap-2 min-w-0">
+                    <i data-lucide="credit-card" class="w-3.5 h-3.5 shrink-0"></i>
+                    <span class="truncate sm:whitespace-normal">Kewajiban hutang / paylater</span>
                   </span>
-                  <span id="mmHutangPending" class="font-bold font-monoNum text-xs sm:text-sm lg:text-base shrink-0">-Rp 0</span>
+                  <span id="mmHutangPending" class="font-bold font-monoNum shrink-0">-Rp 0</span>
                 </div>
 
-                <!-- 4. Pengeluaran Belanja Berjalan -->
                 <div class="flex justify-between items-center gap-2 text-rose-600 dark:text-rose-400">
-                  <span class="font-silkscreen text-[10px] sm:text-xs lg:text-sm font-bold flex items-center gap-1.5 min-w-0">
-                    <span class="shrink-0">🛒</span> <span class="truncate sm:whitespace-normal">(-) Pengeluaran:</span>
+                  <span class="font-medium flex items-center gap-2 min-w-0">
+                    <i data-lucide="shopping-bag" class="w-3.5 h-3.5 shrink-0"></i>
+                    <span class="truncate sm:whitespace-normal">Pengeluaran belanja berjalan</span>
                   </span>
-                  <span id="mmPengeluaranBerjalan" class="font-bold font-monoNum text-xs sm:text-sm lg:text-base shrink-0">-Rp 0</span>
+                  <span id="mmPengeluaranBerjalan" class="font-bold font-monoNum shrink-0">-Rp 0</span>
                 </div>
 
-                <!-- 5. Topup / Pemasukan Tambahan -->
                 <div class="flex justify-between items-center gap-2 text-emerald-600 dark:text-emerald-400">
-                  <span class="font-silkscreen text-[10px] sm:text-xs lg:text-sm font-bold flex items-center gap-1.5 min-w-0">
-                    <span class="shrink-0">💰</span> <span class="truncate sm:whitespace-normal">(+) Top-up/Masuk:</span>
+                  <span class="font-medium flex items-center gap-2 min-w-0">
+                    <i data-lucide="arrow-down-left" class="w-3.5 h-3.5 shrink-0"></i>
+                    <span class="truncate sm:whitespace-normal">Top-up / pemasukan tambahan</span>
                   </span>
-                  <span id="mmTopupBerjalan" class="font-bold font-monoNum text-xs sm:text-sm lg:text-base shrink-0">+Rp 0</span>
+                  <span id="mmTopupBerjalan" class="font-bold font-monoNum shrink-0">+Rp 0</span>
                 </div>
 
-                <!-- 6. Sisa Bersih Siap Belanja (Dana Aman) -->
-                <div class="pt-2 border-t-2 border-dashed border-slate-200 dark:border-slate-700 flex justify-between items-center gap-2 text-xs sm:text-sm lg:text-base font-bold">
-                  <span class="font-silkscreen text-ink dark:text-white text-[10px] sm:text-xs lg:text-sm truncate sm:whitespace-normal">✨ Dana Bersih Aman:</span>
-                  <span id="mmDanaAman" class="font-monoNum font-bold text-emerald-700 dark:text-emerald-300 text-sm sm:text-base lg:text-xl shrink-0">Rp 0</span>
+                <div class="pt-3 border-t border-zinc-200 dark:border-white/10 flex justify-between items-center gap-2 font-bold">
+                  <span class="text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm">Dana bersih aman belanja</span>
+                  <span id="mmDanaAman" class="font-monoNum font-extrabold text-emerald-700 dark:text-emerald-300 text-base sm:text-lg shrink-0">Rp 0</span>
                 </div>
-                <div class="text-[9px] sm:text-[10px] lg:text-xs font-silkscreen text-slate-500 dark:text-slate-400 text-right">
-                  Dibagi <span id="mmHariTersisa" class="font-bold text-ink dark:text-slate-200">0 hari</span> = <span id="mmJatahPerHari" class="font-bold font-monoNum text-amber-700 dark:text-amber-400 text-xs sm:text-sm lg:text-base">Rp 0</span> / hari
+                <div class="text-xs text-zinc-500 dark:text-zinc-400 text-right">
+                  Dibagi <span id="mmHariTersisa" class="font-semibold text-zinc-800 dark:text-zinc-200">0 hari</span> = <span id="mmJatahPerHari" class="font-bold font-monoNum text-amber-700 dark:text-amber-400">Rp 0</span> / hari
                 </div>
 
-                <!-- 7. Piutang Tertahan (Akan Kembali) -->
-                <div class="mt-2 p-3 rounded-none bg-sky-50 dark:bg-sky-950/40 border-2 border-sky-300 dark:border-sky-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                  <div class="flex items-start sm:items-center gap-2 min-w-0">
-                    <span class="text-xl shrink-0">🤝</span>
+                <div class="mt-2 p-3.5 rounded-xl bg-sky-500/[0.08] border border-sky-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div class="flex items-start sm:items-center gap-2.5 min-w-0">
+                    <i data-lucide="hand-coins" class="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5 sm:mt-0"></i>
                     <div class="min-w-0">
-                      <div class="flex items-center gap-1.5 flex-wrap">
-                        <span class="font-doodle text-xs lg:text-sm font-bold text-sky-900 dark:text-sky-200">Dana Tertahan: Piutang Uang Saya</span>
-                        <span class="text-[10px] font-bold font-silkscreen px-1.5 py-0.5 bg-sky-200 dark:bg-sky-800 text-sky-800 dark:text-sky-200 rounded-full border border-sky-400 shrink-0">Akan Kembali</span>
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-xs sm:text-sm font-bold text-sky-900 dark:text-sky-200">Dana tertahan (piutang / talangan)</span>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 bg-sky-500/15 text-sky-800 dark:text-sky-200 rounded-full border border-sky-500/30 shrink-0">Akan kembali</span>
                       </div>
-                      <span class="text-[10px] lg:text-[11px] text-slate-500 dark:text-slate-400 font-doodle block mt-0.5 leading-tight">Uang dipinjamkan ke orang lain. Otomatis menambah saldo saat dilunasi.</span>
+                      <span class="text-[11px] text-zinc-500 dark:text-zinc-400 block mt-0.5 leading-snug">Otomatis kembali menambah saldo dompet saat dilunasi.</span>
                     </div>
                   </div>
-                  <div class="flex items-center justify-between sm:justify-end gap-2 pt-1.5 sm:pt-0 border-t sm:border-t-0 border-sky-200 dark:border-sky-800 shrink-0">
-                    <span class="sm:hidden font-doodle text-xs text-sky-700 dark:text-sky-300 font-bold">Total:</span>
-                    <span id="mmPiutangTertahan" class="font-monoNum font-bold text-sky-700 dark:text-sky-300 text-base lg:text-lg">Rp 0</span>
+                  <div class="flex items-center justify-between sm:justify-end gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-sky-500/20 shrink-0">
+                    <span class="sm:hidden text-xs text-sky-700 dark:text-sky-300 font-semibold">Total:</span>
+                    <span id="mmPiutangTertahan" class="font-monoNum font-bold text-sky-700 dark:text-sky-300 text-base">Rp 0</span>
                   </div>
                 </div>
               </div>
@@ -505,15 +489,15 @@
 
             <!-- CATATAN TRANSAKSI TERBARU -->
             <div class="flex-1">
-              <div class="flex items-center justify-between gap-2 mb-3 px-1 flex-wrap">
-                <div class="flex items-center gap-1.5">
-                  <span class="text-sm">🏷️</span>
-                  <h2 class="font-doodle text-xl font-bold text-ink dark:text-slate-100">Catatan Belanja Terbaru</h2>
+              <div class="flex items-center justify-between gap-2 mb-3 px-0.5 flex-wrap">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="history" class="w-4 h-4 text-amber-500 shrink-0"></i>
+                  <h2 class="font-sans text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100">Catatan Transaksi</h2>
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <button type="button" id="btnTxScope_cycle" onclick="setJournalTxScope('cycle')" class="doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-doodleYellow text-ink border border-ink dark:border-slate-300 shadow-pixel-sm transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400">Siklus Ini</button>
-                  <button type="button" id="btnTxScope_all" onclick="setJournalTxScope('all')" class="doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-ink dark:border-slate-400 transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400">Semua</button>
-                  <span id="txCount" class="font-doodle font-monoNum text-xs px-2.5 py-0.5 bg-white dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none shadow-doodle-sm">0 Catatan</span>
+                  <button type="button" id="btnTxScope_cycle" onclick="setJournalTxScope('cycle')" class="doodle-sticker h-8 px-3 text-xs font-bold bg-amber-400 text-zinc-950">Siklus Ini</button>
+                  <button type="button" id="btnTxScope_all" onclick="setJournalTxScope('all')" class="doodle-sticker h-8 px-3 text-xs font-semibold bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300">Semua</button>
+                  <span id="txCount" class="font-monoNum text-xs h-8 px-2.5 inline-flex items-center bg-white dark:bg-[#141519] border border-zinc-200 dark:border-white/10 rounded-lg text-zinc-600 dark:text-zinc-400">0 Catatan</span>
                 </div>
               </div>
               <div id="transactionsList" class="flex flex-col gap-2.5"></div>
@@ -525,41 +509,43 @@
           <div class="lg:col-span-5 flex flex-col gap-6 min-w-0 w-full">
 
             <!-- DOMPET & REKENING SAYA -->
-            <div class="doodle-card p-3.5 sm:p-5 bg-white dark:bg-[#181a24] shadow-pixel">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-1.5">
-                  <span class="text-base">👛</span>
-                  <h3 class="font-doodle text-xl font-bold text-ink dark:text-slate-100">Dompet & Rekening</h3>
+            <div class="doodle-card p-4 sm:p-5 bg-white dark:bg-[#121215]">
+              <div class="flex items-center justify-between gap-2 mb-3.5">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="wallet" class="w-4 h-4 text-amber-500 shrink-0"></i>
+                  <h3 class="font-sans text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100">Dompet & Rekening</h3>
                 </div>
-                <button onclick="openWalletManagerModal()" class="doodle-sticker px-2.5 py-1 rounded-none bg-doodleYellow dark:bg-amber-500/20 text-ink dark:text-amber-300 hover:bg-amber-300 text-xs font-doodle font-bold flex items-center gap-1 transition active:scale-95">
-                  <span>⚙️ Atur Saldo</span>
+                <button onclick="openWalletManagerModal()" class="doodle-sticker h-8 px-3 bg-amber-400/20 dark:bg-amber-400/15 hover:bg-amber-400/30 text-amber-950 dark:text-amber-300 text-xs font-semibold flex items-center gap-1.5 shrink-0">
+                  <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+                  <span>Atur Saldo</span>
                 </button>
               </div>
 
-              <div class="mb-3 px-3 py-2 rounded-none bg-[#faf5eb] dark:bg-slate-900 border border-ink/40 dark:border-slate-600 flex items-center justify-between text-xs">
-                <span class="font-doodle text-slate-600 dark:text-slate-400 font-bold">Total Saldo di Dompet:</span>
+              <div class="mb-3.5 px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-[#18191e] border border-zinc-200 dark:border-white/10 flex items-center justify-between text-xs">
+                <span class="text-zinc-600 dark:text-zinc-400 font-semibold">Total saldo di dompet</span>
                 <span id="totalWalletBalanceVal" class="font-monoNum font-bold text-emerald-700 dark:text-emerald-400 text-base">Rp 0</span>
               </div>
 
               <!-- List Dompet: Horizontal di HP, Vertikal Rapi di Windows -->
-              <div id="walletsList" class="flex lg:flex-col gap-2.5 overflow-x-auto lg:overflow-visible no-scrollbar py-1 w-full min-w-0">
+              <div id="walletsList" class="flex lg:flex-col gap-2.5 overflow-x-auto lg:overflow-visible no-scrollbar py-0.5 w-full min-w-0">
                 <!-- Rendered dynamically -->
               </div>
             </div>
 
             <!-- DESKTOP WIDGET: Pengingat Tagihan & Hutang Jatuh Tempo -->
-            <div class="doodle-card p-5 bg-[#fffdfa] dark:bg-[#1a1c23] flex flex-col gap-3">
-              <h3 class="font-doodle text-lg font-bold text-ink dark:text-white flex items-center gap-1.5">
-                <span>⏰</span> Pengingat Kewajiban Terdekat
+            <div class="doodle-card p-4 sm:p-5 bg-white dark:bg-[#121215] flex flex-col gap-3">
+              <h3 class="font-sans text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                <i data-lucide="bell-ring" class="w-4 h-4 text-amber-500 shrink-0"></i>
+                <span>Pengingat Kewajiban Terdekat</span>
               </h3>
               
               <div id="desktopRemindersList" class="flex flex-col gap-2">
                 <!-- Rendered dynamically -->
               </div>
 
-              <div class="flex gap-2 mt-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-                <button onclick="switchTab('bills')" class="doodle-sticker flex-1 py-1.5 rounded-none bg-slate-50 dark:bg-slate-800 text-xs font-bold font-doodle hover:bg-slate-100">Lihat Tagihan</button>
-                <button onclick="switchTab('debts')" class="doodle-sticker flex-1 py-1.5 rounded-none bg-slate-50 dark:bg-slate-800 text-xs font-bold font-doodle hover:bg-slate-100">Lihat Hutang</button>
+              <div class="flex gap-2 mt-1 pt-3 border-t border-zinc-200 dark:border-white/10">
+                <button onclick="switchTab('bills')" class="doodle-sticker flex-1 h-9 bg-zinc-50 dark:bg-[#18191e] hover:bg-zinc-100 dark:hover:bg-[#202228] text-xs font-semibold text-zinc-800 dark:text-zinc-200">Lihat Tagihan</button>
+                <button onclick="switchTab('debts')" class="doodle-sticker flex-1 h-9 bg-zinc-50 dark:bg-[#18191e] hover:bg-zinc-100 dark:hover:bg-[#202228] text-xs font-semibold text-zinc-800 dark:text-zinc-200">Lihat Hutang</button>
               </div>
             </div>
 
@@ -578,31 +564,43 @@
         <!-- 4 KPI Cards Grid di Landscape Windows -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
           <!-- Card 1: Net Worth -->
-          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-[#fffdfa] dark:bg-[#1a1c23]">
-            <span class="font-doodle text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block leading-tight">💎 Kekayaan Bersih</span>
-            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-ink dark:text-white" id="dbNetWorthVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-400 block mt-1 leading-tight">Saldo + Piutang - Hutang</span>
+          <div class="doodle-card kpi-stat-card p-4 bg-white dark:bg-[#121215]">
+            <div class="flex items-center gap-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+              <span>Kekayaan bersih</span>
+            </div>
+            <div class="kpi-stat-val mt-2 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-zinc-900 dark:text-zinc-50" id="dbNetWorthVal">Rp 0</div>
+            <span class="text-[11px] text-zinc-500 dark:text-zinc-500 block mt-1 leading-tight">Saldo + piutang − hutang</span>
           </div>
 
           <!-- Card 2: Total Saldo Dompet -->
-          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-400">
-            <span class="font-doodle text-[11px] sm:text-xs font-bold text-emerald-700 dark:text-emerald-300 uppercase block leading-tight">👛 Uang di Dompet</span>
-            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-emerald-800 dark:text-emerald-200" id="dbTotalAssetsVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-1 leading-tight">Tunai, bank & e-wallet</span>
+          <div class="doodle-card kpi-stat-card p-4 bg-white dark:bg-[#121215]">
+            <div class="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+              <i data-lucide="wallet" class="w-3.5 h-3.5 shrink-0"></i>
+              <span>Uang di dompet</span>
+            </div>
+            <div class="kpi-stat-val mt-2 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-emerald-700 dark:text-emerald-300" id="dbTotalAssetsVal">Rp 0</div>
+            <span class="text-[11px] text-zinc-500 dark:text-zinc-500 block mt-1 leading-tight">Tunai, bank & e-wallet</span>
           </div>
 
           <!-- Card 3: Beban Hutang/Paylater -->
-          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-rose-50/60 dark:bg-rose-950/30 border-rose-400">
-            <span class="font-doodle text-[11px] sm:text-xs font-bold text-rose-700 dark:text-rose-300 uppercase block leading-tight">💳 Beban Hutang</span>
-            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-rose-800 dark:text-rose-200" id="dbTotalDebtsVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-1 leading-tight">Paylater & pinjaman</span>
+          <div class="doodle-card kpi-stat-card p-4 bg-white dark:bg-[#121215]">
+            <div class="flex items-center gap-1.5 text-xs font-semibold text-rose-700 dark:text-rose-400">
+              <i data-lucide="credit-card" class="w-3.5 h-3.5 shrink-0"></i>
+              <span>Beban hutang</span>
+            </div>
+            <div class="kpi-stat-val mt-2 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-rose-700 dark:text-rose-300" id="dbTotalDebtsVal">Rp 0</div>
+            <span class="text-[11px] text-zinc-500 dark:text-zinc-500 block mt-1 leading-tight">Paylater & pinjaman</span>
           </div>
 
           <!-- Card 4: Piutang Uang Saya -->
-          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-sky-50/60 dark:bg-sky-950/30 border-sky-400">
-            <span class="font-doodle text-[11px] sm:text-xs font-bold text-sky-700 dark:text-sky-300 uppercase block leading-tight">🤝 Piutang Belum Balik</span>
-            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-sky-800 dark:text-sky-200" id="dbTotalReceivablesVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-1 leading-tight">Dipinjamkan ke orang</span>
+          <div class="doodle-card kpi-stat-card p-4 bg-white dark:bg-[#121215]">
+            <div class="flex items-center gap-1.5 text-xs font-semibold text-sky-700 dark:text-sky-400">
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 shrink-0"></i>
+              <span>Piutang belum balik</span>
+            </div>
+            <div class="kpi-stat-val mt-2 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-sky-700 dark:text-sky-300" id="dbTotalReceivablesVal">Rp 0</div>
+            <span class="text-[11px] text-zinc-500 dark:text-zinc-500 block mt-1 leading-tight">Talangan & pinjaman orang</span>
           </div>
         </div>
 
@@ -610,13 +608,14 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           
           <!-- Arus Kas Siklus Berjalan (Mastermind Keuangan) -->
-          <div class="doodle-card p-5 lg:p-6 bg-white dark:bg-[#1a1c23]">
-            <h3 class="font-doodle text-xl font-bold text-ink dark:text-white mb-4 flex items-center gap-1.5">
-              <span>📈</span> Arus Kas Keuangan Mastermind
+          <div class="doodle-card p-5 lg:p-6 bg-white dark:bg-[#121215]">
+            <h3 class="font-sans text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-4 flex items-center gap-2">
+              <i data-lucide="trending-up" class="w-4 h-4 text-amber-500 shrink-0"></i>
+              <span>Arus Kas Keuangan Mastermind</span>
             </h3>
             <div class="space-y-3 text-xs lg:text-sm font-medium">
               <div class="flex justify-between items-center">
-                <span class="text-slate-600 dark:text-slate-400 font-doodle text-sm lg:text-base">Budget Awal Siklus:</span>
+                <span class="text-zinc-600 dark:text-zinc-400 font-doodle text-sm lg:text-base">Budget Awal Siklus:</span>
                 <span id="dbBudgetAwal" class="font-bold font-monoNum text-sm lg:text-base">Rp 0</span>
               </div>
               <div class="flex justify-between items-center text-rose-600 dark:text-rose-400">
@@ -628,26 +627,26 @@
                 <span id="dbHutangPending" class="font-bold font-monoNum text-sm lg:text-base">-Rp 0</span>
               </div>
               <div class="flex justify-between items-center text-rose-600 dark:text-rose-400">
-                <span class="text-slate-600 dark:text-slate-400 font-doodle text-sm lg:text-base">Total Pengeluaran Belanja:</span>
+                <span class="text-zinc-600 dark:text-zinc-400 font-doodle text-sm lg:text-base">Total Pengeluaran Belanja:</span>
                 <span id="dbTotalSpent" class="font-bold font-monoNum text-sm lg:text-base text-rose-600 dark:text-rose-400">-Rp 0</span>
               </div>
               <div class="flex justify-between items-center text-emerald-600 dark:text-emerald-400">
-                <span class="text-slate-600 dark:text-slate-400 font-doodle text-sm lg:text-base">Top-up & Pemasukan Baru:</span>
+                <span class="text-zinc-600 dark:text-zinc-400 font-doodle text-sm lg:text-base">Top-up & Pemasukan Baru:</span>
                 <span id="dbTotalTopup" class="font-bold font-monoNum text-sm lg:text-base text-emerald-600 dark:text-emerald-400">+Rp 0</span>
               </div>
-              <div class="pt-3 border-t-2 border-dashed border-slate-200 dark:border-slate-700 flex justify-between items-center gap-2 text-sm lg:text-base font-black">
+              <div class="pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-700 flex justify-between items-center gap-2 text-sm lg:text-base font-black">
                 <span class="font-doodle text-base lg:text-lg">Sisa Anggaran Bebas Belanja:</span>
                 <span id="dbRemainingBudget" class="font-monoNum font-bold text-emerald-700 dark:text-emerald-300 text-lg lg:text-xl shrink-0">Rp 0</span>
               </div>
             </div>
 
             <!-- Catatan Piutang Mastermind -->
-            <div class="mt-4 p-3 rounded-none bg-sky-50 dark:bg-sky-950/40 border border-sky-300 dark:border-sky-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+            <div class="mt-4 p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-300 dark:border-sky-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <div class="flex items-start sm:items-center gap-2 min-w-0">
                 <span class="text-lg shrink-0">🤝</span>
                 <div class="min-w-0">
                   <span class="font-bold text-sky-900 dark:text-sky-200 font-doodle block text-xs sm:text-sm">Piutang Tertahan (Akan Kembali)</span>
-                  <span class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block leading-tight">Tidak mengurangi kekayaan bersih, kembali saat dilunasi</span>
+                  <span class="text-[10px] sm:text-[11px] text-zinc-500 dark:text-zinc-400 block leading-tight">Tidak mengurangi kekayaan bersih, kembali saat dilunasi</span>
                 </div>
               </div>
               <div class="flex items-center justify-between sm:justify-end gap-2 pt-1 sm:pt-0 border-t sm:border-t-0 border-sky-200 dark:border-sky-800 shrink-0">
@@ -658,11 +657,12 @@
           </div>
 
           <!-- Breakdown Kategori Pengeluaran -->
-          <div class="doodle-card p-5 lg:p-6 bg-white dark:bg-[#1a1c23]">
-            <h3 class="font-doodle text-xl font-bold text-ink dark:text-white mb-2 flex items-center gap-1.5">
-              <span>🍕</span> Pengeluaran per Kategori
+          <div class="doodle-card p-5 lg:p-6 bg-white dark:bg-[#121215]">
+            <h3 class="font-sans text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2 flex items-center gap-2">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-amber-500 shrink-0"></i>
+              <span>Pengeluaran per Kategori</span>
             </h3>
-            <p class="text-xs font-doodle text-slate-500 dark:text-slate-400 mb-3">Persentase pengeluaran belanja berdasarkan pos kebutuhan</p>
+            <p class="text-xs font-doodle text-zinc-500 dark:text-zinc-400 mb-3">Persentase pengeluaran belanja berdasarkan pos kebutuhan</p>
             <div id="categoryBreakdownList" class="flex flex-col gap-3"></div>
           </div>
 
@@ -676,26 +676,28 @@
       <!-- ================================================================= -->
       <section id="tab_bills" class="w-full flex flex-col gap-6 hidden">
         
-        <div class="doodle-card p-4 sm:p-5 bg-doodleYellow/30 dark:bg-amber-950/30 border-2 border-dashed border-amber-400 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 class="font-doodle text-xl font-bold text-ink dark:text-amber-200 flex items-center gap-1.5">
-                <span>💡</span> Kewajiban Bulanan Pasti
+        <div class="doodle-card p-5 bg-white dark:bg-[#121215] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="min-w-0">
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h3 class="font-sans text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                <i data-lucide="receipt" class="w-5 h-5 text-amber-500 shrink-0"></i>
+                <span>Kewajiban Bulanan Pasti</span>
               </h3>
-              <span id="billsPendingBadge" class="doodle-sticker px-2.5 py-0.5 rounded-full text-[11px] font-bold font-silkscreen bg-doodlePink text-rose-800 border-2 border-ink shadow-pixel-sm">0 Belum Bayar</span>
+              <span id="billsPendingBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30 whitespace-nowrap">0 belum dibayar</span>
             </div>
-            <p class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1">
-              Cicilan motor, wifi, kuota, kos, dll yang wajib dibayar tiap bulan agar tidak mengganggu uang jajan harian.
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1 max-w-xl leading-relaxed">
+              Cicilan motor, wifi, kuota, dan tagihan rutin lain disisihkan otomatis agar tidak mengganggu jatah belanja harian.
             </p>
           </div>
 
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 sm:pt-0 border-t-2 border-dashed sm:border-t-0 border-amber-300 dark:border-amber-700 shrink-0">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-3 sm:pt-0 border-t sm:border-t-0 border-zinc-200 dark:border-white/10 shrink-0">
             <div class="flex items-center justify-between sm:block text-left sm:text-right">
-              <span class="text-[11px] font-doodle text-slate-500 dark:text-slate-400 block font-bold">Total Beban Tagihan:</span>
-              <span id="totalBillsAmountVal" class="text-xl sm:text-2xl font-bold font-monoNum text-rose-700 dark:text-rose-400">Rp 0</span>
+              <span class="text-xs text-zinc-500 dark:text-zinc-400 block font-medium">Total beban tagihan</span>
+              <span id="totalBillsAmountVal" class="text-xl sm:text-2xl font-extrabold font-monoNum text-rose-600 dark:text-rose-400">Rp 0</span>
             </div>
-            <button onclick="openModal('addBillModal')" class="doodle-sticker py-2.5 px-4 rounded-none bg-white dark:bg-slate-800 hover:bg-slate-50 font-doodle text-sm font-bold text-ink dark:text-white transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
-              <span>➕ Tambah Tagihan</span>
+            <button onclick="openModal('addBillModal')" class="doodle-sticker h-10 px-4 bg-amber-400 hover:bg-amber-300 font-sans text-xs sm:text-sm font-bold text-zinc-950 flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <i data-lucide="plus" class="w-4 h-4 stroke-[2.5]"></i>
+              <span>Tambah Tagihan</span>
             </button>
           </div>
         </div>
@@ -711,28 +713,35 @@
       <!-- ================================================================= -->
       <section id="tab_debts" class="w-full flex flex-col gap-6 hidden">
 
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div class="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">
           <div class="grid grid-cols-2 gap-3 w-full lg:w-auto">
-            <div class="doodle-card p-3.5 lg:min-w-[175px] bg-rose-50 dark:bg-rose-950/40 border-rose-300 rounded-2xl">
-              <span class="font-doodle text-xs font-bold text-rose-700 dark:text-rose-300 block">💳 Hutang & Paylater</span>
-              <span id="sumHutangSayaVal" class="text-base sm:text-lg font-bold font-monoNum text-rose-800 dark:text-rose-200 mt-0.5 block leading-tight break-words">Rp 0</span>
+            <div class="doodle-card p-4 lg:min-w-[190px] bg-white dark:bg-[#121215]">
+              <span class="text-xs font-semibold text-rose-700 dark:text-rose-400 flex items-center gap-1.5">
+                <i data-lucide="credit-card" class="w-3.5 h-3.5 shrink-0"></i>
+                <span>Hutang & paylater</span>
+              </span>
+              <span id="sumHutangSayaVal" class="text-base sm:text-lg font-extrabold font-monoNum text-zinc-900 dark:text-zinc-100 mt-1 block leading-tight break-words">Rp 0</span>
             </div>
-            <div class="doodle-card p-3.5 lg:min-w-[175px] bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 rounded-2xl">
-              <span class="font-doodle text-xs font-bold text-emerald-700 dark:text-emerald-300 block">🤝 Piutang Uang Saya</span>
-              <span id="sumPiutangSayaVal" class="text-base sm:text-lg font-bold font-monoNum text-emerald-800 dark:text-emerald-200 mt-0.5 block leading-tight break-words">Rp 0</span>
+            <div class="doodle-card p-4 lg:min-w-[190px] bg-white dark:bg-[#121215]">
+              <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+                <i data-lucide="hand-coins" class="w-3.5 h-3.5 shrink-0"></i>
+                <span>Piutang & talangan</span>
+              </span>
+              <span id="sumPiutangSayaVal" class="text-base sm:text-lg font-extrabold font-monoNum text-zinc-900 dark:text-zinc-100 mt-1 block leading-tight break-words">Rp 0</span>
             </div>
           </div>
 
-          <div class="flex items-center gap-2 w-full lg:w-auto justify-between lg:justify-end">
-            <!-- Filter Pills -->
-            <div class="flex gap-1.5 text-xs font-bold font-doodle">
-              <button onclick="filterDebts('all')" id="btnDebtFilter_all" class="doodle-sticker px-3 py-1.5 rounded-none bg-ink text-white dark:bg-white dark:text-ink">Semua</button>
-              <button onclick="filterDebts('hutang')" id="btnDebtFilter_hutang" class="doodle-sticker px-3 py-1.5 rounded-none bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">Hutang</button>
-              <button onclick="filterDebts('piutang')" id="btnDebtFilter_piutang" class="doodle-sticker px-3 py-1.5 rounded-none bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">Piutang</button>
+          <div class="flex items-center gap-2 w-full lg:w-auto justify-between lg:justify-end flex-wrap">
+            <!-- Page-Level Filter Pills -->
+            <div class="flex gap-1.5 text-xs font-semibold">
+              <button onclick="filterDebts('all')" id="btnDebtFilter_all" class="doodle-sticker h-9 px-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-bold">Semua</button>
+              <button onclick="filterDebts('hutang')" id="btnDebtFilter_hutang" class="doodle-sticker h-9 px-3.5 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300">Hutang</button>
+              <button onclick="filterDebts('piutang')" id="btnDebtFilter_piutang" class="doodle-sticker h-9 px-3.5 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300">Piutang</button>
             </div>
 
-            <button onclick="openModal('addDebtModal')" class="doodle-sticker py-2 px-3.5 rounded-none bg-doodleYellow hover:bg-amber-300 font-doodle text-xs font-bold text-ink transition flex items-center gap-1 active:scale-95">
-              <span>➕ Catat Baru</span>
+            <button onclick="openModal('addDebtModal')" class="doodle-sticker h-9 px-4 bg-amber-400 hover:bg-amber-300 font-sans text-xs font-bold text-zinc-950 flex items-center gap-1.5 whitespace-nowrap">
+              <i data-lucide="plus" class="w-4 h-4 stroke-[2.5]"></i>
+              <span>Catat Baru</span>
             </button>
           </div>
         </div>
@@ -749,9 +758,9 @@
   <!-- 📱 FLOATING ACTION BUTTON (Visible ONLY on Mobile Screens) -->
   <div id="fabContainer" class="lg:hidden fixed bottom-6 right-4 sm:right-6 pointer-events-none z-30">
     <div class="pointer-events-auto">
-      <button onclick="openModal('addTxModal')" aria-label="Catat Belanja Baru" class="doodle-sticker flex items-center gap-2 bg-doodleYellow dark:bg-amber-400 text-ink font-bold px-5 py-3.5 rounded-2xl shadow-pixel-lg dark:shadow-doodle-dark-lg transition active:scale-95 ">
-        <span class="text-xl">✏️</span>
-        <span class="font-doodle text-base font-bold text-ink">Catat Belanja</span>
+      <button onclick="openModal('addTxModal')" aria-label="Catat Belanja Baru" class="doodle-sticker flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-zinc-950 font-bold px-4 py-3 shadow-lg">
+        <i data-lucide="plus" class="w-4 h-4 stroke-[2.5]"></i>
+        <span class="font-sans text-sm font-bold">Catat Belanja</span>
       </button>
     </div>
   </div>
@@ -762,63 +771,63 @@
 
   <!-- MODAL 1: CATAT TRANSAKSI -->
   <div id="addTxModal" onclick="if(event.target === this) closeModal('addTxModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-t-2 sm:border-2 border-ink dark:border-slate-300 rounded-none sm:rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-t-2 sm:border-2 border-ink dark:border-zinc-300 rounded-xl sm:rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape-pink w-28 h-6 -top-3 left-1/2 -translate-x-1/2 "></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700 mt-1">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700 mt-1">
         <div class="flex gap-2">
-          <button id="typeExpenseBtn" onclick="setTxType('Pengeluaran')" class="doodle-sticker px-3.5 py-1.5 rounded-none text-xs font-bold bg-doodlePink dark:bg-rose-950 dark:text-rose-200 text-ink transition">
+          <button id="typeExpenseBtn" onclick="setTxType('Pengeluaran')" class="doodle-sticker px-3.5 py-1.5 rounded-xl text-xs font-bold bg-doodlePink dark:bg-rose-950 dark:text-rose-200 text-ink transition">
             💸 Pengeluaran
           </button>
-          <button id="typeIncomeBtn" onclick="setTxType('Pemasukan')" class="doodle-sticker px-3.5 py-1.5 rounded-none text-xs font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition">
+          <button id="typeIncomeBtn" onclick="setTxType('Pemasukan')" class="doodle-sticker px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition">
             💰 Pemasukan / Topup
           </button>
         </div>
-        <button onclick="closeModal('addTxModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('addTxModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
       <!-- Nominal -->
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Berapa Uangnya?</label>
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Berapa Uangnya?</label>
         <div class="relative mt-1">
-          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-slate-500 dark:text-slate-400">Rp</span>
-          <input type="number" id="inputAmount" placeholder="0" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-3 pl-12 pr-4 text-2xl font-black text-ink dark:text-white shadow-doodle-sm focus:outline-none focus:bg-doodleYellow/20 transition" inputmode="numeric">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-zinc-500 dark:text-zinc-400">Rp</span>
+          <input type="number" id="inputAmount" placeholder="0" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-3 pl-12 pr-4 text-2xl font-black text-ink dark:text-white shadow-doodle-sm focus:outline-none focus:bg-doodleYellow/20 transition" inputmode="numeric">
         </div>
         <div class="flex gap-1.5 mt-2 overflow-x-auto no-scrollbar">
-          <button type="button" onclick="addQuickAmount(10000)" class="doodle-sticker px-2.5 py-1 rounded-none bg-white dark:bg-slate-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-slate-700">+10k</button>
-          <button type="button" onclick="addQuickAmount(25000)" class="doodle-sticker px-2.5 py-1 rounded-none bg-white dark:bg-slate-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-slate-700">+25k</button>
-          <button type="button" onclick="addQuickAmount(50000)" class="doodle-sticker px-2.5 py-1 rounded-none bg-white dark:bg-slate-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-slate-700">+50k</button>
-          <button type="button" onclick="addQuickAmount(100000)" class="doodle-sticker px-2.5 py-1 rounded-none bg-white dark:bg-slate-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-slate-700">+100k</button>
+          <button type="button" onclick="addQuickAmount(10000)" class="doodle-sticker px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-zinc-700">+10k</button>
+          <button type="button" onclick="addQuickAmount(25000)" class="doodle-sticker px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-zinc-700">+25k</button>
+          <button type="button" onclick="addQuickAmount(50000)" class="doodle-sticker px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-zinc-700">+50k</button>
+          <button type="button" onclick="addQuickAmount(100000)" class="doodle-sticker px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 text-xs font-bold hover:bg-doodleYellow dark:hover:bg-zinc-700">+100k</button>
         </div>
       </div>
 
       <!-- Deskripsi/Catatan -->
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Catatan / Keterangan</label>
-        <input type="text" id="inputDescription" placeholder="misal: Makan Siang Nasi Padang" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2.5 px-3.5 text-sm font-medium text-ink dark:text-white shadow-doodle-sm focus:outline-none focus:bg-doodleYellow/20 transition">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Catatan / Keterangan</label>
+        <input type="text" id="inputDescription" placeholder="misal: Makan Siang Nasi Padang" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2.5 px-3.5 text-sm font-medium text-ink dark:text-white shadow-doodle-sm focus:outline-none focus:bg-doodleYellow/20 transition">
       </div>
 
       <!-- Kategori -->
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Kategori Belanja</label>
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Kategori Belanja</label>
         <div id="categoryGrid" class="grid grid-cols-3 gap-2 mt-1.5"></div>
       </div>
 
       <!-- Pilihan Dompet -->
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Ambil Uang Dari Dompet Mana?</label>
-        <select id="selectWallet" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2.5 px-3.5 text-sm font-bold text-ink dark:text-white shadow-doodle-sm focus:outline-none"></select>
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Ambil Uang Dari Dompet Mana?</label>
+        <select id="selectWallet" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2.5 px-3.5 text-sm font-bold text-ink dark:text-white shadow-doodle-sm focus:outline-none"></select>
       </div>
 
       <!-- Tanggal -->
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Tanggal Transaksi</label>
-        <input type="date" id="inputDate" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white shadow-doodle-sm focus:outline-none">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Tanggal Transaksi</label>
+        <input type="date" id="inputDate" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white shadow-doodle-sm focus:outline-none">
       </div>
 
-      <button id="saveTxBtn" onclick="submitTransaction()" class="doodle-sticker w-full mt-2 py-3.5 rounded-none bg-doodleMint dark:bg-emerald-500 hover:bg-emerald-300 text-ink font-doodle text-xl font-bold shadow-doodle transition active:translate-x-0.5 active:translate-y-0.5 flex items-center justify-center gap-2">
+      <button id="saveTxBtn" onclick="submitTransaction()" class="doodle-sticker w-full mt-2 py-3.5 rounded-xl bg-doodleMint dark:bg-emerald-500 hover:bg-emerald-300 text-ink font-doodle text-xl font-bold shadow-doodle transition active:translate-x-0.5 active:translate-y-0.5 flex items-center justify-center gap-2">
         <span>💾 Simpan ke Buku Catatan</span>
       </button>
     </div>
@@ -826,37 +835,37 @@
 
   <!-- MODAL 2: TAMBAH TAGIHAN RUTIN -->
   <div id="addBillModal" onclick="if(event.target === this) closeModal('addBillModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape w-24 h-5 -top-2.5 left-1/2 -translate-x-1/2 "></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700">
         <h3 class="font-doodle text-xl font-bold text-ink dark:text-white flex items-center gap-1.5">
           <span>💡</span> Tambah Tagihan Rutin
         </h3>
-        <button onclick="closeModal('addBillModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('addBillModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nama Tagihan</label>
-        <input type="text" id="billNameInput" placeholder="misal: Cicilan Motor Honda, Wifi Biznet" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Nama Tagihan</label>
+        <input type="text" id="billNameInput" placeholder="misal: Cicilan Motor Honda, Wifi Biznet" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
       </div>
 
       <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nominal (Rp)</label>
-          <input type="number" id="billAmountInput" placeholder="0" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+          <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Nominal (Rp)</label>
+          <input type="number" id="billAmountInput" placeholder="0" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
         </div>
         <div>
-          <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Tgl Jatuh Tempo</label>
-          <input type="number" id="billDueDateInput" min="1" max="31" placeholder="Tiap tgl (1-31)" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+          <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Tgl Jatuh Tempo</label>
+          <input type="number" id="billDueDateInput" min="1" max="31" placeholder="Tiap tgl (1-31)" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
         </div>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Kategori</label>
-        <select id="billCategoryInput" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Kategori</label>
+        <select id="billCategoryInput" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
           <option value="Kendaraan">🛵 Kendaraan / Cicilan</option>
           <option value="Utilitas">💡 Wifi & Listrik</option>
           <option value="Telekomunikasi">📱 Kuota & Pulsa</option>
@@ -866,11 +875,11 @@
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Catatan Tambahan (Noted)</label>
-        <input type="text" id="billNotesInput" placeholder="misal: No Kontrak / Rekening tujuan transfer" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-medium text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Catatan Tambahan (Noted)</label>
+        <input type="text" id="billNotesInput" placeholder="misal: No Kontrak / Rekening tujuan transfer" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-medium text-ink dark:text-white">
       </div>
 
-      <button onclick="submitNewBill()" class="doodle-sticker w-full mt-2 py-3 rounded-none bg-doodleMint dark:bg-emerald-500 font-doodle text-lg font-bold text-ink shadow-doodle transition active:scale-95">
+      <button onclick="submitNewBill()" class="doodle-sticker w-full mt-2 py-3 rounded-xl bg-doodleMint dark:bg-emerald-500 font-doodle text-lg font-bold text-ink shadow-doodle transition active:scale-95">
         Simpan Tagihan Rutin
       </button>
     </div>
@@ -878,14 +887,14 @@
 
   <!-- MODAL EDIT TAGIHAN RUTIN -->
   <div id="editBillModal" onclick="if(event.target === this) closeModal('editBillModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape w-24 h-5 -top-2.5 left-1/2 -translate-x-1/2 "></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700">
         <h3 class="font-doodle text-xl font-bold text-ink dark:text-white flex items-center gap-1.5">
           <span>✏️</span> Edit Tagihan Rutin
         </h3>
-        <button onclick="closeModal('editBillModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('editBillModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -893,24 +902,24 @@
       <input type="hidden" id="editBillId">
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nama Tagihan</label>
-        <input type="text" id="editBillName" placeholder="misal: Cicilan Motor Honda" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Nama Tagihan</label>
+        <input type="text" id="editBillName" placeholder="misal: Cicilan Motor Honda" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
       </div>
 
       <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nominal (Rp)</label>
-          <input type="number" id="editBillAmount" placeholder="0" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+          <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Nominal (Rp)</label>
+          <input type="number" id="editBillAmount" placeholder="0" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
         </div>
         <div>
-          <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Tgl Jatuh Tempo</label>
-          <input type="number" id="editBillDueDate" min="1" max="31" placeholder="Tiap tgl (1-31)" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+          <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Tgl Jatuh Tempo</label>
+          <input type="number" id="editBillDueDate" min="1" max="31" placeholder="Tiap tgl (1-31)" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
         </div>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Kategori</label>
-        <select id="editBillCategory" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Kategori</label>
+        <select id="editBillCategory" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
           <option value="Kendaraan">🛵 Kendaraan / Cicilan</option>
           <option value="Utilitas">💡 Wifi & Listrik</option>
           <option value="Telekomunikasi">📱 Kuota & Pulsa</option>
@@ -920,11 +929,11 @@
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Catatan Tambahan (Noted)</label>
-        <input type="text" id="editBillNotes" placeholder="misal: Rekening tujuan transfer" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-medium text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Catatan Tambahan (Noted)</label>
+        <input type="text" id="editBillNotes" placeholder="misal: Rekening tujuan transfer" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-medium text-ink dark:text-white">
       </div>
 
-      <button onclick="submitEditBill()" class="doodle-sticker w-full mt-2 py-3 rounded-none bg-doodleMint dark:bg-emerald-500 font-doodle text-lg font-bold text-ink shadow-doodle transition active:scale-95">
+      <button onclick="submitEditBill()" class="doodle-sticker w-full mt-2 py-3 rounded-xl bg-doodleMint dark:bg-emerald-500 font-doodle text-lg font-bold text-ink shadow-doodle transition active:scale-95">
         Simpan Perubahan
       </button>
     </div>
@@ -932,21 +941,21 @@
 
   <!-- MODAL 3: CATAT HUTANG / PIUTANG -->
   <div id="addDebtModal" onclick="if(event.target === this) closeModal('addDebtModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape-pink w-24 h-5 -top-2.5 left-1/2 -translate-x-1/2 "></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700">
         <h3 class="font-doodle text-xl font-bold text-ink dark:text-white flex items-center gap-1.5">
           <span>🤝</span> Catat Hutang / Piutang
         </h3>
-        <button onclick="closeModal('addDebtModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('addDebtModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jenis Catatan</label>
-        <select id="debtTypeInput" onchange="toggleDebtWalletSource()" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs sm:text-sm font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Jenis Catatan</label>
+        <select id="debtTypeInput" onchange="toggleDebtWalletSource()" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs sm:text-sm font-bold text-ink dark:text-white">
           <option value="Orang Berhutang (Piutang)">🤝 Dana Talangan / Piutang (Nalangin Kedai / Dipinjam Orang)</option>
           <option value="Hutang Saya (Paylater)">💳 Hutang Saya / Paylater (Kewajiban Saya Membayar)</option>
         </select>
@@ -954,31 +963,31 @@
 
       <div id="debtWalletSourceContainer" class="p-3 bg-sky-50 dark:bg-sky-950/40 border-2 border-dashed border-sky-400 dark:border-sky-500 rounded-xl">
         <label id="debtWalletSourceLabel" class="font-doodle text-xs font-bold text-sky-900 dark:text-sky-200 block mb-1">Diambil / Ditalangi dari Keuangan Mana? (Cash / Bank / E-Wallet):</label>
-        <select id="debtWalletSourceInput" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-bold text-ink dark:text-white">
+        <select id="debtWalletSourceInput" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-bold text-ink dark:text-white">
           <option value="">Jangan potong saldo dompet (Catat piutang lama)</option>
         </select>
-        <p id="debtWalletSourceHint" class="text-[10px] text-slate-600 dark:text-slate-300 mt-1.5 font-doodle leading-snug">💡 Saldo Cash/Bank yang dipilih berkurang sekarang, namun TIDAK dihitung sebagai pengeluaran belanja harian pribadi.</p>
+        <p id="debtWalletSourceHint" class="text-[10px] text-zinc-600 dark:text-zinc-300 mt-1.5 font-doodle leading-snug">💡 Saldo Cash/Bank yang dipilih berkurang sekarang, namun TIDAK dihitung sebagai pengeluaran belanja harian pribadi.</p>
       </div>
 
       <div>
-        <label id="debtPartyLabel" class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nama Pihak / Usaha / Platform</label>
-        <input type="text" id="debtPartyInput" placeholder="misal: Kedai Kopi, Teman (Budi), SPaylater" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+        <label id="debtPartyLabel" class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Nama Pihak / Usaha / Platform</label>
+        <input type="text" id="debtPartyInput" placeholder="misal: Kedai Kopi, Teman (Budi), SPaylater" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
       </div>
 
       <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jumlah Uang (Rp)</label>
-          <input type="number" id="debtAmountInput" placeholder="0" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+          <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Jumlah Uang (Rp)</label>
+          <input type="number" id="debtAmountInput" placeholder="0" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
         </div>
         <div>
-          <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jatuh Tempo</label>
-          <input type="date" id="debtDueDateInput" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-2 text-xs font-bold text-ink dark:text-white">
+          <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Jatuh Tempo</label>
+          <input type="date" id="debtDueDateInput" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-2 text-xs font-bold text-ink dark:text-white">
         </div>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Catatan Penting (Noted)</label>
-        <input type="text" id="debtNotesInput" placeholder="misal: Beli keyboard kerja cicilan 3x, atau pinjam buat bensin" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-medium text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Catatan Penting (Noted)</label>
+        <input type="text" id="debtNotesInput" placeholder="misal: Beli keyboard kerja cicilan 3x, atau pinjam buat bensin" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-medium text-ink dark:text-white">
       </div>
 
       <button onclick="submitNewDebt()" class="doodle-sticker w-full mt-2 py-3 rounded-2xl bg-doodleYellow dark:bg-amber-400 font-doodle text-lg font-bold text-ink shadow-doodle transition active:scale-95">
@@ -989,14 +998,14 @@
 
   <!-- MODAL EDIT HUTANG / PIUTANG -->
   <div id="editDebtModal" onclick="if(event.target === this) closeModal('editDebtModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape-pink w-24 h-5 -top-2.5 left-1/2 -translate-x-1/2 "></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700">
         <h3 class="font-doodle text-xl font-bold text-ink dark:text-white flex items-center gap-1.5">
           <span>✏️</span> Edit Hutang / Piutang
         </h3>
-        <button onclick="closeModal('editDebtModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('editDebtModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
@@ -1004,44 +1013,44 @@
       <input type="hidden" id="editDebtId">
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jenis Catatan</label>
-        <select id="editDebtType" onchange="updateEditDebtTypeLabels()" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs sm:text-sm font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Jenis Catatan</label>
+        <select id="editDebtType" onchange="updateEditDebtTypeLabels()" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs sm:text-sm font-bold text-ink dark:text-white">
           <option value="Orang Berhutang (Piutang)">🤝 Dana Talangan / Piutang (Nalangin Kedai / Dipinjam Orang)</option>
           <option value="Hutang Saya (Paylater)">💳 Hutang Saya / Paylater (Kewajiban Saya Membayar)</option>
         </select>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Keterangan Sumber Keuangan (Cash / Bank / E-Wallet)</label>
-        <select id="editDebtWalletTag" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Keterangan Sumber Keuangan (Cash / Bank / E-Wallet)</label>
+        <select id="editDebtWalletTag" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-bold text-ink dark:text-white">
           <option value="">Tidak ditentukan</option>
         </select>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nama Pihak / Platform</label>
-        <input type="text" id="editDebtParty" placeholder="misal: SPaylater, Andi" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Nama Pihak / Platform</label>
+        <input type="text" id="editDebtParty" placeholder="misal: SPaylater, Andi" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
       </div>
 
       <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jumlah Awal (Rp)</label>
-          <input type="number" id="editDebtAmount" placeholder="0" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+          <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Jumlah Awal (Rp)</label>
+          <input type="number" id="editDebtAmount" placeholder="0" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
         </div>
         <div>
-          <label id="editDebtRemainingLabel" class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Sisa Hutang (Rp)</label>
-          <input type="number" id="editDebtRemaining" placeholder="0" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+          <label id="editDebtRemainingLabel" class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Sisa Hutang (Rp)</label>
+          <input type="number" id="editDebtRemaining" placeholder="0" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-sm font-bold text-ink dark:text-white">
         </div>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jatuh Tempo</label>
-        <input type="date" id="editDebtDueDate" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-2 text-xs font-bold text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Jatuh Tempo</label>
+        <input type="date" id="editDebtDueDate" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-2 text-xs font-bold text-ink dark:text-white">
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Catatan Penting (Noted)</label>
-        <input type="text" id="editDebtNotes" placeholder="Catatan" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-medium text-ink dark:text-white">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Catatan Penting (Noted)</label>
+        <input type="text" id="editDebtNotes" placeholder="Catatan" class="w-full mt-1 bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-medium text-ink dark:text-white">
       </div>
 
       <button onclick="submitEditDebt()" class="doodle-sticker w-full mt-2 py-3 rounded-2xl bg-doodleYellow dark:bg-amber-400 font-doodle text-lg font-bold text-ink shadow-doodle transition active:scale-95">
@@ -1052,60 +1061,60 @@
 
   <!-- MODAL 4: KONFIRMASI BAYAR TAGIHAN / LUNASI -->
   <div id="settleModal" onclick="if(event.target === this) closeModal('settleModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-sm bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-5 shadow-2xl flex flex-col gap-3.5">
+    <div class="w-full max-w-sm bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-5 shadow-2xl flex flex-col gap-3.5">
       <h3 id="settleModalTitle" class="font-doodle text-lg font-bold text-ink dark:text-white">Konfirmasi Pembayaran</h3>
-      <p id="settleModalDesc" class="text-xs font-doodle text-slate-600 dark:text-slate-400">Pilih dompet yang digunakan untuk transaksi ini:</p>
+      <p id="settleModalDesc" class="text-xs font-doodle text-zinc-600 dark:text-zinc-400">Pilih dompet yang digunakan untuk transaksi ini:</p>
       
       <div>
         <label class="text-[11px] font-doodle font-bold block mb-1">Sumber Dompet / Rekening:</label>
-        <select id="settleWalletSelect" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-bold text-ink dark:text-white"></select>
+        <select id="settleWalletSelect" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-bold text-ink dark:text-white"></select>
       </div>
 
       <div class="flex gap-2 mt-2">
-        <button onclick="closeModal('settleModal')" class="doodle-sticker flex-1 py-2 rounded-none bg-slate-200 dark:bg-slate-800 text-xs font-bold font-doodle text-ink dark:text-white">Batal</button>
-        <button id="settleConfirmBtn" class="doodle-sticker flex-1 py-2 rounded-none bg-doodleMint dark:bg-emerald-500 text-xs font-bold font-doodle text-ink">Konfirmasi</button>
+        <button onclick="closeModal('settleModal')" class="doodle-sticker flex-1 py-2 rounded-xl bg-zinc-200 dark:bg-zinc-800 text-xs font-bold font-doodle text-ink dark:text-white">Batal</button>
+        <button id="settleConfirmBtn" class="doodle-sticker flex-1 py-2 rounded-xl bg-doodleMint dark:bg-emerald-500 text-xs font-bold font-doodle text-ink">Konfirmasi</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL 5: KELOLA DOMPET -->
   <div id="walletModal" onclick="if(event.target === this) closeModal('walletModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape w-28 h-6 -top-3 left-1/2 -translate-x-1/2 "></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700 mt-1">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700 mt-1">
         <div>
           <h3 class="font-doodle text-xl font-bold text-ink dark:text-white flex items-center gap-1.5">
             <span>👛</span> Atur Saldo Dompet
           </h3>
-          <p class="text-xs text-slate-500 dark:text-slate-400 font-doodle">Bagi budget Anda ke masing-masing dompet/rekening</p>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 font-doodle">Bagi budget Anda ke masing-masing dompet/rekening</p>
         </div>
-        <button onclick="closeModal('walletModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('walletModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div class="p-3 rounded-none bg-doodleYellow/40 dark:bg-amber-950/30 border-2 border-ink dark:border-slate-400">
+      <div class="p-3 rounded-xl bg-doodleYellow/40 dark:bg-amber-950/30 border-2 border-ink dark:border-zinc-400">
         <div class="flex justify-between items-center text-xs">
-          <span class="font-doodle text-slate-700 dark:text-slate-300 font-bold">Target Budget Siklus:</span>
+          <span class="font-doodle text-zinc-700 dark:text-zinc-300 font-bold">Target Budget Siklus:</span>
           <span id="allocTargetBudget" class="font-black text-ink dark:text-white">Rp 0</span>
         </div>
         <div class="flex justify-between items-center text-xs mt-1">
-          <span class="font-doodle text-slate-700 dark:text-slate-300 font-bold">Total Terbagi di Dompet:</span>
+          <span class="font-doodle text-zinc-700 dark:text-zinc-300 font-bold">Total Terbagi di Dompet:</span>
           <span id="allocTotalEntered" class="font-black text-blue-700 dark:text-sky-400">Rp 0</span>
         </div>
-        <div id="allocStatusMsg" class="mt-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 text-center font-doodle bg-white/70 dark:bg-slate-900/60 py-1 rounded-none border border-ink/20 dark:border-slate-600">
+        <div id="allocStatusMsg" class="mt-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 text-center font-doodle bg-white/70 dark:bg-zinc-900/60 py-1 rounded-xl border border-ink/20 dark:border-zinc-600">
           ✨ Saldo terbagi pas dengan budget
         </div>
       </div>
 
       <div id="walletInputsContainer" class="flex flex-col gap-3"></div>
 
-      <button onclick="addNewWalletRow()" class="doodle-sticker py-2 rounded-none bg-white dark:bg-slate-800 border-2 border-dashed border-ink dark:border-slate-300 font-doodle text-sm font-bold text-ink dark:text-slate-200 transition flex items-center justify-center gap-1">
+      <button onclick="addNewWalletRow()" class="doodle-sticker py-2 rounded-xl bg-white dark:bg-zinc-800 border-2 border-dashed border-ink dark:border-zinc-300 font-doodle text-sm font-bold text-ink dark:text-zinc-200 transition flex items-center justify-center gap-1">
         <span>➕ Tambah Dompet / Rekening Baru</span>
       </button>
 
-      <button id="saveWalletsBtn" onclick="saveWalletAllocations()" class="doodle-sticker w-full mt-2 py-3.5 rounded-none bg-doodleMint dark:bg-emerald-500 hover:bg-emerald-300 font-doodle text-lg font-bold text-ink shadow-doodle transition active:translate-x-0.5 active:translate-y-0.5">
+      <button id="saveWalletsBtn" onclick="saveWalletAllocations()" class="doodle-sticker w-full mt-2 py-3.5 rounded-xl bg-doodleMint dark:bg-emerald-500 hover:bg-emerald-300 font-doodle text-lg font-bold text-ink shadow-doodle transition active:translate-x-0.5 active:translate-y-0.5">
         Simpan Alokasi Saldo ke Spreadsheet
       </button>
     </div>
@@ -1113,35 +1122,35 @@
 
   <!-- MODAL 7: MULAI SIKLUS ANGGARAN BARU (DEDICATED) -->
   <div id="newCycleModal" onclick="if(event.target === this) closeModal('newCycleModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape w-24 h-5 -top-2.5 left-1/2 -translate-x-1/2"></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700">
         <div>
           <h3 class="font-doodle text-xl font-bold text-ink dark:text-white flex items-center gap-1.5">
             <span>🗓️</span> Mulai Siklus Anggaran Baru
           </h3>
-          <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Sisa saldo fisik tetap aman & tagihan bulanan otomatis di-reset</p>
+          <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">Sisa saldo fisik tetap aman & tagihan bulanan otomatis di-reset</p>
         </div>
-        <button onclick="closeModal('newCycleModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('newCycleModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
       <div class="flex flex-col gap-3">
         <div>
-          <label class="font-doodle text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Nama Periode Siklus</label>
-          <input type="text" id="newCycleName" placeholder="misal: Siklus November 2026" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-xl py-2 px-3 text-xs font-bold text-ink dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+          <label class="font-doodle text-xs font-bold text-zinc-700 dark:text-zinc-300 block mb-1">Nama Periode Siklus</label>
+          <input type="text" id="newCycleName" placeholder="misal: Siklus November 2026" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-bold text-ink dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="font-doodle text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Tanggal Mulai</label>
-            <input type="date" id="newCycleStart" onchange="updateNewCycleDuration()" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-xl py-2 px-2 text-xs font-bold text-ink dark:text-white focus:outline-none">
+            <label class="font-doodle text-xs font-bold text-zinc-700 dark:text-zinc-300 block mb-1">Tanggal Mulai</label>
+            <input type="date" id="newCycleStart" onchange="updateNewCycleDuration()" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-2 text-xs font-bold text-ink dark:text-white focus:outline-none">
           </div>
           <div>
-            <label class="font-doodle text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Tanggal Selesai</label>
-            <input type="date" id="newCycleEnd" onchange="updateNewCycleDuration()" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-xl py-2 px-2 text-xs font-bold text-ink dark:text-white focus:outline-none">
+            <label class="font-doodle text-xs font-bold text-zinc-700 dark:text-zinc-300 block mb-1">Tanggal Selesai</label>
+            <input type="date" id="newCycleEnd" onchange="updateNewCycleDuration()" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-2 text-xs font-bold text-ink dark:text-white focus:outline-none">
           </div>
         </div>
 
@@ -1151,14 +1160,14 @@
         </div>
 
         <div>
-          <label class="font-doodle text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Total Target Anggaran Belanja (Rp)</label>
-          <input type="number" id="newCycleBudget" placeholder="misal: 1500000" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-xl py-2 px-3 text-xs font-bold text-ink dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400">
-          <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Budget ini akan dihitung jatah harian setelah disisihkan untuk tagihan bulanan & hutang.</p>
+          <label class="font-doodle text-xs font-bold text-zinc-700 dark:text-zinc-300 block mb-1">Total Target Anggaran Belanja (Rp)</label>
+          <input type="number" id="newCycleBudget" placeholder="misal: 1500000" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-bold text-ink dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+          <p class="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1">Budget ini akan dihitung jatah harian setelah disisihkan untuk tagihan bulanan & hutang.</p>
         </div>
 
-        <div class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-600 flex items-start gap-2.5">
+        <div class="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-300 dark:border-zinc-600 flex items-start gap-2.5">
           <input type="checkbox" id="newCycleResetBills" checked class="w-4 h-4 mt-0.5 rounded border-2 border-ink text-amber-500 focus:ring-0">
-          <label for="newCycleResetBills" class="font-doodle text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+          <label for="newCycleResetBills" class="font-doodle text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer">
             Reset status Tagihan Bulanan jadi 'Belum Dibayar' untuk siklus baru ini?
           </label>
         </div>
@@ -1172,51 +1181,51 @@
 
   <!-- MODAL 6: PENGATURAN SISTEM -->
   <div id="settingsModal" onclick="if(event.target === this) closeModal('settingsModal')" class="fixed inset-0 bg-ink/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-slate-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
+    <div class="w-full max-w-md bg-[#fffdfa] dark:bg-[#1a1c23] border-2 border-ink dark:border-zinc-300 rounded-3xl p-6 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto relative">
       <div class="washi-tape w-24 h-5 -top-2.5 left-1/2 -translate-x-1/2 "></div>
 
-      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-slate-300 dark:border-slate-700">
+      <div class="flex items-center justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-zinc-700">
         <h3 class="font-doodle text-xl font-bold text-ink dark:text-white flex items-center gap-1.5">
           <span>⚙️</span> Pengaturan Sistem
         </h3>
-        <button onclick="closeModal('settingsModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-slate-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
+        <button onclick="closeModal('settingsModal')" class="w-8 h-8 rounded-full border-2 border-ink dark:border-zinc-400 flex items-center justify-center text-ink dark:text-white hover:bg-rose-500 hover:text-white transition shadow-pixel-sm font-bold text-xs">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <div class="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-none border-2 border-ink dark:border-slate-400">
+      <div class="bg-zinc-50 dark:bg-zinc-900/60 p-3 rounded-xl border-2 border-ink dark:border-zinc-400">
         <label class="font-doodle text-sm font-bold text-ink dark:text-white block mb-1.5">
           🎨 Mode Tampilan (Tema Visual)
         </label>
         <div class="grid grid-cols-3 gap-2">
-          <button type="button" onclick="setThemePreference('light')" id="themeBtn_light" class="doodle-sticker py-2 px-2 rounded-none text-xs font-bold flex flex-col items-center gap-1 transition bg-white border-2 border-ink text-ink">
+          <button type="button" onclick="setThemePreference('light')" id="themeBtn_light" class="doodle-sticker py-2 px-2 rounded-xl text-xs font-bold flex flex-col items-center gap-1 transition bg-white border-2 border-ink text-ink">
             <span class="text-base">☀️</span><span class="font-doodle text-xs">Terang</span>
           </button>
-          <button type="button" onclick="setThemePreference('dark')" id="themeBtn_dark" class="doodle-sticker py-2 px-2 rounded-none text-xs font-bold flex flex-col items-center gap-1 transition bg-white border-2 border-ink text-ink">
+          <button type="button" onclick="setThemePreference('dark')" id="themeBtn_dark" class="doodle-sticker py-2 px-2 rounded-xl text-xs font-bold flex flex-col items-center gap-1 transition bg-white border-2 border-ink text-ink">
             <span class="text-base">🌙</span><span class="font-doodle text-xs">Gelap</span>
           </button>
-          <button type="button" onclick="setThemePreference('system')" id="themeBtn_system" class="doodle-sticker py-2 px-2 rounded-none text-xs font-bold flex flex-col items-center gap-1 transition bg-white border-2 border-ink text-ink">
+          <button type="button" onclick="setThemePreference('system')" id="themeBtn_system" class="doodle-sticker py-2 px-2 rounded-xl text-xs font-bold flex flex-col items-center gap-1 transition bg-white border-2 border-ink text-ink">
             <span class="text-base">💻</span><span class="font-doodle text-xs">Sistem OS</span>
           </button>
         </div>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Alamat Google Apps Script URL</label>
-        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-1">Dihasilkan dari tombol 'Deploy' di Apps Script</p>
-        <input type="url" id="settingScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-mono text-ink dark:text-white shadow-doodle-sm focus:outline-none">
+        <label class="font-doodle text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Alamat Google Apps Script URL</label>
+        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Dihasilkan dari tombol 'Deploy' di Apps Script</p>
+        <input type="url" id="settingScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white dark:bg-zinc-900 border-2 border-ink dark:border-zinc-400 rounded-xl py-2 px-3 text-xs font-mono text-ink dark:text-white shadow-doodle-sm focus:outline-none">
       </div>
 
-      <div class="pt-3 border-t-2 border-dashed border-slate-200 dark:border-slate-700">
+      <div class="pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-700">
         <label class="font-doodle text-sm font-bold text-ink dark:text-white block mb-1">Periode & Siklus Anggaran 🗓️</label>
-        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">Mulai siklus baru untuk mereset perhitungan harian dan tagihan bulanan.</p>
-        <button type="button" onclick="closeModal('settingsModal'); openNewCycleModal();" class="doodle-sticker w-full py-2.5 rounded-none bg-doodleYellow dark:bg-amber-500/30 hover:bg-amber-300 font-doodle text-xs font-bold text-ink dark:text-amber-200 transition flex items-center justify-center gap-1.5">
+        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-2">Mulai siklus baru untuk mereset perhitungan harian dan tagihan bulanan.</p>
+        <button type="button" onclick="closeModal('settingsModal'); openNewCycleModal();" class="doodle-sticker w-full py-2.5 rounded-xl bg-doodleYellow dark:bg-amber-500/30 hover:bg-amber-300 font-doodle text-xs font-bold text-ink dark:text-amber-200 transition flex items-center justify-center gap-1.5">
           <span>🗓️</span> Buka Form Mulai Siklus Baru
         </button>
       </div>
 
-      <div class="pt-2 border-t-2 border-dashed border-slate-200 dark:border-slate-700 flex justify-end">
-        <button onclick="saveSettings()" class="doodle-sticker w-full py-3 rounded-none bg-doodleBlue dark:bg-sky-500 hover:bg-sky-300 font-doodle text-lg font-bold text-ink shadow-doodle transition">
+      <div class="pt-2 border-t-2 border-dashed border-zinc-200 dark:border-zinc-700 flex justify-end">
+        <button onclick="saveSettings()" class="doodle-sticker w-full py-3 rounded-xl bg-doodleBlue dark:bg-sky-500 hover:bg-sky-300 font-doodle text-lg font-bold text-ink shadow-doodle transition">
           Simpan Pengaturan
         </button>
       </div>
@@ -1226,12 +1235,12 @@
   <!-- APPLICATION LOGIC JAVASCRIPT -->
   <script>
     const DEFAULT_CATEGORIES = [
-      { id: 'cat_food', name: 'Makanan', icon: '🍔' },
-      { id: 'cat_trans', name: 'Transport', icon: '🛵' },
-      { id: 'cat_mart', name: 'Kebutuhan', icon: '🛒' },
-      { id: 'cat_snack', name: 'Jajan & Kopi', icon: '☕' },
-      { id: 'cat_bill', name: 'Tagihan', icon: '💡' },
-      { id: 'cat_other', name: 'Lain-lain', icon: '📦' }
+      { id: 'cat_food', name: 'Makanan', icon: 'utensils' },
+      { id: 'cat_trans', name: 'Transport', icon: 'bike' },
+      { id: 'cat_mart', name: 'Kebutuhan', icon: 'shopping-cart' },
+      { id: 'cat_snack', name: 'Jajan & Kopi', icon: 'coffee' },
+      { id: 'cat_bill', name: 'Tagihan', icon: 'receipt' },
+      { id: 'cat_other', name: 'Lain-lain', icon: 'package' }
     ];
 
     let activeTab = 'journal';
@@ -1585,11 +1594,16 @@
     // ================= TAB NAVIGATION (ADAPTIVE TO MOBILE & DESKTOP) =================
 
     const TAB_HEADINGS = {
-      journal: '📖 Jurnal Pengeluaran Harian',
-      dashboard: '📊 Ringkasan & Analisis Keuangan',
-      bills: '💡 Tagihan Bulanan Rutin',
-      debts: '🤝 Buku Catatan Hutang & Paylater'
+      journal: 'Jurnal Pengeluaran Harian',
+      dashboard: 'Ringkasan & Analisis Keuangan',
+      bills: 'Tagihan Bulanan Rutin',
+      debts: 'Catatan Hutang & Paylater'
     };
+
+    const DESKTOP_TAB_ACTIVE_CLS = "doodle-sticker w-full h-11 px-3.5 flex items-center gap-3 text-left text-[13.5px] font-bold bg-amber-400/90 dark:bg-amber-400 text-zinc-950 whitespace-nowrap";
+    const DESKTOP_TAB_IDLE_CLS = "doodle-sticker w-full h-11 px-3.5 flex items-center gap-3 text-left text-[13.5px] font-semibold bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-[#1e2026] whitespace-nowrap";
+    const MOBILE_TAB_ACTIVE_CLS = "doodle-sticker h-11 px-1.5 text-xs font-bold flex items-center justify-center gap-1 bg-amber-400 text-zinc-950 whitespace-nowrap";
+    const MOBILE_TAB_IDLE_CLS = "doodle-sticker h-11 px-1.5 text-xs font-semibold flex items-center justify-center gap-1 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 whitespace-nowrap";
 
     function switchTab(tabId) {
       activeTab = tabId;
@@ -1605,12 +1619,12 @@
 
         if (t === tabId) {
           sec.classList.remove('hidden');
-          if (mobileNav) mobileNav.className = "doodle-sticker flex-1 min-w-[76px] py-2 px-2.5 rounded-xl font-silkscreen text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 bg-doodleYellow text-ink transition shadow-pixel";
-          if (desktopNav) desktopNav.className = "doodle-sticker w-full px-4 py-2.5 rounded-xl flex items-center gap-3 text-left transition bg-doodleYellow text-ink shadow-pixel font-silkscreen text-xs font-bold";
+          if (mobileNav) mobileNav.className = MOBILE_TAB_ACTIVE_CLS;
+          if (desktopNav) desktopNav.className = DESKTOP_TAB_ACTIVE_CLS;
         } else {
           sec.classList.add('hidden');
-          if (mobileNav) mobileNav.className = "doodle-sticker flex-1 min-w-[76px] py-2 px-2.5 rounded-xl font-silkscreen text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 transition";
-          if (desktopNav) desktopNav.className = "doodle-sticker w-full px-4 py-2.5 rounded-xl flex items-center gap-3 text-left transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-silkscreen text-xs font-bold";
+          if (mobileNav) mobileNav.className = MOBILE_TAB_IDLE_CLS;
+          if (desktopNav) desktopNav.className = DESKTOP_TAB_IDLE_CLS;
         }
       });
 
@@ -1625,7 +1639,7 @@
       if (tabId === 'dashboard') renderDashboardVisuals();
       if (tabId === 'bills') renderBills();
       if (tabId === 'debts') renderDebts();
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
     }
 
     // ================= THEME CONTROLLER =================
@@ -1658,26 +1672,27 @@
 
       if (effectiveDark) {
         html.classList.add('dark');
-        if (metaColor) metaColor.setAttribute('content', '#111218');
+        if (metaColor) metaColor.setAttribute('content', '#09090b');
       } else {
         html.classList.remove('dark');
-        if (metaColor) metaColor.setAttribute('content', '#f4f3ec');
+        if (metaColor) metaColor.setAttribute('content', '#f4f4f0');
       }
 
-      const iconText = (mode === 'system') ? '💻' : (mode === 'dark' ? '🌙' : '☀️');
+      const lucideThemeIcon = (mode === 'system') ? 'monitor' : (mode === 'dark' ? 'moon' : 'sun');
       const quickIcon = document.getElementById('quickThemeIcon');
       const dQuickIcon = document.getElementById('dQuickThemeIcon');
-      if (quickIcon) quickIcon.innerText = iconText;
-      if (dQuickIcon) dQuickIcon.innerText = iconText;
+      if (quickIcon) quickIcon.innerHTML = `<i data-lucide="${lucideThemeIcon}" class="w-4 h-4"></i>`;
+      if (dQuickIcon) dQuickIcon.innerHTML = `<i data-lucide="${lucideThemeIcon}" class="w-3.5 h-3.5"></i>`;
 
       ['light', 'dark', 'system'].forEach(m => {
         const btn = document.getElementById('themeBtn_' + m);
         if (btn) {
           btn.className = (m === mode)
-            ? "doodle-sticker py-2 px-2 rounded-none text-xs font-bold font-silkscreen flex flex-col items-center gap-1 transition bg-doodleYellow dark:bg-amber-500/40 border-2 border-ink dark:border-white shadow-pixel text-ink dark:text-white"
-            : "doodle-sticker py-2 px-2 rounded-none text-xs font-bold font-silkscreen flex flex-col items-center gap-1 transition bg-white dark:bg-slate-800 border-2 border-ink dark:border-slate-400 text-slate-700 dark:text-slate-300";
+            ? "doodle-sticker py-2.5 px-2 text-xs font-bold flex flex-col items-center gap-1 bg-amber-400 text-zinc-950"
+            : "doodle-sticker py-2.5 px-2 text-xs font-semibold flex flex-col items-center gap-1 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300";
         }
       });
+      if (window.lucide) { try { window.lucide.createIcons(); } catch (e) {} }
     }
 
     // ================= DESKTOP KEYBOARD SHORTCUTS =================
@@ -1706,7 +1721,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       initThemeSystem();
-      lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
       initCategoryGrid();
       populateWalletDropdown();
       document.getElementById('inputDate').valueAsDate = new Date();
@@ -1732,29 +1747,28 @@
       try { renderBills(); } catch (e) { console.error('renderBills error:', e); }
       try { renderDebts(); } catch (e) { console.error('renderDebts error:', e); }
       try { renderDesktopReminders(); } catch (e) { console.error('renderDesktopReminders error:', e); }
-      if (window.lucide) {
-        try { lucide.createIcons(); } catch (e) {}
-      }
+      if (window.lucide) { try { window.lucide.createIcons(); } catch (e) {} }
     }
 
     function initCategoryGrid() {
       const container = document.getElementById('categoryGrid');
       container.innerHTML = DEFAULT_CATEGORIES.map(cat => `
-        <button type="button" onclick="selectCategory('${cat.name}', this)" class="category-chip doodle-sticker flex items-center gap-1.5 p-2 rounded-xl border-2 border-ink dark:border-slate-300 ${cat.name === selectedCategory ? 'bg-doodleYellow dark:bg-amber-400 dark:text-ink shadow-pixel' : 'bg-white dark:bg-slate-800 text-ink dark:text-white hover:bg-slate-50'} font-bold font-silkscreen transition shadow-pixel-sm">
-          <span class="text-sm sm:text-base shrink-0">${cat.icon}</span>
-          <span class="font-silkscreen text-[9px] sm:text-[11px] truncate leading-tight">${cat.name}</span>
+        <button type="button" onclick="selectCategory('${cat.name}', this)" class="category-chip doodle-sticker flex items-center gap-2 p-2.5 ${cat.name === selectedCategory ? 'bg-doodleYellow dark:bg-amber-400 dark:text-ink shadow-pixel' : 'bg-white dark:bg-zinc-800 text-ink dark:text-white hover:bg-zinc-50'} font-semibold text-xs">
+          <i data-lucide="${cat.icon}" class="w-3.5 h-3.5 shrink-0"></i>
+          <span class="text-[11px] truncate leading-tight">${cat.name}</span>
         </button>
       `).join('');
+      if (window.lucide) { try { window.lucide.createIcons(); } catch (e) {} }
     }
 
     function selectCategory(catName, el) {
       selectedCategory = catName;
       document.querySelectorAll('.category-chip').forEach(c => {
         c.classList.remove('bg-doodleYellow', 'dark:bg-amber-400', 'dark:text-ink', 'shadow-pixel', 'shadow-doodle');
-        c.classList.add('bg-white', 'dark:bg-slate-800', 'text-ink', 'dark:text-white');
+        c.classList.add('bg-white', 'dark:bg-zinc-800', 'text-ink', 'dark:text-white');
       });
       el.classList.add('bg-doodleYellow', 'dark:bg-amber-400', 'dark:text-ink', 'shadow-pixel');
-      el.classList.remove('bg-white', 'dark:bg-slate-800', 'text-ink');
+      el.classList.remove('bg-white', 'dark:bg-zinc-800', 'text-ink');
     }
 
     function setTxType(type) {
@@ -1762,11 +1776,11 @@
       const expBtn = document.getElementById('typeExpenseBtn');
       const incBtn = document.getElementById('typeIncomeBtn');
       if (type === 'Pengeluaran') {
-        expBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-none text-xs font-bold font-silkscreen bg-doodlePink dark:bg-rose-950 dark:text-rose-200 text-ink transition shadow-pixel-sm";
-        incBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-none text-xs font-bold font-silkscreen bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition";
+        expBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-xl text-xs font-bold font-silkscreen bg-doodlePink dark:bg-rose-950 dark:text-rose-200 text-ink transition shadow-pixel-sm";
+        incBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-xl text-xs font-bold font-silkscreen bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition";
       } else {
-        incBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-none text-xs font-bold font-silkscreen bg-doodleMint dark:bg-emerald-950 dark:text-emerald-200 text-ink transition shadow-pixel-sm";
-        expBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-none text-xs font-bold font-silkscreen bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 transition";
+        incBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-xl text-xs font-bold font-silkscreen bg-doodleMint dark:bg-emerald-950 dark:text-emerald-200 text-ink transition shadow-pixel-sm";
+        expBtn.className = "doodle-sticker px-3.5 py-1.5 rounded-xl text-xs font-bold font-silkscreen bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 transition";
       }
     }
 
@@ -1929,7 +1943,7 @@
       appState.summary = summary;
 
       const cycle = appState.cycle || { nama: 'Siklus Aktif' };
-      const periodText = (cycle.nama || 'Siklus Berjalan') + ' 📌';
+      const periodText = cycle.nama || 'Siklus Berjalan';
       document.getElementById('periodBadge').innerText = periodText;
       const dBadge = document.getElementById('desktopPeriodBadge');
       if (dBadge) dBadge.innerText = periodText;
@@ -1957,7 +1971,7 @@
                 <span class="text-3xl shrink-0">🏁</span>
                 <div>
                   <h4 class="font-bold text-sm text-ink dark:text-white">Periode Siklus "${cycle.nama || 'Bulan Ini'}" Telah Berakhir</h4>
-                  <p class="text-xs text-slate-600 dark:text-slate-300">
+                  <p class="text-xs text-zinc-600 dark:text-zinc-300">
                     Sisa dana tersimpan: <strong class="text-emerald-700 dark:text-emerald-400">Rp ${formatRupiah(summary.sisa_budget_mastermind)}</strong>. Saldo fisik dompet Anda tetap aman.
                   </p>
                 </div>
@@ -2008,52 +2022,58 @@
 
       if (summary.is_cycle_ended) {
         if (summary.sisa_budget_mastermind >= 0) {
-          badge.innerText = '🏁 Siklus Selesai • Hemat Rp ' + formatRupiah(summary.sisa_budget_mastermind);
-          badge.className = 'doodle-sticker px-3 py-0.5 rounded-full text-[11px] font-bold font-sans bg-doodleMint dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 border-2 border-ink shadow-pixel-sm';
-          prog.className = 'bg-emerald-400 h-full rounded-full transition-all duration-300 border-r-2 border-ink dark:border-slate-300';
+          badge.innerText = 'Siklus selesai • Hemat Rp ' + formatRupiah(summary.sisa_budget_mastermind);
+          badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30';
+          prog.className = 'bg-emerald-500 h-full rounded-full transition-[width] duration-150 ease-out';
         } else {
-          badge.innerText = '⚠️ Siklus Selesai • Defisit Rp ' + formatRupiah(Math.abs(summary.sisa_budget_mastermind));
-          badge.className = 'doodle-sticker px-3 py-0.5 rounded-full text-[11px] font-bold font-sans bg-doodlePink dark:bg-rose-950 text-rose-800 dark:text-rose-200 border-2 border-ink shadow-pixel-sm';
-          prog.className = 'bg-rose-500 h-full rounded-full transition-all duration-300 border-r-2 border-ink dark:border-slate-300';
+          badge.innerText = 'Siklus selesai • Defisit Rp ' + formatRupiah(Math.abs(summary.sisa_budget_mastermind));
+          badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-500/30';
+          prog.className = 'bg-rose-500 h-full rounded-full transition-[width] duration-150 ease-out';
         }
       } else if (summary.status_hari_ini === 'defisit' || sisaHariIni < 0) {
-        badge.innerText = '⚠️ Boros / Defisit';
-        badge.className = 'doodle-sticker px-3 py-0.5 rounded-full text-[11px] font-bold font-sans bg-doodlePink dark:bg-rose-950 text-rose-800 dark:text-rose-200 border-2 border-ink shadow-pixel-sm';
-        prog.className = 'bg-rose-500 h-full rounded-full transition-all duration-300 border-r-2 border-ink dark:border-slate-300';
+        badge.innerText = 'Melebihi jatah harian';
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-500/30';
+        prog.className = 'bg-rose-500 h-full rounded-full transition-[width] duration-150 ease-out';
       } else if (summary.status_hari_ini === 'waspada' || pctSpent > 75) {
-        badge.innerText = '⚡ Waspada';
-        badge.className = 'doodle-sticker px-3 py-0.5 rounded-full text-[11px] font-bold font-sans bg-doodleOrange dark:bg-amber-950 text-amber-800 dark:text-amber-200 border-2 border-ink shadow-pixel-sm';
-        prog.className = 'bg-amber-400 h-full rounded-full transition-all duration-300 border-r-2 border-ink dark:border-slate-300';
+        badge.innerText = 'Hampir batas harian';
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30';
+        prog.className = 'bg-amber-400 h-full rounded-full transition-[width] duration-150 ease-out';
       } else {
-        badge.innerText = '✨ Aman Terkendali';
-        badge.className = 'doodle-sticker px-3 py-0.5 rounded-full text-[11px] font-bold font-sans bg-doodleMint dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200 border-2 border-ink shadow-pixel-sm';
-        prog.className = 'bg-emerald-400 h-full rounded-full transition-all duration-300 border-r-2 border-ink dark:border-slate-300';
+        badge.innerText = 'Aman terkendali';
+        badge.className = 'px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30';
+        prog.className = 'bg-emerald-500 h-full rounded-full transition-[width] duration-150 ease-out';
       }
 
-      // Wallets List
-      const lightPalette = ['bg-doodleMint', 'bg-doodleBlue', 'bg-doodleYellow', 'bg-doodlePurple', 'bg-doodlePink'];
-      const darkPalette = ['dark:bg-emerald-950/40', 'dark:bg-sky-950/40', 'dark:bg-amber-950/40', 'dark:bg-purple-950/40', 'dark:bg-rose-950/40'];
-      
-      document.getElementById('walletsList').innerHTML = appState.wallets.map((w, idx) => {
+      // Wallets List (Consistent Crisp Vector Badges & Nested Radius)
+      document.getElementById('walletsList').innerHTML = appState.wallets.map((w) => {
         const awalBal = Number(w.saldo_awal) || 0;
         const curBal = (w.saldo_sekarang !== undefined ? Number(w.saldo_sekarang) : awalBal);
         const diff = curBal - awalBal;
         const subInfo = diff === 0
           ? `Awal siklus: Rp ${formatRupiah(awalBal)}`
           : `Awal: Rp ${formatRupiah(awalBal)} (${diff > 0 ? '+' : '-'}Rp ${formatRupiah(Math.abs(diff))})`;
+        const tLower = String(w.tipe || '').toLowerCase();
+        const wIcon = tLower.includes('bank') ? 'landmark' : (tLower.includes('wallet') ? 'smartphone' : 'banknote');
+        const wAccent = tLower.includes('bank')
+          ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/25'
+          : (tLower.includes('wallet')
+            ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/25'
+            : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/25');
         return `
-          <div onclick="openWalletManagerModal()" class="doodle-card min-w-[170px] lg:min-w-full p-3.5 rounded-2xl ${lightPalette[idx % lightPalette.length]} ${darkPalette[idx % darkPalette.length]} border-2 border-ink dark:border-slate-500 flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 cursor-pointer hover:translate-x-0.5 hover:translate-y-0.5 transition shadow-pixel-sm">
-            <div class="flex items-center gap-2 min-w-0">
-              <span class="text-2xl shrink-0">${w.ikon || '👛'}</span>
+          <div onclick="openWalletManagerModal()" class="min-w-[185px] lg:min-w-full p-3.5 rounded-xl bg-zinc-50/80 dark:bg-[#18191e] hover:bg-zinc-100 dark:hover:bg-[#1f2128] border border-zinc-200 dark:border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 cursor-pointer transition-colors duration-150">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-lg ${wAccent} border flex items-center justify-center shrink-0">
+                <i data-lucide="${wIcon}" class="w-4 h-4"></i>
+              </div>
               <div class="min-w-0">
-                <span class="text-xs font-bold text-ink dark:text-white truncate block leading-tight font-silkscreen">${escapeHtmlText(w.nama)}</span>
-                <span class="text-[10px] text-slate-600 dark:text-slate-400 block leading-tight mt-0.5 font-silkscreen">${escapeHtmlText(w.tipe || 'Dompet')}</span>
+                <span class="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 truncate block leading-tight">${escapeHtmlText(w.nama)}</span>
+                <span class="text-[11px] text-zinc-500 dark:text-zinc-400 block leading-tight mt-0.5">${escapeHtmlText(w.tipe || 'Dompet')}</span>
               </div>
             </div>
-            <div class="pt-1.5 lg:pt-0 border-t lg:border-t-0 border-ink/20 dark:border-white/20 flex lg:flex-col justify-between items-baseline lg:items-end">
-              <span class="lg:hidden text-[10px] font-silkscreen text-slate-500 dark:text-slate-400">Saldo Riil:</span>
-              <span class="text-sm lg:text-base font-bold text-ink dark:text-slate-100 font-monoNum block">Rp ${formatRupiah(curBal)}</span>
-              <span class="hidden lg:block text-[10px] text-slate-500 dark:text-slate-400 font-monoNum">${subInfo}</span>
+            <div class="pt-2 lg:pt-0 border-t lg:border-t-0 border-zinc-200 dark:border-white/10 flex lg:flex-col justify-between items-baseline lg:items-end shrink-0">
+              <span class="lg:hidden text-[10px] text-zinc-500 dark:text-zinc-400">Saldo Riil:</span>
+              <span class="text-sm lg:text-base font-bold text-zinc-900 dark:text-zinc-100 font-monoNum block">Rp ${formatRupiah(curBal)}</span>
+              <span class="hidden lg:block text-[10px] text-zinc-500 dark:text-zinc-400 font-monoNum mt-0.5">${subInfo}</span>
             </div>
           </div>
         `;
@@ -2068,8 +2088,8 @@
       const btnScopeCycle = document.getElementById('btnTxScope_cycle');
       const btnScopeAll = document.getElementById('btnTxScope_all');
       if (btnScopeCycle && btnScopeAll) {
-        const activeCls = 'doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-doodleYellow text-ink border border-ink dark:border-slate-300 shadow-pixel-sm transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400';
-        const idleCls = 'doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-ink dark:border-slate-400 transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400';
+        const activeCls = 'doodle-sticker h-8 px-3 text-xs font-bold bg-amber-400 text-zinc-950';
+        const idleCls = 'doodle-sticker h-8 px-3 text-xs font-semibold bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300';
         btnScopeCycle.className = (journalTxScope === 'cycle') ? activeCls : idleCls;
         btnScopeAll.className = (journalTxScope === 'all') ? activeCls : idleCls;
       }
@@ -2079,13 +2099,16 @@
       if (txs.length === 0) {
         const archivedCount = allTxs.length - cycleTxs.length;
         container.innerHTML = `
-          <div class="doodle-card p-8 text-center bg-white dark:bg-[#1a1c23] border-2 border-dashed border-slate-400 shadow-none">
-            <div class="text-4xl mb-2">📝</div>
-            <p class="font-doodle text-base font-bold text-slate-600 dark:text-slate-300">${journalTxScope === 'cycle' ? 'Belum ada catatan belanja di siklus ini' : 'Belum ada catatan di buku ini'}</p>
-            <p class="text-xs text-slate-400 mt-0.5">Tekan tombol Catat Belanja Baru saat mulai berbelanja!</p>
-            ${(journalTxScope === 'cycle' && archivedCount > 0) ? `<p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-doodle">(${archivedCount} catatan dari siklus lama tersimpan di tab Semua dan tidak memotong siklus ini)</p>` : ''}
+          <div class="doodle-card p-8 text-center bg-white dark:bg-[#121215]">
+            <div class="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 flex items-center justify-center mx-auto mb-2.5 text-zinc-500 dark:text-zinc-400">
+              <i data-lucide="notebook-pen" class="w-5 h-5"></i>
+            </div>
+            <p class="text-sm font-bold text-zinc-700 dark:text-zinc-200">${journalTxScope === 'cycle' ? 'Belum ada catatan belanja di siklus ini' : 'Belum ada catatan di buku ini'}</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Tekan tombol Catat Belanja Baru saat mulai berbelanja.</p>
+            ${(journalTxScope === 'cycle' && archivedCount > 0) ? `<p class="text-[11px] text-zinc-400 dark:text-zinc-500 mt-2">(${archivedCount} catatan siklus sebelumnya tersimpan rapi di tab Semua)</p>` : ''}
           </div>
         `;
+        if (window.lucide) window.lucide.createIcons();
         return;
       }
 
@@ -2106,29 +2129,30 @@
           ? 'text-sky-600 dark:text-sky-400'
           : (isExp ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400');
 
+        const txIcon = isTalangan ? 'arrow-up-right' : (isExp ? 'shopping-bag' : 'arrow-down-left');
         return `
-          <div class="doodle-card p-3.5 rounded-2xl bg-white dark:bg-[#181a24] border-2 border-ink dark:border-slate-500 flex items-center justify-between shadow-pixel-sm hover:translate-x-0.5 transition">
-            <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 mr-2">
-              <div class="w-9 h-9 rounded-xl ${badgeColor} border-2 border-ink dark:border-slate-300 shadow-pixel-sm flex items-center justify-center text-base font-bold shrink-0">
-                ${isTalangan ? '🤝' : (isExp ? '💸' : '💰')}
+          <div class="doodle-card p-3.5 bg-white dark:bg-[#121215] flex items-center justify-between gap-3 hover:border-zinc-400 dark:hover:border-white/20 transition-colors duration-150">
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-9 h-9 rounded-lg ${badgeColor} border border-current/20 flex items-center justify-center shrink-0">
+                <i data-lucide="${txIcon}" class="w-4 h-4"></i>
               </div>
               <div class="min-w-0 flex-1">
-                <h4 class="text-xs lg:text-sm font-bold text-ink dark:text-white leading-tight truncate font-sans">${displayDesc}</h4>
-                <div class="flex items-center gap-1.5 mt-0.5 text-[10px] sm:text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 font-bold truncate">
-                  <span>${displayKat}</span> • <span>${displayWallet}</span> • <span>${displayDate}</span>
+                <h4 class="text-xs sm:text-sm font-bold text-zinc-900 dark:text-zinc-100 leading-tight truncate">${displayDesc}</h4>
+                <div class="flex items-center gap-1.5 mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400 truncate">
+                  <span>${displayKat}</span> • <span>${displayWallet}</span> • <span class="font-monoNum">${displayDate}</span>
                 </div>
               </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <span class="text-sm lg:text-base font-bold font-monoNum ${amtColor}">${sign}Rp ${formatRupiah(tx.jumlah)}</span>
-              <button onclick="confirmDeleteTransaction('${safeId}', '${safeDesc}', ${Number(tx.jumlah) || 0})" title="Hapus Catatan" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 hover:bg-rose-100 dark:hover:bg-rose-950/60 text-slate-400 hover:text-rose-600 flex items-center justify-center text-xs transition shadow-pixel-sm">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-500"></i>
+            <div class="flex items-center gap-2.5 shrink-0">
+              <span class="text-sm font-bold font-monoNum ${amtColor}">${sign}Rp ${formatRupiah(tx.jumlah)}</span>
+              <button onclick="confirmDeleteTransaction('${safeId}', '${safeDesc}', ${Number(tx.jumlah) || 0})" aria-label="Hapus Catatan" title="Hapus Catatan" class="w-8 h-8 rounded-lg border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#18191e] hover:bg-rose-500/15 text-zinc-500 hover:text-rose-500 flex items-center justify-center transition-colors duration-150">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
               </button>
             </div>
           </div>
         `;
       }).join('');
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
     }
 
     // ================= RENDER DESKTOP REMINDERS WIDGET =================
@@ -2148,12 +2172,12 @@
       let html = '';
       pendingBills.forEach(b => {
         html += `
-          <div class="p-2.5 rounded-none bg-amber-50 dark:bg-amber-950/40 border border-amber-300 flex items-center justify-between text-xs">
-            <div>
-              <span class="font-bold text-ink dark:text-white block font-silkscreen text-xs">${b.nama}</span>
-              <span class="text-[10px] text-slate-500 font-silkscreen">Tempo: Tgl ${b.tgl_jatuh_tempo}</span>
+          <div class="p-3 rounded-xl bg-amber-500/[0.08] border border-amber-500/25 flex items-center justify-between gap-2 text-xs">
+            <div class="min-w-0">
+              <span class="font-bold text-zinc-900 dark:text-zinc-100 block truncate">${escapeHtmlText(b.nama)}</span>
+              <span class="text-[11px] text-zinc-500 dark:text-zinc-400">Jatuh tempo tgl ${escapeHtmlText(b.tgl_jatuh_tempo)}</span>
             </div>
-            <span class="font-bold text-rose-700 dark:text-rose-400 font-monoNum text-sm">Rp ${formatRupiah(b.jumlah)}</span>
+            <span class="font-bold text-rose-600 dark:text-rose-400 font-monoNum text-sm shrink-0">Rp ${formatRupiah(b.jumlah)}</span>
           </div>
         `;
       });
@@ -2161,12 +2185,12 @@
       pendingDebts.forEach(d => {
         const isPiutang = isPiutangType(d.tipe);
         html += `
-          <div class="p-2.5 rounded-none ${isPiutang ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-300'} border flex items-center justify-between text-xs">
-            <div>
-              <span class="font-bold text-ink dark:text-white block font-silkscreen text-xs">${d.nama_pihak}</span>
-              <span class="text-[10px] text-slate-500 font-silkscreen">${isPiutang ? 'Piutang' : 'Hutang/Paylater'}</span>
+          <div class="p-3 rounded-xl ${isPiutang ? 'bg-emerald-500/[0.08] border-emerald-500/25' : 'bg-rose-500/[0.08] border-rose-500/25'} border flex items-center justify-between gap-2 text-xs">
+            <div class="min-w-0">
+              <span class="font-bold text-zinc-900 dark:text-zinc-100 block truncate">${escapeHtmlText(d.nama_pihak)}</span>
+              <span class="text-[11px] text-zinc-500 dark:text-zinc-400">${isPiutang ? 'Piutang / talangan' : 'Hutang / paylater'}</span>
             </div>
-            <span class="font-bold ${isPiutang ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'} font-monoNum text-sm">Rp ${formatRupiah(d.sisa_hutang || d.jumlah)}</span>
+            <span class="font-bold ${isPiutang ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'} font-monoNum text-sm shrink-0">Rp ${formatRupiah(d.sisa_hutang || d.jumlah)}</span>
           </div>
         `;
       });
@@ -2222,7 +2246,7 @@
 
       const catContainer = document.getElementById('categoryBreakdownList');
       if (totalExpenseSum === 0) {
-        catContainer.innerHTML = `<p class="font-doodle text-xs text-slate-400 text-center py-3">Belum ada pengeluaran tercatat di siklus ini</p>`;
+        catContainer.innerHTML = `<p class="font-doodle text-xs text-zinc-400 text-center py-3">Belum ada pengeluaran tercatat di siklus ini</p>`;
         return;
       }
 
@@ -2232,10 +2256,10 @@
         return `
           <div>
             <div class="flex justify-between items-center text-xs lg:text-sm mb-1 font-bold">
-              <span class="font-silkscreen text-slate-700 dark:text-slate-300">${cat}</span>
+              <span class="font-silkscreen text-zinc-700 dark:text-zinc-300">${cat}</span>
               <span class="font-monoNum font-bold text-sm lg:text-base text-ink dark:text-white">Rp ${formatRupiah(amt)} (${pct}%)</span>
             </div>
-            <div class="w-full pixel-bar-bg h-3.5 border-2 border-ink dark:border-slate-500 overflow-hidden p-0.5">
+            <div class="w-full pixel-bar-bg h-3.5 border-2 border-ink dark:border-zinc-500 overflow-hidden p-0.5">
               <div class="bg-amber-400 dark:bg-amber-500 h-full rounded-full" style="width: ${pct}%"></div>
             </div>
           </div>
@@ -2256,51 +2280,70 @@
       });
 
       document.getElementById('totalBillsAmountVal').innerText = 'Rp ' + formatRupiah(totalBills);
-      document.getElementById('billsPendingBadge').innerText = `${pendingCount} Belum Bayar`;
+      document.getElementById('billsPendingBadge').innerText = `${pendingCount} belum dibayar`;
 
       if (appState.bills.length === 0) {
-        container.innerHTML = `<div class="doodle-card p-6 text-center text-slate-400 font-doodle col-span-full">Belum ada daftar tagihan rutin</div>`;
+        container.innerHTML = `<div class="doodle-card p-6 text-center text-zinc-400 text-sm col-span-full">Belum ada daftar tagihan rutin</div>`;
         return;
       }
 
       container.innerHTML = appState.bills.map(bill => {
         const isPaid = bill.status === 'Sudah Dibayar';
         const safeName = escapeJsAttr(bill.nama || '');
+        const safeId = escapeJsAttr(bill.id || '');
+        const displayNama = escapeHtmlText(bill.nama || 'Tagihan');
+        const displayKategori = escapeHtmlText(bill.kategori || 'Utilitas');
+        const displayTempo = escapeHtmlText(bill.tgl_jatuh_tempo || '1');
+        const displayNotes = bill.catatan ? escapeHtmlText(bill.catatan) : '';
         return `
-          <div class="doodle-card p-4 bg-white dark:bg-[#181a24] rounded-2xl border-2 border-ink dark:border-slate-500 flex flex-col justify-between gap-3 relative hover:translate-x-0.5 transition shadow-pixel">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <span class="font-silkscreen text-[11px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">${bill.kategori} • Tgl ${bill.tgl_jatuh_tempo}</span>
-                <h4 class="font-bold text-xs sm:text-sm lg:text-base text-ink dark:text-white mt-0.5 break-words font-silkscreen">${bill.nama}</h4>
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <span class="doodle-sticker px-2 py-0.5 rounded-none text-[11px] font-bold font-silkscreen ${isPaid ? 'bg-doodleMint text-emerald-800' : 'bg-doodlePink text-rose-800'}">
-                  ${isPaid ? '✓ Lunas' : '⏳ Belum'}
-                </span>
-                <button onclick="openEditBillModal('${bill.id}')" title="Edit Tagihan" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-doodleYellow flex items-center justify-center text-ink dark:text-white transition shadow-pixel-sm">
-                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="confirmDeleteBill('${bill.id}', '${safeName}')" title="Hapus Tagihan" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-rose-100 flex items-center justify-center text-rose-600 dark:text-rose-400 transition shadow-pixel-sm">
-                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                </button>
-              </div>
-            </div>
-
+          <div class="doodle-card p-5 bg-white dark:bg-[#121215] flex flex-col justify-between h-full">
             <div>
-              <span class="text-xl font-bold font-monoNum text-ink dark:text-slate-100 block">Rp ${formatRupiah(bill.jumlah)}</span>
-              ${bill.catatan ? `<span class="text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 italic block mt-0.5">📌 ${bill.catatan}</span>` : ''}
+              <!-- Row 1: Status Pill & Icon Controls (Never collides with title/category) -->
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap ${isPaid ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30'}">
+                  <i data-lucide="${isPaid ? 'check-circle-2' : 'clock'}" class="w-3 h-3 shrink-0"></i>
+                  <span>${isPaid ? 'Sudah dibayar' : 'Belum dibayar'}</span>
+                </span>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button onclick="openEditBillModal('${safeId}')" aria-label="Edit Tagihan" title="Edit Tagihan" class="w-8 h-8 rounded-lg border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#18191e] hover:bg-amber-400/20 flex items-center justify-center text-zinc-700 dark:text-zinc-300 transition-colors duration-150">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <button onclick="confirmDeleteBill('${safeId}', '${safeName}')" aria-label="Hapus Tagihan" title="Hapus Tagihan" class="w-8 h-8 rounded-lg border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#18191e] hover:bg-rose-500/15 flex items-center justify-center text-rose-500 transition-colors duration-150">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Row 2: Title & Sentence-Case Metadata -->
+              <div class="mt-3.5">
+                <h4 class="font-sans font-bold text-base text-zinc-900 dark:text-zinc-100 leading-snug truncate" title="${displayNama}">${displayNama}</h4>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">${displayKategori} • Jatuh tempo tgl ${displayTempo}</p>
+              </div>
             </div>
 
-            ${!isPaid ? `
-              <button onclick="promptPayBill('${bill.id}', '${safeName}', ${bill.jumlah})" class="doodle-sticker w-full py-2.5 rounded-xl bg-doodleYellow dark:bg-amber-400 hover:bg-amber-300 text-ink font-silkscreen text-xs font-bold flex items-center justify-center gap-2 transition active:scale-95 shadow-pixel-sm">
-                <i data-lucide="credit-card" class="w-4 h-4"></i>
-                <span>Bayar Sekarang</span>
-              </button>
-            ` : '<div class="py-1 text-center font-silkscreen text-xs text-emerald-600 dark:text-emerald-400 font-bold">Lunas Bulan Ini ✨</div>'}
+            <!-- Row 3 & 4: Aligned Tabular Amount + Uniform Height Action Footer -->
+            <div class="mt-4 pt-3.5 border-t border-zinc-200 dark:border-white/10">
+              <div class="mb-3.5">
+                <span class="text-xl font-extrabold font-monoNum text-zinc-900 dark:text-zinc-50 block">Rp ${formatRupiah(bill.jumlah)}</span>
+                ${displayNotes ? `<span class="text-xs text-zinc-500 dark:text-zinc-400 block mt-1 truncate">${displayNotes}</span>` : ''}
+              </div>
+
+              ${!isPaid ? `
+                <button onclick="promptPayBill('${safeId}', '${safeName}', ${bill.jumlah})" class="doodle-sticker w-full h-10 bg-amber-400 hover:bg-amber-300 text-zinc-950 text-xs font-bold flex items-center justify-center gap-2">
+                  <i data-lucide="credit-card" class="w-4 h-4"></i>
+                  <span>Bayar Sekarang</span>
+                </button>
+              ` : `
+                <div class="h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-300 font-semibold">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  <span>Lunas bulan ini</span>
+                </div>
+              `}
+            </div>
           </div>
         `;
       }).join('');
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
     }
 
     function openEditBillModal(id) {
@@ -2495,9 +2538,9 @@
       ['all', 'hutang', 'piutang'].forEach(t => {
         const btn = document.getElementById('btnDebtFilter_' + t);
         if (t === type) {
-          btn.className = "doodle-sticker px-3 py-1.5 rounded-none bg-ink text-white dark:bg-white dark:text-ink";
+          btn.className = "doodle-sticker h-9 px-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-bold text-xs";
         } else {
-          btn.className = "doodle-sticker px-3 py-1.5 rounded-none bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300";
+          btn.className = "doodle-sticker h-9 px-3.5 bg-white dark:bg-[#16171b] text-zinc-700 dark:text-zinc-300 font-semibold text-xs";
         }
       });
       renderDebts();
@@ -2535,7 +2578,7 @@
         const emptyLabel = debtFilter === 'hutang'
           ? 'Tidak ada catatan hutang / paylater'
           : (debtFilter === 'piutang' ? 'Tidak ada catatan piutang' : 'Tidak ada catatan hutang/piutang');
-        container.innerHTML = `<div class="doodle-card p-6 text-center text-slate-400 font-doodle col-span-full">${emptyLabel}</div>`;
+        container.innerHTML = `<div class="doodle-card p-6 text-center text-zinc-400 font-doodle col-span-full">${emptyLabel}</div>`;
         return;
       }
 
@@ -2555,49 +2598,62 @@
           : (Number(d.sisa_hutang !== undefined ? d.sisa_hutang : d.jumlah) || 0);
 
         return `
-          <div class="doodle-card p-4 ${cardBg} rounded-2xl border-2 border-ink dark:border-slate-500 flex flex-col justify-between gap-3 relative hover:translate-x-0.5 transition shadow-pixel">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0 flex-1">
-                <span class="font-silkscreen text-[11px] ${isPiutang ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'} font-bold">
-                  ${isPiutang ? '🤝 Dana Talangan / Piutang' : '💳 Hutang Saya (Paylater)'}
-                </span>
-                <h4 class="font-bold text-xs sm:text-sm lg:text-base text-ink dark:text-white mt-0.5 break-words font-silkscreen">${displayParty}</h4>
-              </div>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <span class="doodle-sticker px-2 py-0.5 rounded-none text-[11px] font-bold font-silkscreen ${isPaid ? 'bg-doodleMint text-emerald-800' : 'bg-doodlePink text-rose-800'}">
-                  ${escapeHtmlText(d.status || 'Belum Lunas')}
-                </span>
-                <button onclick="openEditDebtModal('${safeId}')" title="Edit Hutang/Piutang" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-doodleYellow flex items-center justify-center text-ink dark:text-white transition shadow-pixel-sm">
-                  <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="confirmDeleteDebt('${safeId}', '${safeParty}')" title="Hapus" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-rose-100 flex items-center justify-center text-rose-600 dark:text-rose-400 transition shadow-pixel-sm">
-                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                </button>
-              </div>
-            </div>
-
+          <div class="doodle-card p-5 bg-white dark:bg-[#121215] flex flex-col justify-between h-full">
             <div>
-              <span class="text-xl font-bold font-monoNum text-ink dark:text-slate-100 block">Rp ${formatRupiah(actualSisa)}</span>
-              ${displayWalletTag ? `
-                <div class="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 dark:bg-slate-800 border border-ink/30 dark:border-slate-500 text-[10px] font-bold font-doodle text-slate-700 dark:text-slate-200">
-                  <span>${isPiutang ? '👛 Diambil dari:' : '💳 Keuangan:'}</span>
-                  <span class="text-ink dark:text-amber-300">${displayWalletTag}</span>
+              <!-- Row 1: Type/Status Pill & Action Controls -->
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap ${isPaid ? 'bg-zinc-500/15 text-zinc-600 dark:text-zinc-300 border border-zinc-500/25' : (isPiutang ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30')}">
+                  <i data-lucide="${isPiutang ? 'hand-coins' : 'credit-card'}" class="w-3 h-3 shrink-0"></i>
+                  <span>${isPiutang ? 'Dana talangan / piutang' : 'Hutang / paylater'}</span>
+                </span>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button onclick="openEditDebtModal('${safeId}')" aria-label="Edit Catatan" title="Edit Hutang/Piutang" class="w-8 h-8 rounded-lg border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#18191e] hover:bg-amber-400/20 flex items-center justify-center text-zinc-700 dark:text-zinc-300 transition-colors duration-150">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <button onclick="confirmDeleteDebt('${safeId}', '${safeParty}')" aria-label="Hapus Catatan" title="Hapus" class="w-8 h-8 rounded-lg border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-[#18191e] hover:bg-rose-500/15 flex items-center justify-center text-rose-500 transition-colors duration-150">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
                 </div>
-              ` : ''}
-              ${displayTempo ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 block font-silkscreen mt-1">Tempo: ${displayTempo}</span>` : ''}
-              ${displayNotes ? `<span class="text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 italic block mt-0.5">📌 ${displayNotes}</span>` : ''}
+              </div>
+
+              <!-- Row 2: Party Title & Metadata -->
+              <div class="mt-3.5">
+                <h4 class="font-sans font-bold text-base text-zinc-900 dark:text-zinc-100 leading-snug truncate" title="${displayParty}">${displayParty}</h4>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">
+                  ${escapeHtmlText(d.status || 'Belum Lunas')}${displayTempo ? ` • Tempo ${displayTempo}` : ''}
+                </p>
+              </div>
             </div>
 
-            ${!isPaid ? `
-              <button onclick="promptSettleDebt('${safeId}', '${safeParty}', ${actualSisa}, ${isPiutang})" class="doodle-sticker w-full py-2.5 rounded-none ${isPiutang ? 'bg-doodleMint dark:bg-emerald-500 hover:bg-emerald-400' : 'bg-doodleYellow dark:bg-amber-400 hover:bg-amber-300'} text-ink font-silkscreen text-xs font-bold flex items-center justify-center gap-2 transition active:scale-95 shadow-pixel-sm">
-                <i data-lucide="${isPiutang ? 'check-circle' : 'credit-card'}" class="w-4 h-4"></i>
-                <span>${isPiutang ? 'Terima Pelunasan' : 'Lunasi Hutang'}</span>
-              </button>
-            ` : '<div class="py-1 text-center font-silkscreen text-xs text-emerald-600 dark:text-emerald-400 font-bold">Lunas ✨</div>'}
+            <!-- Row 3 & 4: Aligned Tabular Amount + Wallet Source Tag + Uniform Action Footer -->
+            <div class="mt-4 pt-3.5 border-t border-zinc-200 dark:border-white/10">
+              <div class="mb-3.5">
+                <span class="text-xl font-extrabold font-monoNum text-zinc-900 dark:text-zinc-50 block">Rp ${formatRupiah(actualSisa)}</span>
+                ${displayWalletTag ? `
+                  <div class="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-[#18191e] border border-zinc-200 dark:border-white/10 text-[11px] font-medium text-zinc-700 dark:text-zinc-300">
+                    <i data-lucide="wallet" class="w-3 h-3 text-amber-500 shrink-0"></i>
+                    <span>${isPiutang ? 'Diambil dari:' : 'Sumber:'} ${displayWalletTag}</span>
+                  </div>
+                ` : ''}
+                ${displayNotes ? `<span class="text-xs text-zinc-500 dark:text-zinc-400 block mt-1 truncate">${displayNotes}</span>` : ''}
+              </div>
+
+              ${!isPaid ? `
+                <button onclick="promptSettleDebt('${safeId}', '${safeParty}', ${actualSisa}, ${isPiutang})" class="doodle-sticker w-full h-10 ${isPiutang ? 'bg-emerald-500 hover:bg-emerald-400 text-zinc-950' : 'bg-amber-400 hover:bg-amber-300 text-zinc-950'} text-xs font-bold flex items-center justify-center gap-2">
+                  <i data-lucide="${isPiutang ? 'check-circle-2' : 'credit-card'}" class="w-4 h-4"></i>
+                  <span>${isPiutang ? 'Terima Pelunasan' : 'Lunasi Hutang'}</span>
+                </button>
+              ` : `
+                <div class="h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-300 font-semibold">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  <span>Sudah lunas</span>
+                </div>
+              `}
+            </div>
           </div>
         `;
       }).join('');
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide) window.lucide.createIcons();
     }
 
     function populateEditDebtWalletOptions(selectedTag) {
@@ -2977,29 +3033,29 @@
         const awalNum = Number(w.saldo_awal) || 0;
         const realNow = awalNum + delta.net;
         return `
-        <div class="doodle-card p-3 bg-white dark:bg-slate-900 flex flex-col gap-2 relative">
+        <div class="doodle-card p-3 bg-white dark:bg-zinc-900 flex flex-col gap-2 relative">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <input type="text" value="${escapeHtmlText(w.ikon || '👛')}" onchange="updateWalletField(${idx}, 'ikon', this.value)" class="w-8 text-center bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none text-sm text-ink dark:text-white">
-              <input type="text" value="${escapeHtmlText(w.nama)}" onchange="updateWalletField(${idx}, 'nama', this.value)" placeholder="Nama Dompet" class="font-bold text-xs bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none px-2 py-1 text-ink dark:text-white">
+              <input type="text" value="${escapeHtmlText(w.ikon || '👛')}" onchange="updateWalletField(${idx}, 'ikon', this.value)" class="w-8 text-center bg-zinc-50 dark:bg-zinc-800 border border-ink dark:border-zinc-400 rounded-xl text-sm text-ink dark:text-white">
+              <input type="text" value="${escapeHtmlText(w.nama)}" onchange="updateWalletField(${idx}, 'nama', this.value)" placeholder="Nama Dompet" class="font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-ink dark:border-zinc-400 rounded-xl px-2 py-1 text-ink dark:text-white">
             </div>
             <button onclick="removeWalletRow(${idx})" class="text-rose-500 font-bold text-xs p-1 hover:bg-rose-50 dark:hover:bg-rose-950 rounded">Hapus</button>
           </div>
           <div class="grid grid-cols-2 gap-2 mt-1">
             <div>
-              <span class="text-[10px] text-slate-500 dark:text-slate-400 font-doodle block">Tipe</span>
-              <select onchange="updateWalletField(${idx}, 'tipe', this.value)" class="w-full bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none text-xs py-1 px-1.5 font-medium text-ink dark:text-white">
+              <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-doodle block">Tipe</span>
+              <select onchange="updateWalletField(${idx}, 'tipe', this.value)" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-ink dark:border-zinc-400 rounded-xl text-xs py-1 px-1.5 font-medium text-ink dark:text-white">
                 <option value="Cash" ${w.tipe === 'Cash' ? 'selected' : ''}>💵 Tunai</option>
                 <option value="Bank" ${w.tipe === 'Bank' ? 'selected' : ''}>🏦 Bank</option>
                 <option value="E-Wallet" ${w.tipe === 'E-Wallet' ? 'selected' : ''}>📱 E-Wallet</option>
               </select>
             </div>
             <div>
-              <span class="text-[10px] text-slate-500 dark:text-slate-400 font-doodle block">Saldo Awal Siklus (Rp)</span>
-              <input type="number" id="walletAwalInput_${idx}" value="${awalNum}" oninput="updateWalletField(${idx}, 'saldo_awal', Number(this.value)); calculateAllocationSummary();" class="w-full bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none text-xs font-bold font-monoNum py-1 px-2 text-ink dark:text-white">
+              <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-doodle block">Saldo Awal Siklus (Rp)</span>
+              <input type="number" id="walletAwalInput_${idx}" value="${awalNum}" oninput="updateWalletField(${idx}, 'saldo_awal', Number(this.value)); calculateAllocationSummary();" class="w-full bg-zinc-50 dark:bg-zinc-800 border border-ink dark:border-zinc-400 rounded-xl text-xs font-bold font-monoNum py-1 px-2 text-ink dark:text-white">
             </div>
           </div>
-          <div id="walletPreviewRow_${idx}" class="flex items-center justify-between text-[10px] font-doodle pt-1 border-t border-dashed border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
+          <div id="walletPreviewRow_${idx}" class="flex items-center justify-between text-[10px] font-doodle pt-1 border-t border-dashed border-zinc-200 dark:border-zinc-700 text-zinc-500 dark:text-zinc-400">
             <span>${delta.net === 0 ? 'Belum ada mutasi di siklus ini' : `Mutasi siklus ini: ${delta.net > 0 ? '+' : '-'}Rp ${formatRupiah(Math.abs(delta.net))}`}</span>
             <span class="font-bold font-monoNum text-emerald-700 dark:text-emerald-400">Saldo Riil: Rp ${formatRupiah(realNow)}</span>
           </div>
@@ -3074,13 +3130,13 @@
 
       if (diff === 0) {
         statusEl.innerText = '✨ Saldo terbagi pas 100% seimbang dengan budget!';
-        statusEl.className = 'mt-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 text-center font-doodle bg-emerald-100 dark:bg-emerald-950/60 py-1 rounded-none border border-emerald-300 dark:border-emerald-700';
+        statusEl.className = 'mt-2 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 text-center font-doodle bg-emerald-100 dark:bg-emerald-950/60 py-1 rounded-xl border border-emerald-300 dark:border-emerald-700';
       } else if (diff > 0) {
         statusEl.innerText = `💡 Masih ada sisa Rp ${formatRupiah(diff)} yang belum dialokasikan ke dompet`;
-        statusEl.className = 'mt-2 text-[11px] font-bold text-amber-800 dark:text-amber-300 text-center font-doodle bg-amber-100 dark:bg-amber-950/60 py-1 rounded-none border border-amber-300 dark:border-amber-700';
+        statusEl.className = 'mt-2 text-[11px] font-bold text-amber-800 dark:text-amber-300 text-center font-doodle bg-amber-100 dark:bg-amber-950/60 py-1 rounded-xl border border-amber-300 dark:border-amber-700';
       } else {
         statusEl.innerText = `⚠️ Total alokasi melebihi budget sebesar Rp ${formatRupiah(Math.abs(diff))}`;
-        statusEl.className = 'mt-2 text-[11px] font-bold text-rose-800 dark:text-rose-300 text-center font-doodle bg-rose-100 dark:bg-rose-950/60 py-1 rounded-none border border-rose-300 dark:border-rose-700';
+        statusEl.className = 'mt-2 text-[11px] font-bold text-rose-800 dark:text-rose-300 text-center font-doodle bg-rose-100 dark:bg-rose-950/60 py-1 rounded-xl border border-rose-300 dark:border-rose-700';
       }
     }
 
