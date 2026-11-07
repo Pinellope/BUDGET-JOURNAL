@@ -227,7 +227,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="font-pixel text-base sm:text-lg font-bold tracking-tight text-ink dark:text-slate-100 leading-none">Budget Journal</h1>
-            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.8</span>
+            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.9</span>
           </div>
           <p id="desktopPeriodBadge" class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">Memuat siklus...</p>
         </div>
@@ -298,7 +298,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1 min-w-0">
               <h1 class="font-pixel text-[11px] sm:text-xs font-bold tracking-tight text-ink dark:text-slate-100 leading-none truncate">Budget Journal</h1>
-              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.8</span>
+              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.9</span>
             </div>
             <p id="periodBadge" class="font-silkscreen text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
@@ -2696,13 +2696,37 @@
     }
 
     function confirmDeleteDebt(id, party) {
-      if (!confirm(`Hapus catatan hutang/piutang "${party}"?`)) return;
+      if (!confirm(`Hapus catatan hutang/piutang "${party}"? (Jika ada potongan/pemasukan dompet awal dari catatan ini, saldo dompet akan dikembalikan otomatis)`)) return;
       deleteDebt(id, party);
     }
 
     async function deleteDebt(id, party) {
       const targetD = appState.debts.find(d => String(d.id) === String(id));
       const targetParty = party || (targetD ? targetD.nama_pihak : '');
+      const partyLower = String(targetParty || '').trim().toLowerCase();
+      const targetAmount = targetD ? (Number(targetD.jumlah) || 0) : 0;
+      const isAlreadySettled = targetD && String(targetD.status || '').toLowerCase() === 'lunas';
+
+      // Cari mutasi dompet awal yang terkait jika hutang/talangan ini belum lunas (misal salah input lalu dihapus)
+      const linkedTxs = (!isAlreadySettled && partyLower) ? (appState.transactions || []).filter(tx => {
+        const dLower = String(tx.deskripsi || '').trim().toLowerCase();
+        const isLinkedPrefix =
+          dLower === ('meminjamkan uang ke ' + partyLower) ||
+          dLower.startsWith('meminjamkan uang ke ' + partyLower + ' (') ||
+          dLower === ('penerimaan pinjaman dari ' + partyLower) ||
+          dLower.startsWith('penerimaan pinjaman dari ' + partyLower + ' (');
+        const amtMatches = !targetAmount || Number(tx.jumlah) === targetAmount;
+        return isLinkedPrefix && amtMatches;
+      }) : [];
+
+      linkedTxs.forEach(tx => {
+        markAsDeleted('transactions', tx.id, tx.deskripsi);
+      });
+      if (linkedTxs.length > 0) {
+        const linkedIds = new Set(linkedTxs.map(t => String(t.id)));
+        appState.transactions = appState.transactions.filter(t => !linkedIds.has(String(t.id)));
+        localStorage.setItem('vb_transactions', JSON.stringify(appState.transactions));
+      }
 
       markAsDeleted('debts', id, targetParty);
       appState.debts = appState.debts.filter(d => String(d.id) !== String(id));
@@ -2716,6 +2740,14 @@
             id: id,
             nama_pihak: targetParty
           });
+          for (const tx of linkedTxs) {
+            await sendPostToScript({
+              action: 'delete_transaction',
+              id: tx.id,
+              deskripsi: tx.deskripsi,
+              jumlah: tx.jumlah
+            });
+          }
           setTimeout(syncData, 2000);
         } catch (e) { console.error(e); }
       }
