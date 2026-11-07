@@ -188,6 +188,27 @@
       box-shadow: inset 2px 2px 0px 0px rgba(0,0,0,0.4);
       border-radius: 9999px !important;
     }
+
+    /* Tabular numbers & anti-clipping adaptive KPI typography */
+    .font-monoNum {
+      font-variant-numeric: tabular-nums;
+    }
+    .kpi-stat-card {
+      container-type: inline-size;
+    }
+    .kpi-stat-val {
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(0.875rem, 11cqw, 1.5rem);
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      overflow-wrap: anywhere;
+    }
+    .kpi-stat-val[data-digits="long"] {
+      font-size: clamp(0.8rem, 9.4cqw, 1.3rem);
+    }
+    .kpi-stat-val[data-digits="xlong"] {
+      font-size: clamp(0.75rem, 8cqw, 1.15rem);
+    }
   </style>
 </head>
 <body class="min-h-screen font-sans antialiased flex select-none overflow-x-hidden">
@@ -206,7 +227,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="font-pixel text-base sm:text-lg font-bold tracking-tight text-ink dark:text-slate-100 leading-none">Budget Journal</h1>
-            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.5</span>
+            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.6</span>
           </div>
           <p id="desktopPeriodBadge" class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">Memuat siklus...</p>
         </div>
@@ -277,7 +298,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1 min-w-0">
               <h1 class="font-pixel text-[11px] sm:text-xs font-bold tracking-tight text-ink dark:text-slate-100 leading-none truncate">Budget Journal</h1>
-              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.5</span>
+              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.6</span>
             </div>
             <p id="periodBadge" class="font-silkscreen text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
@@ -381,15 +402,15 @@
               <div class="grid grid-cols-3 gap-1 sm:gap-2 mt-3 pt-2.5 border-t-2 border-dashed border-slate-200 dark:border-slate-700">
                 <div class="doodle-sticker p-1 sm:p-2 rounded-none bg-doodlePink dark:bg-rose-950/50 text-center shadow-pixel-sm min-w-0">
                   <span class="font-silkscreen text-[8px] sm:text-[10px] lg:text-xs text-slate-700 dark:text-rose-300 block font-bold leading-tight truncate">Terpakai</span>
-                  <span id="todaySpentVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-rose-700 dark:text-rose-400 mt-0.5 block truncate">Rp 0</span>
+                  <span id="todaySpentVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-rose-700 dark:text-rose-400 mt-0.5 block leading-tight break-words">Rp 0</span>
                 </div>
                 <div class="doodle-sticker p-1 sm:p-2 rounded-none bg-doodleOrange dark:bg-amber-950/50 text-center shadow-pixel-sm min-w-0">
                   <span class="font-silkscreen text-[8px] sm:text-[10px] lg:text-xs text-slate-700 dark:text-amber-300 block font-bold leading-tight truncate">Waktu</span>
-                  <span id="daysRemainingVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-amber-800 dark:text-amber-400 mt-0.5 block truncate">0 Hari</span>
+                  <span id="daysRemainingVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-amber-800 dark:text-amber-400 mt-0.5 block leading-tight break-words">0 Hari</span>
                 </div>
                 <div class="doodle-sticker p-1 sm:p-2 rounded-none bg-doodleMint dark:bg-emerald-950/50 text-center shadow-pixel-sm min-w-0">
                   <span class="font-silkscreen text-[8px] sm:text-[10px] lg:text-xs text-slate-700 dark:text-emerald-300 block font-bold leading-tight truncate">Sisa Tab</span>
-                  <span id="totalRemainingPoolVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-emerald-800 dark:text-emerald-400 mt-0.5 block truncate">Rp 0</span>
+                  <span id="totalRemainingPoolVal" class="text-[11px] sm:text-sm lg:text-base font-bold font-monoNum text-emerald-800 dark:text-emerald-400 mt-0.5 block leading-tight break-words">Rp 0</span>
                 </div>
               </div>
             </div>
@@ -555,33 +576,33 @@
       <section id="tab_dashboard" class="w-full flex flex-col gap-6 hidden">
         
         <!-- 4 KPI Cards Grid di Landscape Windows -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
           <!-- Card 1: Net Worth -->
-          <div class="doodle-card p-4 lg:p-5 rounded-2xl bg-[#fffdfa] dark:bg-[#1a1c23]">
-            <span class="font-doodle text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">💎 Kekayaan Bersih</span>
-            <div class="mt-1 text-xl sm:text-2xl lg:text-3xl font-bold font-monoNum text-ink dark:text-white truncate" id="dbNetWorthVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-400 block mt-0.5 truncate">Saldo + Piutang - Hutang</span>
+          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-[#fffdfa] dark:bg-[#1a1c23]">
+            <span class="font-doodle text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase block leading-tight">💎 Kekayaan Bersih</span>
+            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-ink dark:text-white" id="dbNetWorthVal">Rp 0</div>
+            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-400 block mt-1 leading-tight">Saldo + Piutang - Hutang</span>
           </div>
 
           <!-- Card 2: Total Saldo Dompet -->
-          <div class="doodle-card p-4 lg:p-5 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-400">
-            <span class="font-doodle text-xs font-bold text-emerald-700 dark:text-emerald-300 uppercase">👛 Uang di Dompet</span>
-            <div class="mt-1 text-xl sm:text-2xl lg:text-3xl font-bold font-monoNum text-emerald-800 dark:text-emerald-200 truncate" id="dbTotalAssetsVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-0.5 truncate">Tunai, bank & e-wallet</span>
+          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-400">
+            <span class="font-doodle text-[11px] sm:text-xs font-bold text-emerald-700 dark:text-emerald-300 uppercase block leading-tight">👛 Uang di Dompet</span>
+            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-emerald-800 dark:text-emerald-200" id="dbTotalAssetsVal">Rp 0</div>
+            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-1 leading-tight">Tunai, bank & e-wallet</span>
           </div>
 
           <!-- Card 3: Beban Hutang/Paylater -->
-          <div class="doodle-card p-4 lg:p-5 rounded-2xl bg-rose-50/60 dark:bg-rose-950/30 border-rose-400">
-            <span class="font-doodle text-xs font-bold text-rose-700 dark:text-rose-300 uppercase">💳 Beban Hutang</span>
-            <div class="mt-1 text-xl sm:text-2xl lg:text-3xl font-bold font-monoNum text-rose-800 dark:text-rose-200 truncate" id="dbTotalDebtsVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-0.5 truncate">Paylater & pinjaman</span>
+          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-rose-50/60 dark:bg-rose-950/30 border-rose-400">
+            <span class="font-doodle text-[11px] sm:text-xs font-bold text-rose-700 dark:text-rose-300 uppercase block leading-tight">💳 Beban Hutang</span>
+            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-rose-800 dark:text-rose-200" id="dbTotalDebtsVal">Rp 0</div>
+            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-1 leading-tight">Paylater & pinjaman</span>
           </div>
 
           <!-- Card 4: Piutang Uang Saya -->
-          <div class="doodle-card p-4 lg:p-5 rounded-2xl bg-sky-50/60 dark:bg-sky-950/30 border-sky-400">
-            <span class="font-doodle text-xs font-bold text-sky-700 dark:text-sky-300 uppercase">🤝 Piutang Belum Balik</span>
-            <div class="mt-1 text-xl sm:text-2xl lg:text-3xl font-bold font-monoNum text-sky-800 dark:text-sky-200 truncate" id="dbTotalReceivablesVal">Rp 0</div>
-            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-0.5 truncate">Dipinjamkan ke orang</span>
+          <div class="doodle-card kpi-stat-card p-3.5 sm:p-4 rounded-2xl bg-sky-50/60 dark:bg-sky-950/30 border-sky-400">
+            <span class="font-doodle text-[11px] sm:text-xs font-bold text-sky-700 dark:text-sky-300 uppercase block leading-tight">🤝 Piutang Belum Balik</span>
+            <div class="kpi-stat-val mt-1.5 text-base sm:text-lg lg:text-xl font-extrabold font-monoNum text-sky-800 dark:text-sky-200" id="dbTotalReceivablesVal">Rp 0</div>
+            <span class="text-[9px] sm:text-[10px] font-doodle text-slate-500 dark:text-slate-400 block mt-1 leading-tight">Dipinjamkan ke orang</span>
           </div>
         </div>
 
@@ -692,13 +713,13 @@
 
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
           <div class="grid grid-cols-2 gap-3 w-full lg:w-auto">
-            <div class="doodle-card p-3.5 bg-rose-50 dark:bg-rose-950/40 border-rose-300 rounded-2xl">
+            <div class="doodle-card p-3.5 lg:min-w-[175px] bg-rose-50 dark:bg-rose-950/40 border-rose-300 rounded-2xl">
               <span class="font-doodle text-xs font-bold text-rose-700 dark:text-rose-300 block">💳 Hutang & Paylater</span>
-              <span id="sumHutangSayaVal" class="text-base sm:text-lg font-bold font-monoNum text-rose-800 dark:text-rose-200 mt-0.5 block truncate">Rp 0</span>
+              <span id="sumHutangSayaVal" class="text-base sm:text-lg font-bold font-monoNum text-rose-800 dark:text-rose-200 mt-0.5 block leading-tight break-words">Rp 0</span>
             </div>
-            <div class="doodle-card p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 rounded-2xl">
+            <div class="doodle-card p-3.5 lg:min-w-[175px] bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 rounded-2xl">
               <span class="font-doodle text-xs font-bold text-emerald-700 dark:text-emerald-300 block">🤝 Piutang Uang Saya</span>
-              <span id="sumPiutangSayaVal" class="text-base sm:text-lg font-bold font-monoNum text-emerald-800 dark:text-emerald-200 mt-0.5 block truncate">Rp 0</span>
+              <span id="sumPiutangSayaVal" class="text-base sm:text-lg font-bold font-monoNum text-emerald-800 dark:text-emerald-200 mt-0.5 block leading-tight break-words">Rp 0</span>
             </div>
           </div>
 
@@ -1466,6 +1487,19 @@
       return new Intl.NumberFormat('id-ID').format(Math.round(amount || 0));
     }
 
+    function setKpiAmountText(el, formattedText) {
+      if (!el) return;
+      el.innerText = formattedText;
+      const len = String(formattedText || '').length;
+      if (len >= 16) {
+        el.setAttribute('data-digits', 'xlong');
+      } else if (len >= 14) {
+        el.setAttribute('data-digits', 'long');
+      } else {
+        el.removeAttribute('data-digits');
+      }
+    }
+
     // ================= TAB NAVIGATION (ADAPTIVE TO MOBILE & DESKTOP) =================
 
     const TAB_HEADINGS = {
@@ -2047,14 +2081,10 @@
       const totalAssets = totalWallets + summary.total_piutang_pending;
       const netWorth = totalAssets - summary.total_hutang_pending;
 
-      const nwEl = document.getElementById('dbNetWorthVal');
-      if (nwEl) nwEl.innerText = 'Rp ' + formatRupiah(netWorth);
-      const waEl = document.getElementById('dbTotalAssetsVal');
-      if (waEl) waEl.innerText = 'Rp ' + formatRupiah(totalWallets);
-      const dtEl = document.getElementById('dbTotalDebtsVal');
-      if (dtEl) dtEl.innerText = 'Rp ' + formatRupiah(summary.total_hutang_pending);
-      const rcEl = document.getElementById('dbTotalReceivablesVal');
-      if (rcEl) rcEl.innerText = 'Rp ' + formatRupiah(summary.total_piutang_pending);
+      setKpiAmountText(document.getElementById('dbNetWorthVal'), 'Rp ' + formatRupiah(netWorth));
+      setKpiAmountText(document.getElementById('dbTotalAssetsVal'), 'Rp ' + formatRupiah(totalWallets));
+      setKpiAmountText(document.getElementById('dbTotalDebtsVal'), 'Rp ' + formatRupiah(summary.total_hutang_pending));
+      setKpiAmountText(document.getElementById('dbTotalReceivablesVal'), 'Rp ' + formatRupiah(summary.total_piutang_pending));
 
       const baEl = document.getElementById('dbBudgetAwal');
       if (baEl) baEl.innerText = 'Rp ' + formatRupiah(summary.budget_awal_kotor);
