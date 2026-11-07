@@ -206,7 +206,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="font-pixel text-base sm:text-lg font-bold tracking-tight text-ink dark:text-slate-100 leading-none">Budget Journal</h1>
-            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.3</span>
+            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.4</span>
           </div>
           <p id="desktopPeriodBadge" class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">Memuat siklus...</p>
         </div>
@@ -277,7 +277,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1 min-w-0">
               <h1 class="font-pixel text-[11px] sm:text-xs font-bold tracking-tight text-ink dark:text-slate-100 leading-none truncate">Budget Journal</h1>
-              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.3</span>
+              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.4</span>
             </div>
             <p id="periodBadge" class="font-silkscreen text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
@@ -1208,30 +1208,127 @@
     let debtFilter = 'all';
     let currentThemeMode = localStorage.getItem('vb_theme_mode') || 'system';
 
+    // ================= DATA SANITIZER & TYPE NORMALIZATION =================
+    function escapeJsAttr(val) {
+      return String(val !== undefined && val !== null ? val : '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '&quot;')
+        .replace(/[\r\n]+/g, ' ');
+    }
+
+    function escapeHtmlText(val) {
+      return String(val !== undefined && val !== null ? val : '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function isPiutangType(tipe) {
+      const t = String(tipe !== undefined && tipe !== null ? tipe : '').toLowerCase();
+      return t.indexOf('piutang') !== -1 || t.indexOf('orang') !== -1;
+    }
+
+    function normalizeDebtsList(rawList) {
+      if (!Array.isArray(rawList)) return [];
+      return rawList.map((d, idx) => {
+        if (!d || typeof d !== 'object') return null;
+        const rawParty = d.nama_pihak !== undefined && d.nama_pihak !== null ? String(d.nama_pihak).trim() : '';
+        const jumlahNum = Number(d.jumlah) || 0;
+        const rawId = d.id !== undefined && d.id !== null ? String(d.id).trim() : '';
+        if (!rawParty && jumlahNum === 0 && !rawId) return null;
+
+        const idStr = rawId || ('D-ROW-' + idx);
+        const tipeStr = (d.tipe !== undefined && d.tipe !== null && String(d.tipe).trim() !== '')
+          ? String(d.tipe).trim()
+          : 'Hutang Saya (Paylater)';
+        const statusRaw = d.status !== undefined && d.status !== null ? String(d.status).trim() : 'Belum Lunas';
+        const isPaid = statusRaw.toLowerCase() === 'lunas';
+        const rawSisa = Number(d.sisa_hutang);
+        const sisaNum = (!isPaid && (d.sisa_hutang === undefined || d.sisa_hutang === null || isNaN(rawSisa) || rawSisa === 0))
+          ? jumlahNum
+          : (isNaN(rawSisa) ? 0 : rawSisa);
+
+        return {
+          ...d,
+          id: idStr,
+          tipe: tipeStr,
+          nama_pihak: rawParty || 'Tanpa Nama',
+          jumlah: jumlahNum,
+          sisa_hutang: sisaNum,
+          jatuh_tempo: d.jatuh_tempo !== undefined && d.jatuh_tempo !== null ? String(d.jatuh_tempo).substring(0, 10) : '',
+          status: isPaid ? 'Lunas' : (statusRaw || 'Belum Lunas'),
+          catatan: d.catatan !== undefined && d.catatan !== null ? String(d.catatan) : ''
+        };
+      }).filter(Boolean);
+    }
+
+    function normalizeBillsList(rawList) {
+      if (!Array.isArray(rawList)) return [];
+      return rawList.map((b, idx) => {
+        if (!b || typeof b !== 'object') return null;
+        const rawName = b.nama !== undefined && b.nama !== null
+          ? String(b.nama).trim()
+          : (b.nama_tagihan !== undefined && b.nama_tagihan !== null ? String(b.nama_tagihan).trim() : '');
+        const jumlahNum = Number(b.jumlah) || 0;
+        const rawId = b.id !== undefined && b.id !== null ? String(b.id).trim() : '';
+        if (!rawName && jumlahNum === 0 && !rawId) return null;
+
+        return {
+          ...b,
+          id: rawId || ('B-ROW-' + idx),
+          nama: rawName || 'Tagihan',
+          kategori: b.kategori !== undefined && b.kategori !== null && String(b.kategori).trim() !== '' ? String(b.kategori).trim() : 'Utilitas',
+          jumlah: jumlahNum,
+          tgl_jatuh_tempo: b.tgl_jatuh_tempo !== undefined && b.tgl_jatuh_tempo !== null ? String(b.tgl_jatuh_tempo) : '1',
+          status: b.status !== undefined && b.status !== null && String(b.status).trim() !== '' ? String(b.status).trim() : 'Belum Dibayar',
+          catatan: b.catatan !== undefined && b.catatan !== null ? String(b.catatan) : ''
+        };
+      }).filter(Boolean);
+    }
+
+    function normalizeTransactionsList(rawList) {
+      if (!Array.isArray(rawList)) return [];
+      return rawList.map((tx, idx) => {
+        if (!tx || typeof tx !== 'object') return null;
+        const rawId = tx.id !== undefined && tx.id !== null ? String(tx.id).trim() : '';
+        const descStr = tx.deskripsi !== undefined && tx.deskripsi !== null ? String(tx.deskripsi) : '';
+        const jumlahNum = Number(tx.jumlah) || 0;
+        if (!descStr && jumlahNum === 0 && !rawId) return null;
+
+        return {
+          ...tx,
+          id: rawId || ('TX-ROW-' + idx),
+          deskripsi: descStr || 'Transaksi',
+          jumlah: jumlahNum,
+          tipe: tx.tipe !== undefined && tx.tipe !== null ? String(tx.tipe) : 'Pengeluaran',
+          kategori: tx.kategori !== undefined && tx.kategori !== null ? String(tx.kategori) : 'Lainnya',
+          dompet: tx.dompet !== undefined && tx.dompet !== null ? String(tx.dompet) : 'Uang Tunai',
+          tanggal: tx.tanggal !== undefined && tx.tanggal !== null ? String(tx.tanggal).substring(0, 10) : ''
+        };
+      }).filter(Boolean);
+    }
+
     let appState = {
       scriptUrl: localStorage.getItem('vb_script_url') || '',
       summary: JSON.parse(localStorage.getItem('vb_summary') || 'null'),
       cycle: JSON.parse(localStorage.getItem('vb_cycle') || 'null'),
-      transactions: JSON.parse(localStorage.getItem('vb_transactions') || '[]'),
+      transactions: normalizeTransactionsList(JSON.parse(localStorage.getItem('vb_transactions') || '[]')),
       wallets: JSON.parse(localStorage.getItem('vb_wallets') || 'null') || [
         { id: 'W1', nama: 'Uang Tunai', tipe: 'Cash', saldo_awal: 200000, saldo_sekarang: 200000, ikon: '💵' },
         { id: 'W2', nama: 'Rekening BCA', tipe: 'Bank', saldo_awal: 1000000, saldo_sekarang: 1000000, ikon: '🏦' },
         { id: 'W3', nama: 'GoPay / OVO', tipe: 'E-Wallet', saldo_awal: 300000, saldo_sekarang: 300000, ikon: '📱' }
       ],
-      bills: filterOutDeleted(JSON.parse(localStorage.getItem('vb_bills') || 'null') || [
+      bills: normalizeBillsList(filterOutDeleted(JSON.parse(localStorage.getItem('vb_bills') || 'null') || [
         { id: 'B1', nama: 'Cicilan Motor', kategori: 'Kendaraan', jumlah: 750000, tgl_jatuh_tempo: '15', status: 'Belum Dibayar', catatan: 'Auto-debet BCA tiap tgl 15' },
         { id: 'B2', nama: 'Internet Wifi Rumah', kategori: 'Utilitas', jumlah: 350000, tgl_jatuh_tempo: '20', status: 'Belum Dibayar', catatan: 'Indihome / Biznet' },
         { id: 'B3', nama: 'Paket Data Kuota', kategori: 'Telekomunikasi', jumlah: 100000, tgl_jatuh_tempo: '25', status: 'Belum Dibayar', catatan: 'Telkomsel bulanan' }
-      ], 'bills'),
-      debts: (filterOutDeleted(JSON.parse(localStorage.getItem('vb_debts') || 'null') || [
+      ], 'bills')),
+      debts: normalizeDebtsList(filterOutDeleted(JSON.parse(localStorage.getItem('vb_debts') || 'null') || [
         { id: 'D1', tipe: 'Hutang Saya (Paylater)', nama_pihak: 'SPaylater', jumlah: 350000, sisa_hutang: 350000, jatuh_tempo: '2026-11-05', status: 'Belum Lunas', catatan: 'Beli perlengkapan kerja' },
         { id: 'D2', tipe: 'Orang Berhutang (Piutang)', nama_pihak: 'Teman Kantor (Andi)', jumlah: 200000, sisa_hutang: 200000, jatuh_tempo: '2026-10-30', status: 'Belum Lunas', catatan: 'Pinjam uang bensin' }
-      ], 'debts')).map(d => {
-        if (d.status !== 'Lunas' && (!d.sisa_hutang || Number(d.sisa_hutang) === 0)) {
-          d.sisa_hutang = d.jumlah;
-        }
-        return d;
-      })
+      ], 'debts'))
     };
 
     // ================= TOMBSTONE / PERMANENT DELETION TRACKER =================
@@ -1439,12 +1536,14 @@
     });
 
     function renderAll() {
-      renderJournal();
-      renderDashboardVisuals();
-      renderBills();
-      renderDebts();
-      renderDesktopReminders();
-      if (window.lucide) lucide.createIcons();
+      try { renderJournal(); } catch (e) { console.error('renderJournal error:', e); }
+      try { renderDashboardVisuals(); } catch (e) { console.error('renderDashboardVisuals error:', e); }
+      try { renderBills(); } catch (e) { console.error('renderBills error:', e); }
+      try { renderDebts(); } catch (e) { console.error('renderDebts error:', e); }
+      try { renderDesktopReminders(); } catch (e) { console.error('renderDesktopReminders error:', e); }
+      if (window.lucide) {
+        try { lucide.createIcons(); } catch (e) {}
+      }
     }
 
     function initCategoryGrid() {
@@ -1535,7 +1634,7 @@
       (appState.debts || []).forEach(d => {
         if (d.status !== 'Lunas') {
           const sisa = (Number(d.sisa_hutang) !== undefined && !isNaN(Number(d.sisa_hutang))) ? Number(d.sisa_hutang) : (Number(d.jumlah) || 0);
-          if (d.tipe.indexOf('Piutang') !== -1 || d.tipe.indexOf('Orang') !== -1) {
+          if (isPiutangType(d.tipe)) {
             totalPiutangPending += sisa;
           } else {
             totalHutangPending += sisa;
@@ -1774,7 +1873,7 @@
         const badgeColor = isExp ? 'bg-doodlePink dark:bg-rose-950 text-rose-800 dark:text-rose-300' : 'bg-doodleMint dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300';
         const sign = isExp ? '-' : '+';
         const rot = (idx % 2 === 0 ? '-0.5' : '0.5');
-        const safeDesc = (tx.deskripsi || 'Transaksi').replace(/'/g, "\\'");
+        const safeDesc = escapeJsAttr(tx.deskripsi || 'Transaksi');
 
         return `
           <div class="doodle-card p-3.5 rounded-2xl bg-white dark:bg-[#181a24] border-2 border-ink dark:border-slate-500 flex items-center justify-between shadow-pixel-sm hover:translate-x-0.5 transition">
@@ -1829,7 +1928,7 @@
       });
 
       pendingDebts.forEach(d => {
-        const isPiutang = d.tipe.indexOf('Piutang') !== -1 || d.tipe.indexOf('Orang') !== -1;
+        const isPiutang = isPiutangType(d.tipe);
         html += `
           <div class="p-2.5 rounded-none ${isPiutang ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-300'} border flex items-center justify-between text-xs">
             <div>
@@ -1937,7 +2036,7 @@
 
       container.innerHTML = appState.bills.map(bill => {
         const isPaid = bill.status === 'Sudah Dibayar';
-        const safeName = (bill.nama || '').replace(/'/g, "\\'");
+        const safeName = escapeJsAttr(bill.nama || '');
         return `
           <div class="doodle-card p-4 bg-white dark:bg-[#181a24] rounded-2xl border-2 border-ink dark:border-slate-500 flex flex-col justify-between gap-3 relative hover:translate-x-0.5 transition shadow-pixel">
             <div class="flex items-start justify-between gap-2">
@@ -1976,7 +2075,7 @@
     }
 
     function openEditBillModal(id) {
-      const b = appState.bills.find(x => x.id === id);
+      const b = appState.bills.find(x => String(x.id) === String(id));
       if (!b) return;
       document.getElementById('editBillId').value = b.id;
       document.getElementById('editBillName').value = b.nama;
@@ -2000,7 +2099,7 @@
         return;
       }
 
-      const target = appState.bills.find(b => b.id === id);
+      const target = appState.bills.find(b => String(b.id) === String(id));
       const oldName = target ? target.nama : name;
       if (target) {
         target.nama = name;
@@ -2037,11 +2136,11 @@
     }
 
     async function deleteBill(id, name) {
-      const targetB = appState.bills.find(b => b.id === id);
+      const targetB = appState.bills.find(b => String(b.id) === String(id));
       const targetName = name || (targetB ? targetB.nama : '');
 
       markAsDeleted('bills', id, targetName);
-      appState.bills = appState.bills.filter(b => b.id !== id);
+      appState.bills = appState.bills.filter(b => String(b.id) !== String(id));
       localStorage.setItem('vb_bills', JSON.stringify(appState.bills));
       renderAll();
 
@@ -2072,7 +2171,7 @@
       const walletName = document.getElementById('settleWalletSelect').value;
       closeModal('settleModal');
 
-      const targetB = appState.bills.find(b => b.id === billId);
+      const targetB = appState.bills.find(b => String(b.id) === String(billId));
       if (targetB) targetB.status = 'Sudah Dibayar';
 
       const targetW = appState.wallets.find(w => w.nama === walletName);
@@ -2173,37 +2272,52 @@
 
     function renderDebts() {
       const container = document.getElementById('debtsListContainer');
+      if (!container) return;
       let sumHutang = 0;
       let sumPiutang = 0;
 
-      appState.debts.forEach(d => {
-        if (d.status !== 'Lunas') {
+      const debtsList = normalizeDebtsList(appState.debts || []);
+      appState.debts = debtsList;
+
+      debtsList.forEach(d => {
+        if (String(d.status || '').toLowerCase() !== 'lunas') {
           const sisa = Number(d.sisa_hutang) || Number(d.jumlah) || 0;
-          if (d.tipe.indexOf('Piutang') !== -1 || d.tipe.indexOf('Orang') !== -1) sumPiutang += sisa;
+          if (isPiutangType(d.tipe)) sumPiutang += sisa;
           else sumHutang += sisa;
         }
       });
 
-      document.getElementById('sumHutangSayaVal').innerText = 'Rp ' + formatRupiah(sumHutang);
-      document.getElementById('sumPiutangSayaVal').innerText = 'Rp ' + formatRupiah(sumPiutang);
+      const hutangEl = document.getElementById('sumHutangSayaVal');
+      const piutangEl = document.getElementById('sumPiutangSayaVal');
+      if (hutangEl) hutangEl.innerText = 'Rp ' + formatRupiah(sumHutang);
+      if (piutangEl) piutangEl.innerText = 'Rp ' + formatRupiah(sumPiutang);
 
-      const filtered = appState.debts.filter(d => {
-        if (debtFilter === 'hutang') return d.tipe.indexOf('Piutang') === -1 && d.tipe.indexOf('Orang') === -1;
-        if (debtFilter === 'piutang') return d.tipe.indexOf('Piutang') !== -1 || d.tipe.indexOf('Orang') !== -1;
+      const filtered = debtsList.filter(d => {
+        if (debtFilter === 'hutang') return !isPiutangType(d.tipe);
+        if (debtFilter === 'piutang') return isPiutangType(d.tipe);
         return true;
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="doodle-card p-6 text-center text-slate-400 font-doodle col-span-full">Tidak ada catatan hutang/piutang</div>`;
+        const emptyLabel = debtFilter === 'hutang'
+          ? 'Tidak ada catatan hutang / paylater'
+          : (debtFilter === 'piutang' ? 'Tidak ada catatan piutang' : 'Tidak ada catatan hutang/piutang');
+        container.innerHTML = `<div class="doodle-card p-6 text-center text-slate-400 font-doodle col-span-full">${emptyLabel}</div>`;
         return;
       }
 
       container.innerHTML = filtered.map(d => {
-        const isPiutang = d.tipe.indexOf('Piutang') !== -1 || d.tipe.indexOf('Orang') !== -1;
-        const isPaid = d.status === 'Lunas';
+        const isPiutang = isPiutangType(d.tipe);
+        const isPaid = String(d.status || '').toLowerCase() === 'lunas';
         const cardBg = isPiutang ? 'bg-emerald-50/50 dark:bg-emerald-950/20' : 'bg-rose-50/50 dark:bg-rose-950/20';
-        const safeParty = (d.nama_pihak || '').replace(/'/g, "\\'");
-        const actualSisa = (!isPaid && (d.sisa_hutang === undefined || d.sisa_hutang === null || Number(d.sisa_hutang) === 0)) ? d.jumlah : (d.sisa_hutang !== undefined ? d.sisa_hutang : d.jumlah);
+        const safeId = escapeJsAttr(d.id);
+        const safeParty = escapeJsAttr(d.nama_pihak || 'Tanpa Nama');
+        const displayParty = escapeHtmlText(d.nama_pihak || 'Tanpa Nama');
+        const displayNotes = d.catatan ? escapeHtmlText(d.catatan) : '';
+        const displayTempo = d.jatuh_tempo ? escapeHtmlText(d.jatuh_tempo) : '';
+        const actualSisa = (!isPaid && (d.sisa_hutang === undefined || d.sisa_hutang === null || Number(d.sisa_hutang) === 0))
+          ? (Number(d.jumlah) || 0)
+          : (Number(d.sisa_hutang !== undefined ? d.sisa_hutang : d.jumlah) || 0);
 
         return `
           <div class="doodle-card p-4 ${cardBg} rounded-2xl border-2 border-ink dark:border-slate-500 flex flex-col justify-between gap-3 relative hover:translate-x-0.5 transition shadow-pixel">
@@ -2212,16 +2326,16 @@
                 <span class="font-silkscreen text-[11px] ${isPiutang ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'} font-bold">
                   ${isPiutang ? '🤝 Piutang (Saya Meminjamkan)' : '💳 Hutang Saya (Paylater)'}
                 </span>
-                <h4 class="font-bold text-xs sm:text-sm lg:text-base text-ink dark:text-white mt-0.5 break-words font-silkscreen">${d.nama_pihak}</h4>
+                <h4 class="font-bold text-xs sm:text-sm lg:text-base text-ink dark:text-white mt-0.5 break-words font-silkscreen">${displayParty}</h4>
               </div>
               <div class="flex items-center gap-1.5 shrink-0">
                 <span class="doodle-sticker px-2 py-0.5 rounded-none text-[11px] font-bold font-silkscreen ${isPaid ? 'bg-doodleMint text-emerald-800' : 'bg-doodlePink text-rose-800'}">
-                  ${d.status}
+                  ${escapeHtmlText(d.status || 'Belum Lunas')}
                 </span>
-                <button onclick="openEditDebtModal('${d.id}')" title="Edit Hutang/Piutang" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-doodleYellow flex items-center justify-center text-ink dark:text-white transition shadow-pixel-sm">
+                <button onclick="openEditDebtModal('${safeId}')" title="Edit Hutang/Piutang" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-doodleYellow flex items-center justify-center text-ink dark:text-white transition shadow-pixel-sm">
                   <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
                 </button>
-                <button onclick="confirmDeleteDebt('${d.id}', '${safeParty}')" title="Hapus" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-rose-100 flex items-center justify-center text-rose-600 dark:text-rose-400 transition shadow-pixel-sm">
+                <button onclick="confirmDeleteDebt('${safeId}', '${safeParty}')" title="Hapus" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 bg-white dark:bg-slate-800 hover:bg-rose-100 flex items-center justify-center text-rose-600 dark:text-rose-400 transition shadow-pixel-sm">
                   <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                 </button>
               </div>
@@ -2229,12 +2343,12 @@
 
             <div>
               <span class="text-xl font-bold font-monoNum text-ink dark:text-slate-100">Rp ${formatRupiah(actualSisa)}</span>
-              ${d.jatuh_tempo ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 block font-silkscreen mt-0.5">Tempo: ${d.jatuh_tempo}</span>` : ''}
-              ${d.catatan ? `<span class="text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 italic block mt-0.5">📌 ${d.catatan}</span>` : ''}
+              ${displayTempo ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 block font-silkscreen mt-0.5">Tempo: ${displayTempo}</span>` : ''}
+              ${displayNotes ? `<span class="text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 italic block mt-0.5">📌 ${displayNotes}</span>` : ''}
             </div>
 
             ${!isPaid ? `
-              <button onclick="promptSettleDebt('${d.id}', '${safeParty}', ${actualSisa}, ${isPiutang})" class="doodle-sticker w-full py-2.5 rounded-none ${isPiutang ? 'bg-doodleMint dark:bg-emerald-500 hover:bg-emerald-400' : 'bg-doodleYellow dark:bg-amber-400 hover:bg-amber-300'} text-ink font-silkscreen text-xs font-bold flex items-center justify-center gap-2 transition active:scale-95 shadow-pixel-sm">
+              <button onclick="promptSettleDebt('${safeId}', '${safeParty}', ${actualSisa}, ${isPiutang})" class="doodle-sticker w-full py-2.5 rounded-none ${isPiutang ? 'bg-doodleMint dark:bg-emerald-500 hover:bg-emerald-400' : 'bg-doodleYellow dark:bg-amber-400 hover:bg-amber-300'} text-ink font-silkscreen text-xs font-bold flex items-center justify-center gap-2 transition active:scale-95 shadow-pixel-sm">
                 <i data-lucide="${isPiutang ? 'check-circle' : 'credit-card'}" class="w-4 h-4"></i>
                 <span>${isPiutang ? 'Terima Pelunasan' : 'Lunasi Hutang'}</span>
               </button>
@@ -2246,9 +2360,9 @@
     }
 
     function openEditDebtModal(id) {
-      const d = appState.debts.find(x => x.id === id);
+      const d = appState.debts.find(x => String(x.id) === String(id));
       if (!d) return;
-      const isPiutang = d.tipe && (d.tipe.indexOf('Piutang') !== -1 || d.tipe.indexOf('Orang') !== -1);
+      const isPiutang = isPiutangType(d.tipe);
 
       document.getElementById('editDebtId').value = d.id;
       document.getElementById('editDebtType').value = d.tipe;
@@ -2283,7 +2397,7 @@
         return;
       }
 
-      const target = appState.debts.find(d => d.id === id);
+      const target = appState.debts.find(d => String(d.id) === String(id));
       const oldParty = target ? target.nama_pihak : party;
       if (target) {
         target.tipe = type;
@@ -2322,11 +2436,11 @@
     }
 
     async function deleteDebt(id, party) {
-      const targetD = appState.debts.find(d => d.id === id);
+      const targetD = appState.debts.find(d => String(d.id) === String(id));
       const targetParty = party || (targetD ? targetD.nama_pihak : '');
 
       markAsDeleted('debts', id, targetParty);
-      appState.debts = appState.debts.filter(d => d.id !== id);
+      appState.debts = appState.debts.filter(d => String(d.id) !== String(id));
       localStorage.setItem('vb_debts', JSON.stringify(appState.debts));
       renderAll();
 
@@ -2357,7 +2471,7 @@
       const walletName = document.getElementById('settleWalletSelect').value;
       closeModal('settleModal');
 
-      const targetD = appState.debts.find(d => d.id === debtId);
+      const targetD = appState.debts.find(d => String(d.id) === String(debtId));
       if (targetD) {
         targetD.sisa_hutang = 0;
         targetD.status = 'Lunas';
@@ -2411,7 +2525,7 @@
         return;
       }
 
-      const isPiutang = type.indexOf('Piutang') !== -1 || type.indexOf('Orang') !== -1;
+      const isPiutang = isPiutangType(type);
       const debtId = 'D-' + Date.now();
       const newDebt = {
         id: debtId,
@@ -2619,21 +2733,16 @@
           
           // Anti-resurrection filter: pastikan catatan yang telah dihapus user tidak muncul kembali
           if (Array.isArray(data.transactions)) {
-            appState.transactions = filterOutDeleted(data.transactions, 'transactions');
+            appState.transactions = normalizeTransactionsList(filterOutDeleted(data.transactions, 'transactions'));
           }
           if (Array.isArray(data.wallets) && data.wallets.length) {
             appState.wallets = data.wallets;
           }
           if (Array.isArray(data.bills)) {
-            appState.bills = filterOutDeleted(data.bills, 'bills');
+            appState.bills = normalizeBillsList(filterOutDeleted(data.bills, 'bills'));
           }
           if (Array.isArray(data.debts)) {
-            appState.debts = filterOutDeleted(data.debts, 'debts').map(d => {
-              if (d.status !== 'Lunas' && (!d.sisa_hutang || Number(d.sisa_hutang) === 0)) {
-                d.sisa_hutang = d.jumlah;
-              }
-              return d;
-            });
+            appState.debts = normalizeDebtsList(filterOutDeleted(data.debts, 'debts'));
           }
 
           localStorage.setItem('vb_summary', JSON.stringify(appState.summary));
@@ -2728,7 +2837,7 @@
     }
 
     async function deleteTransaction(id, desc, amount) {
-      const targetTx = appState.transactions.find(t => t.id === id);
+      const targetTx = appState.transactions.find(t => String(t.id) === String(id));
       const targetDesc = desc || (targetTx ? targetTx.deskripsi : '');
       const targetAmt = amount !== undefined ? amount : (targetTx ? targetTx.jumlah : 0);
 
@@ -2746,7 +2855,7 @@
         }
       }
 
-      appState.transactions = appState.transactions.filter(t => t.id !== id);
+      appState.transactions = appState.transactions.filter(t => String(t.id) !== String(id));
       localStorage.setItem('vb_transactions', JSON.stringify(appState.transactions));
       renderAll();
 
@@ -2866,7 +2975,7 @@
 
     function toggleDebtWalletSource() {
       const type = document.getElementById('debtTypeInput').value;
-      const isPiutang = type.indexOf('Piutang') !== -1 || type.indexOf('Orang') !== -1;
+      const isPiutang = isPiutangType(type);
       const box = document.getElementById('debtWalletSourceContainer');
       if (!box) return;
       if (isPiutang) {
@@ -2881,7 +2990,7 @@
 
     function updateEditDebtTypeLabels() {
       const type = document.getElementById('editDebtType').value;
-      const isPiutang = type.indexOf('Piutang') !== -1 || type.indexOf('Orang') !== -1;
+      const isPiutang = isPiutangType(type);
       const lbl = document.getElementById('editDebtRemainingLabel');
       if (lbl) lbl.innerText = isPiutang ? 'Sisa Piutang (Rp)' : 'Sisa Hutang (Rp)';
     }
