@@ -227,7 +227,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="font-pixel text-base sm:text-lg font-bold tracking-tight text-ink dark:text-slate-100 leading-none">Budget Journal</h1>
-            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.7</span>
+            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.8</span>
           </div>
           <p id="desktopPeriodBadge" class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">Memuat siklus...</p>
         </div>
@@ -298,7 +298,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1 min-w-0">
               <h1 class="font-pixel text-[11px] sm:text-xs font-bold tracking-tight text-ink dark:text-slate-100 leading-none truncate">Budget Journal</h1>
-              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.7</span>
+              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.8</span>
             </div>
             <p id="periodBadge" class="font-silkscreen text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
@@ -1307,6 +1307,37 @@
       journalTxScope = (scope === 'all') ? 'all' : 'cycle';
       renderJournal();
     }
+
+    function getWalletActiveCycleDelta(walletName, transactions, cycle) {
+      const targetName = String(walletName || '').trim();
+      if (!targetName) return { pemasukan: 0, pengeluaran: 0, net: 0 };
+      let pemasukan = 0;
+      let pengeluaran = 0;
+      (transactions || []).forEach(tx => {
+        if (!isTransactionInActiveCycle(tx, cycle)) return;
+        if (String(tx.dompet || '').trim() === targetName) {
+          const amt = Number(tx.jumlah) || 0;
+          if (tx.tipe === 'Pengeluaran') pengeluaran += amt;
+          else if (tx.tipe === 'Pemasukan') pemasukan += amt;
+        }
+      });
+      return { pemasukan, pengeluaran, net: pemasukan - pengeluaran };
+    }
+
+    function recalculateActiveCycleWallets(rawWallets, transactions, cycle) {
+      if (!Array.isArray(rawWallets)) return [];
+      return rawWallets.map(w => {
+        const saldoAwal = Number(w.saldo_awal) || 0;
+        const delta = getWalletActiveCycleDelta(w.nama, transactions, cycle);
+        return {
+          ...w,
+          saldo_awal: saldoAwal,
+          pemasukan: delta.pemasukan,
+          pengeluaran: delta.pengeluaran,
+          saldo_sekarang: saldoAwal + delta.net
+        };
+      });
+    }
     function escapeJsAttr(val) {
       return String(val !== undefined && val !== null ? val : '')
         .replace(/\\/g, '\\\\')
@@ -1692,6 +1723,10 @@
     });
 
     function renderAll() {
+      try {
+        appState.wallets = recalculateActiveCycleWallets(appState.wallets, appState.transactions, appState.cycle);
+        populateWalletDropdown();
+      } catch (e) { console.error('recalculateActiveCycleWallets error:', e); }
       try { renderJournal(); } catch (e) { console.error('renderJournal error:', e); }
       try { renderDashboardVisuals(); } catch (e) { console.error('renderDashboardVisuals error:', e); }
       try { renderBills(); } catch (e) { console.error('renderBills error:', e); }
@@ -2000,20 +2035,25 @@
       const darkPalette = ['dark:bg-emerald-950/40', 'dark:bg-sky-950/40', 'dark:bg-amber-950/40', 'dark:bg-purple-950/40', 'dark:bg-rose-950/40'];
       
       document.getElementById('walletsList').innerHTML = appState.wallets.map((w, idx) => {
-        const curBal = (w.saldo_sekarang !== undefined ? w.saldo_sekarang : w.saldo_awal);
+        const awalBal = Number(w.saldo_awal) || 0;
+        const curBal = (w.saldo_sekarang !== undefined ? Number(w.saldo_sekarang) : awalBal);
+        const diff = curBal - awalBal;
+        const subInfo = diff === 0
+          ? `Awal siklus: Rp ${formatRupiah(awalBal)}`
+          : `Awal: Rp ${formatRupiah(awalBal)} (${diff > 0 ? '+' : '-'}Rp ${formatRupiah(Math.abs(diff))})`;
         return `
           <div onclick="openWalletManagerModal()" class="doodle-card min-w-[170px] lg:min-w-full p-3.5 rounded-2xl ${lightPalette[idx % lightPalette.length]} ${darkPalette[idx % darkPalette.length]} border-2 border-ink dark:border-slate-500 flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 cursor-pointer hover:translate-x-0.5 hover:translate-y-0.5 transition shadow-pixel-sm">
             <div class="flex items-center gap-2 min-w-0">
               <span class="text-2xl shrink-0">${w.ikon || '👛'}</span>
               <div class="min-w-0">
-                <span class="text-xs font-bold text-ink dark:text-white truncate block leading-tight font-silkscreen">${w.nama}</span>
-                <span class="text-[10px] text-slate-600 dark:text-slate-400 block leading-tight mt-0.5 font-silkscreen">${w.tipe || 'Dompet'}</span>
+                <span class="text-xs font-bold text-ink dark:text-white truncate block leading-tight font-silkscreen">${escapeHtmlText(w.nama)}</span>
+                <span class="text-[10px] text-slate-600 dark:text-slate-400 block leading-tight mt-0.5 font-silkscreen">${escapeHtmlText(w.tipe || 'Dompet')}</span>
               </div>
             </div>
             <div class="pt-1.5 lg:pt-0 border-t lg:border-t-0 border-ink/20 dark:border-white/20 flex lg:flex-col justify-between items-baseline lg:items-end">
-              <span class="lg:hidden text-[10px] font-silkscreen text-slate-500 dark:text-slate-400">Saldo:</span>
+              <span class="lg:hidden text-[10px] font-silkscreen text-slate-500 dark:text-slate-400">Saldo Riil:</span>
               <span class="text-sm lg:text-base font-bold text-ink dark:text-slate-100 font-monoNum block">Rp ${formatRupiah(curBal)}</span>
-              <span class="hidden lg:block text-[10px] text-slate-500 dark:text-slate-400 font-monoNum">Awal: Rp ${formatRupiah(w.saldo_awal)}</span>
+              <span class="hidden lg:block text-[10px] text-slate-500 dark:text-slate-400 font-monoNum">${subInfo}</span>
             </div>
           </div>
         `;
@@ -2900,12 +2940,16 @@
 
     function renderWalletInputRows() {
       const container = document.getElementById('walletInputsContainer');
-      container.innerHTML = appState.wallets.map((w, idx) => `
+      container.innerHTML = appState.wallets.map((w, idx) => {
+        const delta = getWalletActiveCycleDelta(w.nama, appState.transactions, appState.cycle);
+        const awalNum = Number(w.saldo_awal) || 0;
+        const realNow = awalNum + delta.net;
+        return `
         <div class="doodle-card p-3 bg-white dark:bg-slate-900 flex flex-col gap-2 relative">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-              <input type="text" value="${w.ikon || '👛'}" onchange="updateWalletField(${idx}, 'ikon', this.value)" class="w-8 text-center bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none text-sm text-ink dark:text-white">
-              <input type="text" value="${w.nama}" onchange="updateWalletField(${idx}, 'nama', this.value)" placeholder="Nama Dompet" class="font-bold text-xs bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none px-2 py-1 text-ink dark:text-white">
+              <input type="text" value="${escapeHtmlText(w.ikon || '👛')}" onchange="updateWalletField(${idx}, 'ikon', this.value)" class="w-8 text-center bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none text-sm text-ink dark:text-white">
+              <input type="text" value="${escapeHtmlText(w.nama)}" onchange="updateWalletField(${idx}, 'nama', this.value)" placeholder="Nama Dompet" class="font-bold text-xs bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none px-2 py-1 text-ink dark:text-white">
             </div>
             <button onclick="removeWalletRow(${idx})" class="text-rose-500 font-bold text-xs p-1 hover:bg-rose-50 dark:hover:bg-rose-950 rounded">Hapus</button>
           </div>
@@ -2919,12 +2963,22 @@
               </select>
             </div>
             <div>
-              <span class="text-[10px] text-slate-500 dark:text-slate-400 font-doodle block">Saldo Alokasi (Rp)</span>
-              <input type="number" value="${w.saldo_awal}" oninput="updateWalletField(${idx}, 'saldo_awal', Number(this.value)); calculateAllocationSummary();" class="w-full bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none text-xs font-bold py-1 px-2 text-ink dark:text-white">
+              <span class="text-[10px] text-slate-500 dark:text-slate-400 font-doodle block">Saldo Awal Siklus (Rp)</span>
+              <input type="number" id="walletAwalInput_${idx}" value="${awalNum}" oninput="updateWalletField(${idx}, 'saldo_awal', Number(this.value)); calculateAllocationSummary();" class="w-full bg-slate-50 dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none text-xs font-bold font-monoNum py-1 px-2 text-ink dark:text-white">
             </div>
           </div>
+          <div id="walletPreviewRow_${idx}" class="flex items-center justify-between text-[10px] font-doodle pt-1 border-t border-dashed border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
+            <span>${delta.net === 0 ? 'Belum ada mutasi di siklus ini' : `Mutasi siklus ini: ${delta.net > 0 ? '+' : '-'}Rp ${formatRupiah(Math.abs(delta.net))}`}</span>
+            <span class="font-bold font-monoNum text-emerald-700 dark:text-emerald-400">Saldo Riil: Rp ${formatRupiah(realNow)}</span>
+          </div>
+          ${delta.net !== 0 ? `
+            <button type="button" onclick="alignWalletToRealNow(${idx})" class="text-[10px] font-doodle font-bold text-sky-700 dark:text-sky-300 underline text-right self-end hover:text-sky-500">
+              Pas-kan agar Saldo Riil sekarang persis sesuai angka input di atas
+            </button>
+          ` : ''}
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       calculateAllocationSummary();
     }
@@ -2932,8 +2986,28 @@
     function updateWalletField(index, field, value) {
       appState.wallets[index][field] = value;
       if (field === 'saldo_awal') {
-        appState.wallets[index].saldo_sekarang = value;
+        const delta = getWalletActiveCycleDelta(appState.wallets[index].nama, appState.transactions, appState.cycle);
+        const realNow = (Number(value) || 0) + delta.net;
+        appState.wallets[index].saldo_sekarang = realNow;
+        const prevEl = document.getElementById('walletPreviewRow_' + index);
+        if (prevEl) {
+          prevEl.innerHTML = `
+            <span>${delta.net === 0 ? 'Belum ada mutasi di siklus ini' : `Mutasi siklus ini: ${delta.net > 0 ? '+' : '-'}Rp ${formatRupiah(Math.abs(delta.net))}`}</span>
+            <span class="font-bold font-monoNum text-emerald-700 dark:text-emerald-400">Saldo Riil: Rp ${formatRupiah(realNow)}</span>
+          `;
+        }
       }
+    }
+
+    function alignWalletToRealNow(index) {
+      const inp = document.getElementById('walletAwalInput_' + index);
+      if (!inp || !appState.wallets[index]) return;
+      const desiredReal = Number(inp.value) || 0;
+      const delta = getWalletActiveCycleDelta(appState.wallets[index].nama, appState.transactions, appState.cycle);
+      const adjustedAwal = desiredReal - delta.net;
+      appState.wallets[index].saldo_awal = adjustedAwal;
+      appState.wallets[index].saldo_sekarang = desiredReal;
+      renderWalletInputRows();
     }
 
     function addNewWalletRow() {
@@ -2979,6 +3053,8 @@
     }
 
     async function saveWalletAllocations() {
+      appState._walletsUpdatedAt = Date.now();
+      appState.wallets = recalculateActiveCycleWallets(appState.wallets, appState.transactions, appState.cycle);
       localStorage.setItem('vb_wallets', JSON.stringify(appState.wallets));
       renderAll();
 
@@ -3051,7 +3127,18 @@
             appState.transactions = normalizeTransactionsList(filterOutDeleted(data.transactions, 'transactions'));
           }
           if (Array.isArray(data.wallets) && data.wallets.length) {
-            appState.wallets = data.wallets;
+            const isRecentWalletEdit = appState._walletsUpdatedAt && (Date.now() - appState._walletsUpdatedAt < 15000);
+            const isMatchingWallets = Array.isArray(appState.wallets) &&
+              appState.wallets.length === data.wallets.length &&
+              appState.wallets.every((lw, idx) =>
+                String(lw.nama || '') === String(data.wallets[idx].nama || '') &&
+                Number(lw.saldo_awal) === Number(data.wallets[idx].saldo_awal)
+              );
+            if (!isRecentWalletEdit || isMatchingWallets) {
+              appState.wallets = recalculateActiveCycleWallets(data.wallets, appState.transactions, appState.cycle);
+            } else {
+              appState.wallets = recalculateActiveCycleWallets(appState.wallets, appState.transactions, appState.cycle);
+            }
           }
           if (Array.isArray(data.bills)) {
             appState.bills = normalizeBillsList(filterOutDeleted(data.bills, 'bills'));
