@@ -227,7 +227,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="font-pixel text-base sm:text-lg font-bold tracking-tight text-ink dark:text-slate-100 leading-none">Budget Journal</h1>
-            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.6</span>
+            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.7</span>
           </div>
           <p id="desktopPeriodBadge" class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">Memuat siklus...</p>
         </div>
@@ -298,7 +298,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1 min-w-0">
               <h1 class="font-pixel text-[11px] sm:text-xs font-bold tracking-tight text-ink dark:text-slate-100 leading-none truncate">Budget Journal</h1>
-              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.6</span>
+              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.7</span>
             </div>
             <p id="periodBadge" class="font-silkscreen text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
@@ -946,23 +946,23 @@
 
       <div>
         <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jenis Catatan</label>
-        <select id="debtTypeInput" onchange="toggleDebtWalletSource()" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
-          <option value="Hutang Saya (Paylater)">💳 Hutang Saya / Paylater (Kewajiban Bayar)</option>
-          <option value="Orang Berhutang (Piutang)">🤝 Orang Berhutang ke Saya (Piutang)</option>
+        <select id="debtTypeInput" onchange="toggleDebtWalletSource()" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs sm:text-sm font-bold text-ink dark:text-white">
+          <option value="Orang Berhutang (Piutang)">🤝 Dana Talangan / Piutang (Nalangin Kedai / Dipinjam Orang)</option>
+          <option value="Hutang Saya (Paylater)">💳 Hutang Saya / Paylater (Kewajiban Saya Membayar)</option>
         </select>
       </div>
 
-      <div id="debtWalletSourceContainer" class="hidden p-2.5 bg-sky-50 dark:bg-sky-950/40 border-2 border-dashed border-sky-400 dark:border-sky-500 rounded-xl">
-        <label class="font-doodle text-xs font-bold text-sky-900 dark:text-sky-200 block mb-1">Sumber Dompet (Dipinjamkan Dari):</label>
-        <select id="debtWalletSourceInput" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-1.5 px-3 text-xs font-bold text-ink dark:text-white">
-          <option value="">Jangan potong dompet (Catat piutang lama)</option>
+      <div id="debtWalletSourceContainer" class="p-3 bg-sky-50 dark:bg-sky-950/40 border-2 border-dashed border-sky-400 dark:border-sky-500 rounded-xl">
+        <label id="debtWalletSourceLabel" class="font-doodle text-xs font-bold text-sky-900 dark:text-sky-200 block mb-1">Diambil / Ditalangi dari Keuangan Mana? (Cash / Bank / E-Wallet):</label>
+        <select id="debtWalletSourceInput" class="w-full bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-bold text-ink dark:text-white">
+          <option value="">Jangan potong saldo dompet (Catat piutang lama)</option>
         </select>
-        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-silkscreen">*Pilih dompet jika uang tunai/saldo dipinjamkan keluar hari ini.</p>
+        <p id="debtWalletSourceHint" class="text-[10px] text-slate-600 dark:text-slate-300 mt-1.5 font-doodle leading-snug">💡 Saldo Cash/Bank yang dipilih berkurang sekarang, namun TIDAK dihitung sebagai pengeluaran belanja harian pribadi.</p>
       </div>
 
       <div>
-        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nama Pihak / Platform</label>
-        <input type="text" id="debtPartyInput" placeholder="misal: SPaylater, Kredivo, Teman (Budi)" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
+        <label id="debtPartyLabel" class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Nama Pihak / Usaha / Platform</label>
+        <input type="text" id="debtPartyInput" placeholder="misal: Kedai Kopi, Teman (Budi), SPaylater" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
       </div>
 
       <div class="grid grid-cols-2 gap-2">
@@ -1005,9 +1005,16 @@
 
       <div>
         <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Jenis Catatan</label>
-        <select id="editDebtType" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-sm font-bold text-ink dark:text-white">
-          <option value="Hutang Saya (Paylater)">💳 Hutang Saya / Paylater (Kewajiban Bayar)</option>
-          <option value="Orang Berhutang (Piutang)">🤝 Orang Berhutang ke Saya (Piutang)</option>
+        <select id="editDebtType" onchange="updateEditDebtTypeLabels()" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs sm:text-sm font-bold text-ink dark:text-white">
+          <option value="Orang Berhutang (Piutang)">🤝 Dana Talangan / Piutang (Nalangin Kedai / Dipinjam Orang)</option>
+          <option value="Hutang Saya (Paylater)">💳 Hutang Saya / Paylater (Kewajiban Saya Membayar)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="font-doodle text-sm font-bold text-slate-700 dark:text-slate-300 block">Keterangan Sumber Keuangan (Cash / Bank / E-Wallet)</label>
+        <select id="editDebtWalletTag" class="w-full mt-1 bg-white dark:bg-slate-900 border-2 border-ink dark:border-slate-400 rounded-none py-2 px-3 text-xs font-bold text-ink dark:text-white">
+          <option value="">Tidak ditentukan</option>
         </select>
       </div>
 
@@ -1318,7 +1325,51 @@
 
     function isPiutangType(tipe) {
       const t = String(tipe !== undefined && tipe !== null ? tipe : '').toLowerCase();
-      return t.indexOf('piutang') !== -1 || t.indexOf('orang') !== -1;
+      return t.indexOf('piutang') !== -1 || t.indexOf('orang') !== -1 || t.indexOf('talangan') !== -1;
+    }
+
+    function isLoanAdvanceOutflow(tx) {
+      if (!tx || tx.tipe !== 'Pengeluaran') return false;
+      const kat = String(tx.kategori || '').trim().toLowerCase();
+      const desc = String(tx.deskripsi || '').trim().toLowerCase();
+      return (
+        kat === 'dana talangan' ||
+        kat === 'piutang' ||
+        desc.indexOf('meminjamkan uang ke') === 0 ||
+        desc.indexOf('dana talangan ke') === 0 ||
+        desc.indexOf('talangan ke') === 0
+      );
+    }
+
+    function getWalletTypeLabel(tipe) {
+      const t = String(tipe || '').toLowerCase();
+      if (t === 'cash' || t.indexOf('tunai') !== -1) return 'Cash';
+      if (t === 'bank') return 'Bank';
+      if (t.indexOf('wallet') !== -1) return 'E-Wallet';
+      return tipe || 'Dompet';
+    }
+
+    function formatWalletTagValue(walletName) {
+      if (!walletName) return '';
+      const w = (appState.wallets || []).find(x => x.nama === walletName);
+      if (!w) return String(walletName).trim();
+      return `${w.nama} (${getWalletTypeLabel(w.tipe)})`;
+    }
+
+    function parseDebtWalletTag(catatanStr) {
+      const raw = String(catatanStr !== undefined && catatanStr !== null ? catatanStr : '');
+      const match = raw.match(/^\[Dompet:\s*([^\]]+)\]\s*(.*)$/);
+      if (match) {
+        return { walletTag: match[1].trim(), cleanNotes: match[2].trim() };
+      }
+      return { walletTag: '', cleanNotes: raw };
+    }
+
+    function buildDebtNotesWithWallet(walletTag, cleanNotes) {
+      const w = String(walletTag || '').trim();
+      const n = String(cleanNotes || '').trim();
+      if (!w) return n;
+      return n ? `[Dompet: ${w}] ${n}` : `[Dompet: ${w}]`;
     }
 
     function normalizeDebtsList(rawList) {
@@ -1756,15 +1807,25 @@
       activeCycleTxs.forEach(tx => {
         const amt = Number(tx.jumlah) || 0;
         if (tx.tipe === 'Pengeluaran') {
-          totalPengeluaranSiklus += amt;
-          if (normalizeDateToISO(tx.tanggal) === todayStr) {
-            pengeluaranHariIni += amt;
+          // Dana talangan / meminjamkan piutang memotong saldo fisik dompet, tetapi BUKAN pengeluaran belanja pribadi
+          if (!isLoanAdvanceOutflow(tx)) {
+            totalPengeluaranSiklus += amt;
+            if (normalizeDateToISO(tx.tanggal) === todayStr) {
+              pengeluaranHariIni += amt;
+            }
           }
         } else if (tx.tipe === 'Pemasukan') {
           const kat = String(tx.kategori || '');
+          const katLower = kat.toLowerCase();
           const desc = String(tx.deskripsi || '').toLowerCase();
-          // Mencegah pelunasan piutang mendobelkan budget siklus!
-          if (kat !== 'Pelunasan Piutang' && kat !== 'Hutang-Piutang' && desc.indexOf('pelunasan') === -1) {
+          // Pelunasan piutang & pencairan pinjaman tidak mendobelkan budget belanja siklus!
+          if (
+            kat !== 'Pelunasan Piutang' &&
+            kat !== 'Hutang-Piutang' &&
+            katLower !== 'pinjaman masuk' &&
+            desc.indexOf('pelunasan') === -1 &&
+            desc.indexOf('penerimaan pinjaman') === -1
+          ) {
             totalTopupSiklus += amt;
           }
         }
@@ -1990,20 +2051,26 @@
 
       container.innerHTML = txs.slice(0, 25).map((tx, idx) => {
         const isExp = tx.tipe === 'Pengeluaran';
-        const badgeColor = isExp ? 'bg-doodlePink dark:bg-rose-950 text-rose-800 dark:text-rose-300' : 'bg-doodleMint dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300';
+        const isTalangan = isLoanAdvanceOutflow(tx);
+        const badgeColor = isTalangan
+          ? 'bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300'
+          : (isExp ? 'bg-doodlePink dark:bg-rose-950 text-rose-800 dark:text-rose-300' : 'bg-doodleMint dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300');
         const sign = isExp ? '-' : '+';
         const safeId = escapeJsAttr(tx.id);
         const safeDesc = escapeJsAttr(tx.deskripsi || 'Transaksi');
         const displayDesc = escapeHtmlText(tx.deskripsi || 'Transaksi');
-        const displayKat = escapeHtmlText(tx.kategori || 'Umum');
+        const displayKat = escapeHtmlText(isTalangan ? 'Talangan / Piutang (Bukan Belanja)' : (tx.kategori || 'Umum'));
         const displayWallet = escapeHtmlText(tx.dompet || 'Tunai');
         const displayDate = escapeHtmlText(tx.tanggal || '');
+        const amtColor = isTalangan
+          ? 'text-sky-600 dark:text-sky-400'
+          : (isExp ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400');
 
         return `
           <div class="doodle-card p-3.5 rounded-2xl bg-white dark:bg-[#181a24] border-2 border-ink dark:border-slate-500 flex items-center justify-between shadow-pixel-sm hover:translate-x-0.5 transition">
             <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1 mr-2">
               <div class="w-9 h-9 rounded-xl ${badgeColor} border-2 border-ink dark:border-slate-300 shadow-pixel-sm flex items-center justify-center text-base font-bold shrink-0">
-                ${isExp ? '💸' : '💰'}
+                ${isTalangan ? '🤝' : (isExp ? '💸' : '💰')}
               </div>
               <div class="min-w-0 flex-1">
                 <h4 class="text-xs lg:text-sm font-bold text-ink dark:text-white leading-tight truncate font-sans">${displayDesc}</h4>
@@ -2013,7 +2080,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
-              <span class="text-sm lg:text-base font-bold font-monoNum ${isExp ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400'}">${sign}Rp ${formatRupiah(tx.jumlah)}</span>
+              <span class="text-sm lg:text-base font-bold font-monoNum ${amtColor}">${sign}Rp ${formatRupiah(tx.jumlah)}</span>
               <button onclick="confirmDeleteTransaction('${safeId}', '${safeDesc}', ${Number(tx.jumlah) || 0})" title="Hapus Catatan" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 hover:bg-rose-100 dark:hover:bg-rose-950/60 text-slate-400 hover:text-rose-600 flex items-center justify-center text-xs transition shadow-pixel-sm">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-500"></i>
               </button>
@@ -2105,7 +2172,7 @@
       let totalExpenseSum = 0;
       const cycleTxs = (appState.transactions || []).filter(t => isTransactionInActiveCycle(t, appState.cycle));
       cycleTxs.forEach(t => {
-        if (t.tipe === 'Pengeluaran') {
+        if (t.tipe === 'Pengeluaran' && !isLoanAdvanceOutflow(t)) {
           const cat = t.kategori || 'Lain-lain';
           const amt = Number(t.jumlah) || 0;
           categoryTotals[cat] = (categoryTotals[cat] || 0) + amt;
@@ -2439,7 +2506,9 @@
         const safeId = escapeJsAttr(d.id);
         const safeParty = escapeJsAttr(d.nama_pihak || 'Tanpa Nama');
         const displayParty = escapeHtmlText(d.nama_pihak || 'Tanpa Nama');
-        const displayNotes = d.catatan ? escapeHtmlText(d.catatan) : '';
+        const parsedNotes = parseDebtWalletTag(d.catatan);
+        const displayWalletTag = parsedNotes.walletTag ? escapeHtmlText(parsedNotes.walletTag) : '';
+        const displayNotes = parsedNotes.cleanNotes ? escapeHtmlText(parsedNotes.cleanNotes) : '';
         const displayTempo = d.jatuh_tempo ? escapeHtmlText(d.jatuh_tempo) : '';
         const actualSisa = (!isPaid && (d.sisa_hutang === undefined || d.sisa_hutang === null || Number(d.sisa_hutang) === 0))
           ? (Number(d.jumlah) || 0)
@@ -2450,7 +2519,7 @@
             <div class="flex items-start justify-between gap-2">
               <div class="min-w-0 flex-1">
                 <span class="font-silkscreen text-[11px] ${isPiutang ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'} font-bold">
-                  ${isPiutang ? '🤝 Piutang (Saya Meminjamkan)' : '💳 Hutang Saya (Paylater)'}
+                  ${isPiutang ? '🤝 Dana Talangan / Piutang' : '💳 Hutang Saya (Paylater)'}
                 </span>
                 <h4 class="font-bold text-xs sm:text-sm lg:text-base text-ink dark:text-white mt-0.5 break-words font-silkscreen">${displayParty}</h4>
               </div>
@@ -2468,8 +2537,14 @@
             </div>
 
             <div>
-              <span class="text-xl font-bold font-monoNum text-ink dark:text-slate-100">Rp ${formatRupiah(actualSisa)}</span>
-              ${displayTempo ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 block font-silkscreen mt-0.5">Tempo: ${displayTempo}</span>` : ''}
+              <span class="text-xl font-bold font-monoNum text-ink dark:text-slate-100 block">Rp ${formatRupiah(actualSisa)}</span>
+              ${displayWalletTag ? `
+                <div class="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 dark:bg-slate-800 border border-ink/30 dark:border-slate-500 text-[10px] font-bold font-doodle text-slate-700 dark:text-slate-200">
+                  <span>${isPiutang ? '👛 Diambil dari:' : '💳 Keuangan:'}</span>
+                  <span class="text-ink dark:text-amber-300">${displayWalletTag}</span>
+                </div>
+              ` : ''}
+              ${displayTempo ? `<span class="text-[10px] text-slate-500 dark:text-slate-400 block font-silkscreen mt-1">Tempo: ${displayTempo}</span>` : ''}
               ${displayNotes ? `<span class="text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 italic block mt-0.5">📌 ${displayNotes}</span>` : ''}
             </div>
 
@@ -2485,13 +2560,31 @@
       if (window.lucide) lucide.createIcons();
     }
 
+    function populateEditDebtWalletOptions(selectedTag) {
+      const sel = document.getElementById('editDebtWalletTag');
+      if (!sel) return;
+      const baseOptions = [
+        { val: '', label: 'Tidak ditentukan' },
+        { val: 'Paylater / Kredit', label: '💳 Paylater / Kredit' }
+      ];
+      (appState.wallets || []).forEach(w => {
+        const tag = formatWalletTagValue(w.nama);
+        baseOptions.push({ val: tag, label: `${w.ikon || '👛'} ${tag}` });
+      });
+      if (selectedTag && !baseOptions.some(o => o.val === selectedTag)) {
+        baseOptions.push({ val: selectedTag, label: `👛 ${selectedTag}` });
+      }
+      sel.innerHTML = baseOptions.map(o => `<option value="${escapeHtmlText(o.val)}">${escapeHtmlText(o.label)}</option>`).join('');
+      sel.value = selectedTag || '';
+    }
+
     function openEditDebtModal(id) {
       const d = appState.debts.find(x => String(x.id) === String(id));
       if (!d) return;
       const isPiutang = isPiutangType(d.tipe);
 
       document.getElementById('editDebtId').value = d.id;
-      document.getElementById('editDebtType').value = d.tipe;
+      document.getElementById('editDebtType').value = isPiutang ? 'Orang Berhutang (Piutang)' : 'Hutang Saya (Paylater)';
       document.getElementById('editDebtParty').value = d.nama_pihak;
       document.getElementById('editDebtAmount').value = d.jumlah;
       
@@ -2502,10 +2595,13 @@
       document.getElementById('editDebtRemaining').value = sisa;
       
       const lbl = document.getElementById('editDebtRemainingLabel');
-      if (lbl) lbl.innerText = isPiutang ? 'Sisa Piutang (Rp)' : 'Sisa Hutang (Rp)';
+      if (lbl) lbl.innerText = isPiutang ? 'Sisa Piutang / Talangan (Rp)' : 'Sisa Hutang (Rp)';
+
+      const parsed = parseDebtWalletTag(d.catatan);
+      populateEditDebtWalletOptions(parsed.walletTag);
 
       document.getElementById('editDebtDueDate').value = d.jatuh_tempo || '';
-      document.getElementById('editDebtNotes').value = d.catatan || '';
+      document.getElementById('editDebtNotes').value = parsed.cleanNotes || '';
       openModal('editDebtModal');
     }
 
@@ -2516,7 +2612,10 @@
       const amount = Number(document.getElementById('editDebtAmount').value);
       const remaining = Number(document.getElementById('editDebtRemaining').value);
       const dueDate = document.getElementById('editDebtDueDate').value;
-      const notes = document.getElementById('editDebtNotes').value.trim();
+      const walletTagEl = document.getElementById('editDebtWalletTag');
+      const walletTag = walletTagEl ? walletTagEl.value : '';
+      const cleanNotes = document.getElementById('editDebtNotes').value.trim();
+      const notes = buildDebtNotesWithWallet(walletTag, cleanNotes);
 
       if (!party || !amount) {
         alert('Mohon isi nama pihak dan nominal uang.');
@@ -2583,13 +2682,24 @@
     }
 
     function promptSettleDebt(debtId, partyName, amount, isPiutang) {
-      document.getElementById('settleModalTitle').innerText = (isPiutang ? 'Terima Pelunasan dari ' : 'Lunasi Hutang ke ') + partyName;
-      document.getElementById('settleModalDesc').innerText = `Nominal: Rp ${formatRupiah(amount)}. Pilih dompet yang digunakan untuk transaksi ini:`;
+      document.getElementById('settleModalTitle').innerText = (isPiutang ? 'Terima Pelunasan / Reimburse dari ' : 'Lunasi Hutang ke ') + partyName;
+      document.getElementById('settleModalDesc').innerText = isPiutang
+        ? `Nominal: Rp ${formatRupiah(amount)}. Pilih dompet (Cash / Bank / E-Wallet) tempat uang pengganti masuk:`
+        : `Nominal: Rp ${formatRupiah(amount)}. Pilih dompet (Cash / Bank / E-Wallet) yang dipakai membayar:`;
 
       const confirmBtn = document.getElementById('settleConfirmBtn');
       confirmBtn.onclick = () => executeSettleDebt(debtId, amount, partyName, isPiutang);
 
       populateWalletDropdown();
+      const targetD = (appState.debts || []).find(x => String(x.id) === String(debtId));
+      if (targetD) {
+        const { walletTag } = parseDebtWalletTag(targetD.catatan);
+        if (walletTag) {
+          const matchedW = (appState.wallets || []).find(w => walletTag.indexOf(w.nama) !== -1);
+          const settleSel = document.getElementById('settleWalletSelect');
+          if (matchedW && settleSel) settleSel.value = matchedW.nama;
+        }
+      }
       openModal('settleModal');
     }
 
@@ -2647,15 +2757,38 @@
       const party = document.getElementById('debtPartyInput').value.trim();
       const amount = Number(document.getElementById('debtAmountInput').value);
       const dueDate = document.getElementById('debtDueDateInput').value;
-      const notes = document.getElementById('debtNotesInput').value.trim();
-      const deductWallet = document.getElementById('debtWalletSourceInput') ? document.getElementById('debtWalletSourceInput').value : '';
+      const rawNotes = document.getElementById('debtNotesInput').value.trim();
+      const walletChoice = document.getElementById('debtWalletSourceInput') ? document.getElementById('debtWalletSourceInput').value : '';
 
-      if (!party || !amount) {
-        alert('Mohon isi nama pihak dan nominal uang.');
+      if (!party || !amount || amount <= 0) {
+        alert('Mohon isi nama pihak/usaha dan nominal uang yang valid.');
         return;
       }
 
       const isPiutang = isPiutangType(type);
+      const activeCycleId = (appState.cycle && appState.cycle.id) ? String(appState.cycle.id) : '';
+      let deductWallet = '';
+      let inflowWallet = '';
+      let walletTag = '';
+
+      if (isPiutang) {
+        deductWallet = walletChoice || '';
+        if (deductWallet) {
+          walletTag = formatWalletTagValue(deductWallet);
+        }
+      } else {
+        if (walletChoice === 'TAG:Paylater' || walletChoice === '') {
+          walletTag = 'Paylater / Kredit';
+        } else if (walletChoice.indexOf('TAG:') === 0) {
+          const wName = walletChoice.slice(4);
+          walletTag = 'Via ' + formatWalletTagValue(wName);
+        } else if (walletChoice.indexOf('INFLOW:') === 0) {
+          inflowWallet = walletChoice.slice(7);
+          walletTag = 'Pinjaman ke ' + formatWalletTagValue(inflowWallet);
+        }
+      }
+
+      const storedNotes = buildDebtNotesWithWallet(walletTag, rawNotes);
       const debtId = 'D-' + Date.now();
       const newDebt = {
         id: debtId,
@@ -2665,12 +2798,15 @@
         sisa_hutang: amount,
         jatuh_tempo: dueDate,
         status: 'Belum Lunas',
-        catatan: notes
+        catatan: storedNotes
       };
 
       appState.debts.push(newDebt);
 
-      // Jika user memilih potong saldo dompet langsung saat meminjamkan uang:
+      let inflowTxPayload = null;
+
+      // 1. Jika Dana Talangan / Piutang diambil dari dompet (Cash / Bank / E-Wallet):
+      // Saldo fisik dompet berkurang, namun BUKAN pengeluaran belanja harian pribadi!
       if (isPiutang && deductWallet) {
         const targetW = appState.wallets.find(w => w.nama === deductWallet);
         if (targetW) {
@@ -2679,13 +2815,44 @@
         appState.transactions.unshift({
           id: 'TX-' + Date.now(),
           tanggal: getLocalTodayISO(),
-          deskripsi: 'Meminjamkan uang ke ' + party,
+          deskripsi: 'Meminjamkan uang ke ' + party + (rawNotes ? ' (' + rawNotes + ')' : ''),
           jumlah: amount,
           tipe: 'Pengeluaran',
-          kategori: 'Hutang-Piutang',
+          kategori: 'Dana Talangan',
           dompet: deductWallet,
-          id_siklus: (appState.cycle && appState.cycle.id) ? String(appState.cycle.id) : ''
+          id_siklus: activeCycleId
         });
+      }
+
+      // 2. Jika Hutang Saya berupa pinjaman uang tunai/transfer masuk ke Cash/Bank sekarang:
+      if (!isPiutang && inflowWallet) {
+        const targetW = appState.wallets.find(w => w.nama === inflowWallet);
+        if (targetW) {
+          targetW.saldo_sekarang = (targetW.saldo_sekarang !== undefined ? targetW.saldo_sekarang : targetW.saldo_awal) + amount;
+        }
+        const inflowTxId = 'TX-' + Date.now();
+        const inflowDesc = 'Penerimaan pinjaman dari ' + party + (rawNotes ? ' (' + rawNotes + ')' : '');
+        appState.transactions.unshift({
+          id: inflowTxId,
+          tanggal: getLocalTodayISO(),
+          deskripsi: inflowDesc,
+          jumlah: amount,
+          tipe: 'Pemasukan',
+          kategori: 'Pinjaman Masuk',
+          dompet: inflowWallet,
+          id_siklus: activeCycleId
+        });
+        inflowTxPayload = {
+          action: 'add_transaction',
+          id: inflowTxId,
+          jumlah: amount,
+          deskripsi: inflowDesc,
+          kategori: 'Pinjaman Masuk',
+          dompet: inflowWallet,
+          tipe: 'Pemasukan',
+          tanggal: getLocalTodayISO(),
+          id_siklus: activeCycleId
+        };
       }
 
       localStorage.setItem('vb_debts', JSON.stringify(appState.debts));
@@ -2700,7 +2867,6 @@
       document.getElementById('debtAmountInput').value = '';
       document.getElementById('debtDueDateInput').value = '';
       document.getElementById('debtNotesInput').value = '';
-      if (document.getElementById('debtWalletSourceInput')) document.getElementById('debtWalletSourceInput').value = '';
 
       if (appState.scriptUrl) {
         try {
@@ -2710,11 +2876,14 @@
             tipe: type,
             nama_pihak: party,
             jumlah: amount,
-            sisa_hutang: amount, // ALWAYS SEND sisa_hutang!
+            sisa_hutang: amount,
             jatuh_tempo: dueDate,
-            catatan: notes,
+            catatan: storedNotes,
             potong_dompet: (isPiutang && deductWallet) ? deductWallet : null
           });
+          if (inflowTxPayload) {
+            await sendPostToScript(inflowTxPayload);
+          }
           setTimeout(syncData, 2000);
         } catch (e) { console.error(e); }
       }
@@ -2836,7 +3005,18 @@
 
     // ================= SINKRONISASI ONLINE =================
 
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function openModal(id) {
+      if (id === 'addDebtModal') {
+        const typeEl = document.getElementById('debtTypeInput');
+        if (typeEl) {
+          if (debtFilter === 'hutang') typeEl.value = 'Hutang Saya (Paylater)';
+          else if (debtFilter === 'piutang') typeEl.value = 'Orang Berhutang (Piutang)';
+        }
+        toggleDebtWalletSource();
+      }
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
     async function syncData() {
@@ -3121,17 +3301,60 @@
     }
 
     function toggleDebtWalletSource() {
-      const type = document.getElementById('debtTypeInput').value;
-      const isPiutang = isPiutangType(type);
+      const typeEl = document.getElementById('debtTypeInput');
+      if (!typeEl) return;
+      const isPiutang = isPiutangType(typeEl.value);
       const box = document.getElementById('debtWalletSourceContainer');
-      if (!box) return;
+      const lbl = document.getElementById('debtWalletSourceLabel');
+      const hint = document.getElementById('debtWalletSourceHint');
+      const partyLbl = document.getElementById('debtPartyLabel');
+      const partyInp = document.getElementById('debtPartyInput');
+      const sel = document.getElementById('debtWalletSourceInput');
+      if (!box || !sel) return;
+
+      box.classList.remove('hidden');
+      const wallets = appState.wallets || [];
+
       if (isPiutang) {
-        box.classList.remove('hidden');
-        const sel = document.getElementById('debtWalletSourceInput');
-        sel.innerHTML = `<option value="">Jangan potong dompet (Catat piutang lama)</option>` +
-          appState.wallets.map(w => `<option value="${w.nama}">Potong dari ${w.nama} (Sisa: Rp ${formatRupiah(w.saldo_sekarang !== undefined ? w.saldo_sekarang : w.saldo_awal)})</option>`).join('');
+        box.className = 'p-3 bg-sky-50 dark:bg-sky-950/40 border-2 border-dashed border-sky-400 dark:border-sky-500 rounded-xl';
+        if (lbl) {
+          lbl.className = 'font-doodle text-xs font-bold text-sky-900 dark:text-sky-200 block mb-1';
+          lbl.innerText = 'Diambil / Ditalangi dari Keuangan Mana? (Cash / Bank / E-Wallet):';
+        }
+        if (hint) {
+          hint.innerText = '💡 Cocok untuk nalangin belanja Kedai / pinjamkan uang. Saldo Cash/Bank berkurang sekarang, tetapi TIDAK memotong Jatah Harian / Pengeluaran Belanja pribadi.';
+        }
+        if (partyLbl) partyLbl.innerText = 'Nama Usaha / Pihak yang Ditalangi';
+        if (partyInp) partyInp.placeholder = 'misal: Kedai Kopi, Teman (Budi)';
+
+        sel.innerHTML = wallets.map(w => {
+          const curBal = w.saldo_sekarang !== undefined ? w.saldo_sekarang : w.saldo_awal;
+          const tLabel = getWalletTypeLabel(w.tipe);
+          return `<option value="${escapeHtmlText(w.nama)}">Potong dari ${w.ikon || '👛'} ${escapeHtmlText(w.nama)} • ${tLabel} (Sisa: Rp ${formatRupiah(curBal)})</option>`;
+        }).join('') + `<option value="">Jangan potong saldo dompet (Catat piutang/talangan lama)</option>`;
+
+        const firstFunded = wallets.find(w => (w.saldo_sekarang !== undefined ? w.saldo_sekarang : w.saldo_awal) > 0);
+        if (firstFunded) sel.value = firstFunded.nama;
       } else {
-        box.classList.add('hidden');
+        box.className = 'p-3 bg-rose-50 dark:bg-rose-950/30 border-2 border-dashed border-rose-400 dark:border-rose-500 rounded-xl';
+        if (lbl) {
+          lbl.className = 'font-doodle text-xs font-bold text-rose-900 dark:text-rose-200 block mb-1';
+          lbl.innerText = 'Sumber Keuangan / Rencana Bayar (Paylater / Cash / Bank):';
+        }
+        if (hint) {
+          hint.innerText = '💡 Pilih Paylater/Rencana Bayar jika saldo baru dipotong saat melunasi nanti, atau pilih Terima Pinjaman jika uang masuk ke Cash/Bank kamu hari ini.';
+        }
+        if (partyLbl) partyLbl.innerText = 'Nama Pemberi Pinjaman / Platform';
+        if (partyInp) partyInp.placeholder = 'misal: SPaylater, Kredivo, Pinjaman Bank';
+
+        let opts = `<option value="TAG:Paylater">💳 Paylater / Belanja Tempo (Potong saldo saat klik Lunasi)</option>`;
+        wallets.forEach(w => {
+          const curBal = w.saldo_sekarang !== undefined ? w.saldo_sekarang : w.saldo_awal;
+          const tLabel = getWalletTypeLabel(w.tipe);
+          opts += `<option value="TAG:${escapeHtmlText(w.nama)}">🏷️ Rencana Bayar via ${w.ikon || '👛'} ${escapeHtmlText(w.nama)} • ${tLabel} (Potong saat Lunasi)</option>`;
+          opts += `<option value="INFLOW:${escapeHtmlText(w.nama)}">➕ Terima Pinjaman Masuk ke ${w.ikon || '👛'} ${escapeHtmlText(w.nama)} • ${tLabel} (Sisa: Rp ${formatRupiah(curBal)})</option>`;
+        });
+        sel.innerHTML = opts;
       }
     }
 
