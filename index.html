@@ -206,7 +206,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="font-pixel text-base sm:text-lg font-bold tracking-tight text-ink dark:text-slate-100 leading-none">Budget Journal</h1>
-            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.4</span>
+            <span class="text-[10px] font-sans font-black px-2 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shadow-pixel-sm">v3.5</span>
           </div>
           <p id="desktopPeriodBadge" class="font-doodle text-xs text-slate-600 dark:text-slate-400 mt-1 truncate">Memuat siklus...</p>
         </div>
@@ -277,7 +277,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1 min-w-0">
               <h1 class="font-pixel text-[11px] sm:text-xs font-bold tracking-tight text-ink dark:text-slate-100 leading-none truncate">Budget Journal</h1>
-              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.4</span>
+              <span class="text-[9px] font-sans font-black px-1.5 py-0.5 bg-doodlePink dark:bg-rose-500/30 text-ink dark:text-rose-200 border border-ink dark:border-slate-300 rounded-full shrink-0 shadow-pixel-sm">v3.5</span>
             </div>
             <p id="periodBadge" class="font-silkscreen text-[10px] text-slate-600 dark:text-slate-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
@@ -484,12 +484,16 @@
 
             <!-- CATATAN TRANSAKSI TERBARU -->
             <div class="flex-1">
-              <div class="flex items-center justify-between mb-3 px-1">
+              <div class="flex items-center justify-between gap-2 mb-3 px-1 flex-wrap">
                 <div class="flex items-center gap-1.5">
                   <span class="text-sm">🏷️</span>
                   <h2 class="font-doodle text-xl font-bold text-ink dark:text-slate-100">Catatan Belanja Terbaru</h2>
                 </div>
-                <span id="txCount" class="font-doodle text-xs px-2.5 py-0.5 bg-white dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none shadow-doodle-sm">0 Catatan</span>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" id="btnTxScope_cycle" onclick="setJournalTxScope('cycle')" class="doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-doodleYellow text-ink border border-ink dark:border-slate-300 shadow-pixel-sm transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400">Siklus Ini</button>
+                  <button type="button" id="btnTxScope_all" onclick="setJournalTxScope('all')" class="doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-ink dark:border-slate-400 transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400">Semua</button>
+                  <span id="txCount" class="font-doodle font-monoNum text-xs px-2.5 py-0.5 bg-white dark:bg-slate-800 border border-ink dark:border-slate-400 rounded-none shadow-doodle-sm">0 Catatan</span>
+                </div>
               </div>
               <div id="transactionsList" class="flex flex-col gap-2.5"></div>
             </div>
@@ -1206,9 +1210,75 @@
     let currentTxType = 'Pengeluaran';
     let selectedCategory = 'Makanan';
     let debtFilter = 'all';
+    let journalTxScope = 'cycle';
     let currentThemeMode = localStorage.getItem('vb_theme_mode') || 'system';
 
     // ================= DATA SANITIZER & TYPE NORMALIZATION =================
+    function getLocalTodayISO() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function normalizeDateToISO(val) {
+      if (!val) return '';
+      const str = String(val).trim();
+      const parts = str.split(/[\/\-]/);
+      if (parts.length === 3) {
+        if (parts[2].length === 4 && parts[0].length <= 2) {
+          return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
+        }
+        if (parts[0].length === 4) {
+          return parts[0] + '-' + parts[1].padStart(2, '0') + '-' + parts[2].substring(0, 2).padStart(2, '0');
+        }
+      }
+      return str.substring(0, 10);
+    }
+
+    function extractIdTimestamp(idVal) {
+      if (!idVal) return null;
+      const m = String(idVal).trim().match(/^(?:CYC|TX|D|B)-(\d{12,15})$/);
+      return m ? Number(m[1]) : null;
+    }
+
+    function isTransactionInActiveCycle(tx, cycle) {
+      if (!tx) return false;
+      if (!cycle) return true;
+
+      const cycleId = cycle.id !== undefined && cycle.id !== null ? String(cycle.id).trim() : '';
+      const txCycleId = tx.id_siklus !== undefined && tx.id_siklus !== null ? String(tx.id_siklus).trim() : '';
+
+      // 1. Jika transaksi memiliki ID_Siklus eksplisit, cocokkan langsung dengan siklus aktif
+      if (txCycleId && txCycleId !== 'DEFAULT' && cycleId) {
+        return txCycleId === cycleId;
+      }
+
+      // 2. Fallback akurat via timestamp pembuatan ID (CYC-<ms> vs TX-<ms>) jika Code.gs lama belum mengirim id_siklus:
+      // Transaksi yang dibuat sebelum siklus baru dimulai pasti milik siklus sebelumnya!
+      const cycleTs = extractIdTimestamp(cycleId);
+      const txTs = extractIdTimestamp(tx.id);
+      if (cycleTs && txTs) {
+        return txTs >= cycleTs;
+      }
+
+      // 3. Fallback rentang tanggal kalender siklus (tgl_mulai s/d tgl_selesai)
+      const txDate = normalizeDateToISO(tx.tanggal);
+      const startStr = normalizeDateToISO(cycle.tgl_mulai);
+      const endStr = normalizeDateToISO(cycle.tgl_selesai);
+      if (txDate) {
+        if (startStr && txDate < startStr) return false;
+        if (endStr && txDate > endStr) return false;
+      }
+
+      return true;
+    }
+
+    function setJournalTxScope(scope) {
+      journalTxScope = (scope === 'all') ? 'all' : 'cycle';
+      renderJournal();
+    }
     function escapeJsAttr(val) {
       return String(val !== undefined && val !== null ? val : '')
         .replace(/\\/g, '\\\\')
@@ -1302,10 +1372,11 @@
           id: rawId || ('TX-ROW-' + idx),
           deskripsi: descStr || 'Transaksi',
           jumlah: jumlahNum,
-          tipe: tx.tipe !== undefined && tx.tipe !== null ? String(tx.tipe) : 'Pengeluaran',
-          kategori: tx.kategori !== undefined && tx.kategori !== null ? String(tx.kategori) : 'Lainnya',
-          dompet: tx.dompet !== undefined && tx.dompet !== null ? String(tx.dompet) : 'Uang Tunai',
-          tanggal: tx.tanggal !== undefined && tx.tanggal !== null ? String(tx.tanggal).substring(0, 10) : ''
+          tipe: tx.tipe !== undefined && tx.tipe !== null ? String(tx.tipe).trim() : 'Pengeluaran',
+          kategori: tx.kategori !== undefined && tx.kategori !== null ? String(tx.kategori).trim() : 'Lainnya',
+          dompet: tx.dompet !== undefined && tx.dompet !== null ? String(tx.dompet).trim() : 'Uang Tunai',
+          tanggal: tx.tanggal !== undefined && tx.tanggal !== null ? normalizeDateToISO(tx.tanggal) : '',
+          id_siklus: tx.id_siklus !== undefined && tx.id_siklus !== null ? String(tx.id_siklus).trim() : ''
         };
       }).filter(Boolean);
     }
@@ -1616,7 +1687,7 @@
     }
 
     function computeMastermindSummary() {
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = getLocalTodayISO();
       const cycle = appState.cycle || { budget_awal: 1500000, tgl_mulai: todayStr, tgl_selesai: todayStr, nama: 'Siklus Berjalan' };
       const budgetAwalKotor = Number(cycle.budget_awal) || 1500000;
 
@@ -1642,16 +1713,17 @@
         }
       });
 
-      // 3. Pengeluaran Belanja & Topup Siklus
+      // 3. Pengeluaran Belanja & Topup KHUSUS Siklus Aktif
       let totalPengeluaranSiklus = 0;
       let totalTopupSiklus = 0;
       let pengeluaranHariIni = 0;
 
-      (appState.transactions || []).forEach(tx => {
+      const activeCycleTxs = (appState.transactions || []).filter(tx => isTransactionInActiveCycle(tx, appState.cycle));
+      activeCycleTxs.forEach(tx => {
         const amt = Number(tx.jumlah) || 0;
         if (tx.tipe === 'Pengeluaran') {
           totalPengeluaranSiklus += amt;
-          if (tx.tanggal === todayStr) {
+          if (normalizeDateToISO(tx.tanggal) === todayStr) {
             pengeluaranHariIni += amt;
           }
         } else if (tx.tipe === 'Pemasukan') {
@@ -1852,28 +1924,46 @@
         `;
       }).join('');
 
-      // Transactions List
+      // Transactions List (Default: khusus siklus aktif; opsi 'Semua' untuk lihat arsip lama)
       const container = document.getElementById('transactionsList');
-      const txs = appState.transactions || [];
+      const allTxs = appState.transactions || [];
+      const cycleTxs = allTxs.filter(tx => isTransactionInActiveCycle(tx, appState.cycle));
+      const txs = (journalTxScope === 'all') ? allTxs : cycleTxs;
+
+      const btnScopeCycle = document.getElementById('btnTxScope_cycle');
+      const btnScopeAll = document.getElementById('btnTxScope_all');
+      if (btnScopeCycle && btnScopeAll) {
+        const activeCls = 'doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-doodleYellow text-ink border border-ink dark:border-slate-300 shadow-pixel-sm transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400';
+        const idleCls = 'doodle-sticker px-2.5 py-0.5 text-xs font-doodle font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-ink dark:border-slate-400 transition duration-150 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400';
+        btnScopeCycle.className = (journalTxScope === 'cycle') ? activeCls : idleCls;
+        btnScopeAll.className = (journalTxScope === 'all') ? activeCls : idleCls;
+      }
+
       document.getElementById('txCount').innerText = `${txs.length} Catatan`;
 
       if (txs.length === 0) {
+        const archivedCount = allTxs.length - cycleTxs.length;
         container.innerHTML = `
           <div class="doodle-card p-8 text-center bg-white dark:bg-[#1a1c23] border-2 border-dashed border-slate-400 shadow-none">
             <div class="text-4xl mb-2">📝</div>
-            <p class="font-doodle text-base font-bold text-slate-600 dark:text-slate-300">Belum ada catatan di buku ini</p>
-            <p class="text-xs text-slate-400 mt-0.5">Tekan tombol pensil di bawah untuk mulai mencatat!</p>
+            <p class="font-doodle text-base font-bold text-slate-600 dark:text-slate-300">${journalTxScope === 'cycle' ? 'Belum ada catatan belanja di siklus ini' : 'Belum ada catatan di buku ini'}</p>
+            <p class="text-xs text-slate-400 mt-0.5">Tekan tombol Catat Belanja Baru saat mulai berbelanja!</p>
+            ${(journalTxScope === 'cycle' && archivedCount > 0) ? `<p class="text-[11px] text-slate-400 dark:text-slate-500 mt-2 font-doodle">(${archivedCount} catatan dari siklus lama tersimpan di tab Semua dan tidak memotong siklus ini)</p>` : ''}
           </div>
         `;
         return;
       }
 
-      container.innerHTML = txs.slice(0, 15).map((tx, idx) => {
+      container.innerHTML = txs.slice(0, 25).map((tx, idx) => {
         const isExp = tx.tipe === 'Pengeluaran';
         const badgeColor = isExp ? 'bg-doodlePink dark:bg-rose-950 text-rose-800 dark:text-rose-300' : 'bg-doodleMint dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300';
         const sign = isExp ? '-' : '+';
-        const rot = (idx % 2 === 0 ? '-0.5' : '0.5');
+        const safeId = escapeJsAttr(tx.id);
         const safeDesc = escapeJsAttr(tx.deskripsi || 'Transaksi');
+        const displayDesc = escapeHtmlText(tx.deskripsi || 'Transaksi');
+        const displayKat = escapeHtmlText(tx.kategori || 'Umum');
+        const displayWallet = escapeHtmlText(tx.dompet || 'Tunai');
+        const displayDate = escapeHtmlText(tx.tanggal || '');
 
         return `
           <div class="doodle-card p-3.5 rounded-2xl bg-white dark:bg-[#181a24] border-2 border-ink dark:border-slate-500 flex items-center justify-between shadow-pixel-sm hover:translate-x-0.5 transition">
@@ -1882,15 +1972,15 @@
                 ${isExp ? '💸' : '💰'}
               </div>
               <div class="min-w-0 flex-1">
-                <h4 class="text-xs lg:text-sm font-bold text-ink dark:text-white leading-tight truncate font-sans">${tx.deskripsi || 'Transaksi'}</h4>
+                <h4 class="text-xs lg:text-sm font-bold text-ink dark:text-white leading-tight truncate font-sans">${displayDesc}</h4>
                 <div class="flex items-center gap-1.5 mt-0.5 text-[10px] sm:text-[11px] font-silkscreen text-slate-500 dark:text-slate-400 font-bold truncate">
-                  <span>${tx.kategori || 'Umum'}</span> • <span>${tx.dompet || 'Tunai'}</span> • <span>${tx.tanggal || ''}</span>
+                  <span>${displayKat}</span> • <span>${displayWallet}</span> • <span>${displayDate}</span>
                 </div>
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
               <span class="text-sm lg:text-base font-bold font-monoNum ${isExp ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-700 dark:text-emerald-400'}">${sign}Rp ${formatRupiah(tx.jumlah)}</span>
-              <button onclick="confirmDeleteTransaction('${tx.id}', '${safeDesc}', ${tx.jumlah})" title="Hapus Catatan" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 hover:bg-rose-100 dark:hover:bg-rose-950/60 text-slate-400 hover:text-rose-600 flex items-center justify-center text-xs transition shadow-pixel-sm">
+              <button onclick="confirmDeleteTransaction('${safeId}', '${safeDesc}', ${Number(tx.jumlah) || 0})" title="Hapus Catatan" class="w-7 h-7 rounded-xl border border-ink/40 dark:border-slate-500 hover:bg-rose-100 dark:hover:bg-rose-950/60 text-slate-400 hover:text-rose-600 flex items-center justify-center text-xs transition shadow-pixel-sm">
                 <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-500"></i>
               </button>
             </div>
@@ -1983,11 +2073,13 @@
 
       const categoryTotals = {};
       let totalExpenseSum = 0;
-      appState.transactions.forEach(t => {
+      const cycleTxs = (appState.transactions || []).filter(t => isTransactionInActiveCycle(t, appState.cycle));
+      cycleTxs.forEach(t => {
         if (t.tipe === 'Pengeluaran') {
           const cat = t.kategori || 'Lain-lain';
-          categoryTotals[cat] = (categoryTotals[cat] || 0) + Number(t.jumlah);
-          totalExpenseSum += Number(t.jumlah);
+          const amt = Number(t.jumlah) || 0;
+          categoryTotals[cat] = (categoryTotals[cat] || 0) + amt;
+          totalExpenseSum += amt;
         }
       });
 
@@ -2182,13 +2274,17 @@
       const txId = 'TX-' + Date.now();
       appState.transactions.unshift({
         id: txId,
-        tanggal: new Date().toISOString().split('T')[0],
+        tanggal: getLocalTodayISO(),
         deskripsi: 'Pembayaran ' + billName,
         jumlah: amount,
         tipe: 'Pengeluaran',
         kategori: 'Tagihan',
-        dompet: walletName
+        dompet: walletName,
+        id_siklus: (appState.cycle && appState.cycle.id) ? String(appState.cycle.id) : ''
       });
+      localStorage.setItem('vb_bills', JSON.stringify(appState.bills));
+      localStorage.setItem('vb_wallets', JSON.stringify(appState.wallets));
+      localStorage.setItem('vb_transactions', JSON.stringify(appState.transactions));
 
       renderAll();
 
@@ -2489,13 +2585,17 @@
       const txId = 'TX-' + Date.now();
       appState.transactions.unshift({
         id: txId,
-        tanggal: new Date().toISOString().split('T')[0],
+        tanggal: getLocalTodayISO(),
         deskripsi: (isPiutang ? 'Penerimaan pelunasan dari ' : 'Pelunasan hutang ') + partyName,
         jumlah: amount,
         tipe: isPiutang ? 'Pemasukan' : 'Pengeluaran',
         kategori: isPiutang ? 'Pelunasan Piutang' : 'Hutang-Piutang',
-        dompet: walletName
+        dompet: walletName,
+        id_siklus: (appState.cycle && appState.cycle.id) ? String(appState.cycle.id) : ''
       });
+      localStorage.setItem('vb_debts', JSON.stringify(appState.debts));
+      localStorage.setItem('vb_wallets', JSON.stringify(appState.wallets));
+      localStorage.setItem('vb_transactions', JSON.stringify(appState.transactions));
 
       renderAll();
 
@@ -2548,12 +2648,13 @@
         }
         appState.transactions.unshift({
           id: 'TX-' + Date.now(),
-          tanggal: new Date().toISOString().split('T')[0],
+          tanggal: getLocalTodayISO(),
           deskripsi: 'Meminjamkan uang ke ' + party,
           jumlah: amount,
           tipe: 'Pengeluaran',
           kategori: 'Hutang-Piutang',
-          dompet: deductWallet
+          dompet: deductWallet,
+          id_siklus: (appState.cycle && appState.cycle.id) ? String(appState.cycle.id) : ''
         });
       }
 
@@ -2725,7 +2826,11 @@
           // jangan biarkan sync menimpanya dengan siklus lama dari spreadsheet!
           const isRecentLocalCycle = appState._cycleCreatedAt && (Date.now() - appState._cycleCreatedAt < 60000);
           if (data.cycle) {
-            if (!isRecentLocalCycle || data.cycle.id === (appState.cycle && appState.cycle.id)) {
+            const isMatchingNewCycle = appState.cycle && (
+              String(data.cycle.id) === String(appState.cycle.id) ||
+              (String(data.cycle.nama || '') === String(appState.cycle.nama || '') && Number(data.cycle.budget_awal) === Number(appState.cycle.budget_awal))
+            );
+            if (!isRecentLocalCycle || isMatchingNewCycle) {
               appState.cycle = data.cycle;
               localStorage.setItem('vb_cycle', JSON.stringify(appState.cycle));
             }
@@ -2778,6 +2883,7 @@
       const btn = document.getElementById('saveTxBtn');
 
       const txId = 'TX-' + Date.now();
+      const activeCycleId = (appState.cycle && appState.cycle.id) ? String(appState.cycle.id) : '';
       const payload = {
         action: 'add_transaction',
         id: txId,
@@ -2786,19 +2892,22 @@
         kategori: selectedCategory,
         dompet: wallet,
         tipe: currentTxType,
-        tanggal: date
+        tanggal: date,
+        id_siklus: activeCycleId
       };
 
       const newTx = {
         id: txId,
-        tanggal: date,
+        tanggal: normalizeDateToISO(date) || getLocalTodayISO(),
         deskripsi: desc,
         jumlah: amount,
         tipe: currentTxType,
         kategori: selectedCategory,
-        dompet: wallet
+        dompet: wallet,
+        id_siklus: activeCycleId
       };
       appState.transactions.unshift(newTx);
+      localStorage.setItem('vb_transactions', JSON.stringify(appState.transactions));
 
       const targetW = appState.wallets.find(w => w.nama === wallet);
       if (targetW) {
@@ -2816,6 +2925,7 @@
         }
       }
 
+      localStorage.setItem('vb_wallets', JSON.stringify(appState.wallets));
       renderAll();
       closeModal('addTxModal');
       document.getElementById('inputAmount').value = '';
@@ -2913,8 +3023,9 @@
         status: 'Aktif'
       };
 
-      // Set timestamp untuk anti-reversion guard
+      // Set timestamp untuk anti-reversion guard & fokuskan jurnal ke siklus baru
       appState._cycleCreatedAt = Date.now();
+      journalTxScope = 'cycle';
       appState.cycle = newCycleObj;
       localStorage.setItem('vb_cycle', JSON.stringify(appState.cycle));
 
@@ -2930,6 +3041,7 @@
 
       const payload = {
         action: 'create_cycle',
+        id: newCycleId,
         nama_periode: name,
         tgl_mulai: start,
         tgl_selesai: end,
@@ -2948,6 +3060,11 @@
           if (resData && resData.status === 'error') {
             alert('Perhatian: Spreadsheet melaporkan:\n"' + resData.message + '"\n\nTips: Pastikan kode Code.gs di Google Apps Script sudah diperbarui dan di-Deploy sebagai "Versi Baru" (New Version)!');
           } else {
+            if (resData && resData.cycle && resData.cycle.id) {
+              appState.cycle = resData.cycle;
+              localStorage.setItem('vb_cycle', JSON.stringify(appState.cycle));
+              renderAll();
+            }
             alert('🎉 Siklus "' + name + '" berhasil dimulai dan disinkronkan ke Spreadsheet!');
           }
           setTimeout(syncData, 3000);
@@ -2997,10 +3114,10 @@
 
     function openNewCycleModal() {
       const today = new Date();
-      const startStr = today.toISOString().split('T')[0];
+      const startStr = getLocalTodayISO();
       const endDate = new Date(today);
       endDate.setDate(endDate.getDate() + 30);
-      const endStr = endDate.toISOString().split('T')[0];
+      const endStr = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, '0')}-${String(endDate.getDate()).padStart(2, '0')}`;
 
       const currentCycle = appState.cycle || {};
       const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
