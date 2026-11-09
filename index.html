@@ -216,7 +216,7 @@
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between gap-2">
             <h1 class="font-sans text-[16px] font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">Budget Journal</h1>
-            <span class="shrink-0 whitespace-nowrap inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-monoNum font-bold leading-none rounded-md bg-amber-400/25 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 border border-amber-500/40 dark:border-amber-400/30">v4.1</span>
+            <span class="shrink-0 whitespace-nowrap inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-monoNum font-bold leading-none rounded-md bg-amber-400/25 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 border border-amber-500/40 dark:border-amber-400/30">v4.2</span>
           </div>
           <p id="desktopPeriodBadge" class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">Memuat siklus...</p>
         </div>
@@ -286,7 +286,7 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1.5 min-w-0">
               <h1 class="font-sans text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 leading-tight truncate">Budget Journal</h1>
-              <span class="shrink-0 whitespace-nowrap inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-monoNum font-bold leading-none rounded bg-amber-400/25 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 border border-amber-500/40 dark:border-amber-400/30">v4.1</span>
+              <span class="shrink-0 whitespace-nowrap inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-monoNum font-bold leading-none rounded bg-amber-400/25 dark:bg-amber-400/15 text-amber-900 dark:text-amber-300 border border-amber-500/40 dark:border-amber-400/30">v4.2</span>
             </div>
             <p id="periodBadge" class="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">Memuat siklus...</p>
           </div>
@@ -1503,7 +1503,7 @@
       scriptUrl: localStorage.getItem('vb_script_url') || '',
       summary: JSON.parse(localStorage.getItem('vb_summary') || 'null'),
       cycle: JSON.parse(localStorage.getItem('vb_cycle') || 'null'),
-      transactions: normalizeTransactionsList(JSON.parse(localStorage.getItem('vb_transactions') || '[]')),
+      transactions: normalizeTransactionsList(filterOutDeleted(JSON.parse(localStorage.getItem('vb_transactions') || '[]'), 'transactions')),
       wallets: JSON.parse(localStorage.getItem('vb_wallets') || 'null') || [
         { id: 'W1', nama: 'Uang Tunai', tipe: 'Cash', saldo_awal: 200000, saldo_sekarang: 200000, ikon: '💵' },
         { id: 'W2', nama: 'Rekening BCA', tipe: 'Bank', saldo_awal: 1000000, saldo_sekarang: 1000000, ikon: '🏦' },
@@ -1520,7 +1520,9 @@
       ], 'debts'))
     };
 
-    // ================= TOMBSTONE / PERMANENT DELETION TRACKER =================
+    // ================= TOMBSTONE & CROSS-DEVICE DELETION RECONCILER =================
+    const _reconciledServerDeleteIds = new Set();
+
     function getDeletedIds(type) {
       try {
         const raw = JSON.parse(localStorage.getItem('vb_deleted_ids') || '{}');
@@ -1545,16 +1547,78 @@
       } catch (e) { console.error(e); }
     }
 
+    function unmarkDeletedByName(type, name) {
+      if (!name) return;
+      try {
+        const raw = JSON.parse(localStorage.getItem('vb_deleted_ids') || '{}');
+        if (!Array.isArray(raw[type])) return;
+        const nameKey = 'NAME:' + String(name).trim().toLowerCase();
+        raw[type] = raw[type].filter(k => k !== nameKey);
+        localStorage.setItem('vb_deleted_ids', JSON.stringify(raw));
+      } catch (e) { console.error(e); }
+    }
+
+    function isItemMarkedDeleted(item, deletedSet) {
+      if (!item) return false;
+      if (item.id && deletedSet.has(String(item.id))) return true;
+      const nameVal = item.nama_tagihan || item.nama || item.nama_pihak || item.deskripsi || '';
+      if (nameVal && deletedSet.has('NAME:' + String(nameVal).trim().toLowerCase())) return true;
+      return false;
+    }
+
     function filterOutDeleted(items, type) {
       if (!Array.isArray(items)) return [];
       const deletedSet = getDeletedIds(type);
       return items.filter(item => {
         if (!item) return false;
-        if (item.id && deletedSet.has(String(item.id))) return false;
-        const nameVal = item.nama_tagihan || item.nama || item.nama_pihak || item.deskripsi || '';
-        if (nameVal && deletedSet.has('NAME:' + String(nameVal).trim().toLowerCase())) return false;
-        return true;
+        return !isItemMarkedDeleted(item, deletedSet);
       });
+    }
+
+    async function reconcileServerDeletions(data) {
+      if (!appState.scriptUrl || !data) return;
+      try {
+        const txDel = getDeletedIds('transactions');
+        if (Array.isArray(data.transactions) && txDel.size > 0) {
+          for (const tx of data.transactions) {
+            if (tx && tx.id && isItemMarkedDeleted(tx, txDel) && !_reconciledServerDeleteIds.has('tx:' + tx.id)) {
+              _reconciledServerDeleteIds.add('tx:' + tx.id);
+              sendPostToScript({
+                action: 'delete_transaction',
+                id: String(tx.id),
+                deskripsi: tx.deskripsi || '',
+                jumlah: Number(tx.jumlah) || 0
+              });
+            }
+          }
+        }
+        const debtDel = getDeletedIds('debts');
+        if (Array.isArray(data.debts) && debtDel.size > 0) {
+          for (const d of data.debts) {
+            if (d && d.id && isItemMarkedDeleted(d, debtDel) && !_reconciledServerDeleteIds.has('debt:' + d.id)) {
+              _reconciledServerDeleteIds.add('debt:' + d.id);
+              sendPostToScript({
+                action: 'delete_debt',
+                id: String(d.id),
+                nama_pihak: d.nama_pihak || ''
+              });
+            }
+          }
+        }
+        const billDel = getDeletedIds('bills');
+        if (Array.isArray(data.bills) && billDel.size > 0) {
+          for (const b of data.bills) {
+            if (b && b.id && isItemMarkedDeleted(b, billDel) && !_reconciledServerDeleteIds.has('bill:' + b.id)) {
+              _reconciledServerDeleteIds.add('bill:' + b.id);
+              sendPostToScript({
+                action: 'delete_bill',
+                id: String(b.id),
+                nama_tagihan: b.nama_tagihan || b.nama || ''
+              });
+            }
+          }
+        }
+      } catch (e) { console.warn('Reconcile delete warning:', e); }
     }
 
     async function sendPostToScript(payload) {
@@ -2508,6 +2572,7 @@
         return;
       }
 
+      unmarkDeletedByName('bills', name);
       const billId = 'B-' + Date.now();
       const newBill = {
         id: billId,
@@ -2931,6 +2996,7 @@
         }
       }
 
+      unmarkDeletedByName('debts', party);
       const storedNotes = buildDebtNotesWithWallet(walletTag, rawNotes);
       const debtId = 'D-' + Date.now();
       const newDebt = {
@@ -2947,6 +3013,7 @@
       appState.debts.push(newDebt);
 
       let inflowTxPayload = null;
+      let advanceTxId = null;
 
       // 1. Jika Dana Talangan / Piutang diambil dari dompet (Cash / Bank / E-Wallet):
       // Saldo fisik dompet berkurang, namun BUKAN pengeluaran belanja harian pribadi!
@@ -2955,10 +3022,14 @@
         if (targetW) {
           targetW.saldo_sekarang = (targetW.saldo_sekarang !== undefined ? targetW.saldo_sekarang : targetW.saldo_awal) - amount;
         }
+        advanceTxId = 'TX-' + (Date.now() + 1);
+        const advanceDesc = 'Meminjamkan uang ke ' + party + (rawNotes ? ' (' + rawNotes + ')' : '');
+        unmarkDeletedByName('transactions', advanceDesc);
+        unmarkDeletedByName('transactions', 'Meminjamkan uang ke ' + party);
         appState.transactions.unshift({
-          id: 'TX-' + Date.now(),
+          id: advanceTxId,
           tanggal: getLocalTodayISO(),
-          deskripsi: 'Meminjamkan uang ke ' + party + (rawNotes ? ' (' + rawNotes + ')' : ''),
+          deskripsi: advanceDesc,
           jumlah: amount,
           tipe: 'Pengeluaran',
           kategori: 'Dana Talangan',
@@ -3016,6 +3087,7 @@
           await sendPostToScript({
             action: 'add_debt',
             id: debtId,
+            tx_id: advanceTxId,
             tipe: type,
             nama_pihak: party,
             jumlah: amount,
@@ -3222,6 +3294,9 @@
             }
           }
           
+          // Sinkronkan penghapusan lokal ke Google Sheets agar antar-perangkat (Windows & HP) selalu identik
+          reconcileServerDeletions(data);
+
           // Anti-resurrection filter: pastikan catatan yang telah dihapus user tidak muncul kembali
           if (Array.isArray(data.transactions)) {
             appState.transactions = normalizeTransactionsList(filterOutDeleted(data.transactions, 'transactions'));
@@ -3279,6 +3354,7 @@
       const date = document.getElementById('inputDate').value;
       const btn = document.getElementById('saveTxBtn');
 
+      unmarkDeletedByName('transactions', desc);
       const txId = 'TX-' + Date.now();
       const activeCycleId = (appState.cycle && appState.cycle.id) ? String(appState.cycle.id) : '';
       const payload = {
